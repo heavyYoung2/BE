@@ -1,4 +1,4 @@
-package hongik.heavyyoung;
+package hongik.heavyYoung;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
