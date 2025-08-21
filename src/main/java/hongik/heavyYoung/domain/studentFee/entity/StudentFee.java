@@ -22,7 +22,7 @@ public class StudentFee extends BaseEntity {
     @Column(name = "student_id", nullable = false, length = 20)
     private String studentId;
 
-    @Column(name = "student_fee_status", nullable = false)
+    @Column(name = "is_fee_paid", nullable = false)
     @Builder.Default
-    private Boolean studentFeeStatus = false;
+    private Boolean isFeePaid = false;
 }

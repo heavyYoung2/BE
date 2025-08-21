@@ -19,14 +19,14 @@ public class ItemCategory extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "category_name", nullable = false, length = 20)
-    private ItemCategoryName categoryName;
+    @Column(name = "item_category_name", nullable = false, length = 20)
+    private ItemCategoryName itemCategoryName;
 
-    @Column(name = "total_quantity", nullable = false)
+    @Column(name = "total_count", nullable = false)
     @Builder.Default
-    private Integer totalQuantity = 0;
+    private Integer totalCount = 0;
 
-    @Column(name = "current_quantity", nullable = false)
+    @Column(name = "available_count", nullable = false)
     @Builder.Default
-    private Integer currentQuantity = 0;
+    private Integer availableCount = 0;
 }

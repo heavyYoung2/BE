@@ -24,7 +24,4 @@ public class Locker extends BaseEntity {
     @Column(name = "locker_status", nullable = false, length = 20)
     @Builder.Default
     private LockerStatus lockerStatus = LockerStatus.AVAILABLE;
-
-    @Column(name = "available_locker_count", nullable = false)
-    private Integer availableLockerCount;
 }

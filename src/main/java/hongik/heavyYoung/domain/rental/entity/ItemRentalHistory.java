@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.rentalHistory.entity;
+package hongik.heavyYoung.domain.rental.entity;
 
 import hongik.heavyYoung.domain.item.entity.Item;
 import hongik.heavyYoung.domain.member.entity.Member;
@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-@Table(name = "rental_history")
-public class RentalHistory extends BaseEntity {
+@Table(name = "item_rental_history")
+public class ItemRentalHistory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rental_history_id")
+    @Column(name = "item_rental_history_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

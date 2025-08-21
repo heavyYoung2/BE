@@ -15,11 +15,11 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Table(name = "member_locker")
-public class MemberLocker extends BaseEntity {
+@Table(name = "locker_assignment")
+public class LockerAssignment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_locker_id")
+    @Column(name = "locker_assignment_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -30,8 +30,8 @@ public class MemberLocker extends BaseEntity {
     @JoinColumn(name = "locker_id", nullable = false)
     private Locker locker;
 
-    @Column(name = "semester", nullable = false, length = 20)
-    private String semester;
+    @Column(name = "assign_semester", nullable = false, length = 20)
+    private String assignSemester;
 
     @Column(name = "is_current_semester", nullable = false)
     @Builder.Default

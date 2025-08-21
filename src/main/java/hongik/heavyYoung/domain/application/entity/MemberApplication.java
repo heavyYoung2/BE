@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.locker.entity;
+package hongik.heavyYoung.domain.application.entity;
 
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
@@ -10,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-@Table(name = "locker_application")
-public class LockerApplication extends BaseEntity {
+@Table(name = "member_application")
+public class MemberApplication extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "locker_application_id")
+    @Column(name = "member_application_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -22,6 +22,6 @@ public class LockerApplication extends BaseEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "locker_application_period", nullable = false)
-    private LockerApplicationPeriod lockerApplicationPeriod;
+    @JoinColumn(name = "application_id", nullable = false)
+    private Application application;
 }
