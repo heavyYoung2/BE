@@ -24,5 +24,5 @@ public class StudentFee extends BaseEntity {
 
     @Column(name = "is_fee_paid", nullable = false)
     @Builder.Default
-    private Boolean isFeePaid = false;
+    private boolean isFeePaid = false;
 }

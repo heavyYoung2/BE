@@ -4,16 +4,11 @@ import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@DynamicInsert
-@DynamicUpdate
 @Entity
 @Table(name = "locker_assignment")
 public class LockerAssignment extends BaseEntity {
@@ -35,5 +30,5 @@ public class LockerAssignment extends BaseEntity {
 
     @Column(name = "is_current_semester", nullable = false)
     @Builder.Default
-    private Boolean isCurrentSemester = true;
+    private boolean isCurrentSemester = true;
 }

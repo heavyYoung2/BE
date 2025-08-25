@@ -24,9 +24,9 @@ public class ItemCategory extends BaseEntity {
 
     @Column(name = "total_count", nullable = false)
     @Builder.Default
-    private Integer totalCount = 0;
+    private int totalCount = 0;
 
     @Column(name = "available_count", nullable = false)
     @Builder.Default
-    private Integer availableCount = 0;
+    private int availableCount = 0;
 }

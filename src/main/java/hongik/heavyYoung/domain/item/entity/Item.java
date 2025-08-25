@@ -22,5 +22,5 @@ public class Item extends BaseEntity {
 
     @Column(name = "is_rented", nullable = false)
     @Builder.Default
-    private Boolean isRented = false;
+    private boolean isRented = false;
 }

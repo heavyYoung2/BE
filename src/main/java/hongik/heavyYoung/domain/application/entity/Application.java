@@ -33,17 +33,18 @@ public class Application extends BaseEntity {
     private ApplicationType applicationType;
 
     @Column(name = "application_can_count", nullable = false)
-    private Integer applicationCanCount;
+    @Builder.Default
+    private int applicationCanCount = 0;
 
     @Column(name = "application_member_count", nullable = false)
     @Builder.Default
-    private Integer applicationMemberCount = 0;
+    private int applicationMemberCount = 0;
 
     @Column(name = "can_apply", nullable = false)
     @Builder.Default
-    private Boolean canApply = true;
+    private boolean canApply = true;
 
     @Column(name = "can_assign", nullable = false)
     @Builder.Default
-    private Boolean canAssign = true;
+    private boolean canAssign = true;
 }
