@@ -1,0 +1,29 @@
+language: ko-KR   # 리뷰 언어 (한국어)
+
+reviews:
+  profile: assertive   # 리뷰를 꼼꼼히 받기
+  high_level_summary: true   # PR 설명 요약 자동 생성
+  commit_status: true   # 리뷰 상태를 GitHub 체크로 표시
+  auto_review:
+    enabled: true   # 자동 리뷰 활성화
+    auto_incremental_review: true   # 새 커밋마다 증분 리뷰
+    ignore_title_keywords: ["WIP"]   # 제목에 'WIP' 포함 시 리뷰 제외
+  pre_merge_checks:
+    title:
+      mode: warning   # PR 제목 검사 (경고 수준)
+    description:
+      mode: warning   # PR 설명 검사 (경고 수준)
+
+tools:
+  eslint:
+    enabled: true   # JS/TS 코드 분석
+  gitleaks:
+    enabled: true   # 비밀키/토큰 유출 검사
+  markdownlint:
+    enabled: true   # Markdown 문서 스타일 검사
+
+knowledge_base:
+  code_guidelines:
+    enabled: true   # 팀 코드 규칙 문서 반영
+    filePatterns:
+      - ".github/instructions.md"
