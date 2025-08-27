@@ -13,7 +13,7 @@ import lombok.*;
 public class StudentFee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "student_fee_id")
     private Long id;
 
     @Column(name = "student_name", nullable = false, length = 20)
