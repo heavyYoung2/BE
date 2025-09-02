@@ -28,7 +28,7 @@ class EventQueryServiceImplTest {
     private EventQueryServiceImpl eventQueryService;
 
     @Test
-    @DisplayName("공지사항 전체 조회 성공")
+    @DisplayName("공지사항 조회(전체) 성공")
     void getAllEvents_success() {
         // given
         List<Event> events = new ArrayList<>();
@@ -64,7 +64,7 @@ class EventQueryServiceImplTest {
     }
 
     @Test
-    @DisplayName("공지사항 날짜별 조회 성공")
+    @DisplayName("공지사항 조회(기간별) 성공")
     void getAllEventsWithPeriod_success() {
         // given
         LocalDate from = LocalDate.of(2025, 9, 1);

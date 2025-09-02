@@ -34,7 +34,7 @@ class EventControllerTest {
     @Test
     @DisplayName("공지사항 전체 조회 성공")
     void getEvents_success() throws Exception {
-        //given
+        // given
         EventResponse.EventInfoDTO eventInfoDTO = EventResponse.EventInfoDTO.builder()
                 .eventId(1L)
                 .title("간식행사")
@@ -44,7 +44,7 @@ class EventControllerTest {
                 .build();
         given(eventQueryService.getAllEvents(null, null)).willReturn(List.of(eventInfoDTO));
 
-        //when & then
+        // when & then
         mockMvc.perform(get("/events")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -59,9 +59,9 @@ class EventControllerTest {
     @Test
     @DisplayName("시작일(from)보다 종료일(to)이 앞선 경우")
     void getEvents_invalidDateRange() throws Exception {
-        //given
+        // given
 
-        //when & then
+        // when & then
         mockMvc.perform(get("/events")
                         .param("from", "2025-09-05")
                         .param("to", "2025-09-01")
@@ -75,9 +75,9 @@ class EventControllerTest {
     @Test
     @DisplayName("파라미터값이 잘못 들어온 경우 - 시작일(from), 종료일(to) 둘 중 한 가지 값만 들어온 경우")
     void getEvents_wrongParameter1() throws Exception {
-        //given
+        // given
 
-        //when & then
+        // when & then
         mockMvc.perform(get("/events")
                         .param("from", "2025-09-01")
                         .accept(MediaType.APPLICATION_JSON))
@@ -90,9 +90,9 @@ class EventControllerTest {
     @Test
     @DisplayName("파라미터값이 잘못 들어온 경우 - 시작일(from), 종료일(to)의 날짜 형식(yyyy-MM-dd)이 맞지 않은 경우")
     void getEvents_wrongParameter2() throws Exception {
-        //given
+        // given
 
-        //when & then
+        // when & then
         mockMvc.perform(get("/events")
                         .param("from", "2025/09/01")
                         .param("to", "2025/09/02")
