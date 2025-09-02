@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
@@ -77,6 +78,55 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
+    // MethodArgumentTypeMismatchException(파라미터 형식 오류) 발생 시 실행되는 예외 처리 메서드
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleTypeMismatch(
+            MethodArgumentTypeMismatchException ex,
+            WebRequest request
+    ) {
+        // HTTP 요청이 존재한다면, 상세 HTTP 정보 추출 후 로깅
+        if (request instanceof ServletWebRequest servletWebRequest) {
+            HttpServletRequest httpServletRequest = servletWebRequest.getRequest();
+            log.error(
+                    SYSTEM_EX_LOG,
+                    httpServletRequest.getMethod(),
+                    httpServletRequest.getRequestURI(),
+                    httpServletRequest.getQueryString(),
+                    ErrorStatus.INVALID_PARAMETER.getCode(),
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        // HTTP 정보가 없는 경우
+        else {
+            log.error(
+                    SYSTEM_EX_LOG,
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    ErrorStatus.INVALID_PARAMETER.getCode(),
+                    ex.getMessage(),
+                    ex
+            );
+        }
+
+        // API 공통 응답 객체 생성 (실패 응답)
+        ApiResponse<Object> body = ApiResponse.onFailure(
+                ErrorStatus.INVALID_PARAMETER.getCode(),
+                ErrorStatus.INVALID_PARAMETER.getMessage(),
+                null
+        );
+
+        // ResponseEntity 형태로 클라이언트에 응답 반환 (Spring 표준 예외 처리 응답 구조)
+        return super.handleExceptionInternal(
+                ex,
+                body,
+                null,
+                ErrorStatus.INVALID_PARAMETER.getHttpStatus(),
+                request
+        );
+    }
+
     @ExceptionHandler
     public ResponseEntity<Object> exception(
             Exception ex,
@@ -122,6 +172,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 null,
                 ErrorStatus.INTERNAL_SERVER_ERROR.getHttpStatus(),
                 request
-        );    }
-
+        );
+    }
 }
