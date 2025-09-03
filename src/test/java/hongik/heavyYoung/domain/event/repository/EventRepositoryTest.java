@@ -23,7 +23,7 @@ class EventRepositoryTest {
 
     @Test
     @DisplayName("공지사항 조회(전체) 성공")
-    void findAll(){
+    void findAllByOrderByUpdatedAtDesc(){
         // given
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
