@@ -14,8 +14,9 @@ public class EventResponseConverter {
                 .eventId(event.getId())
                 .title(event.getEventTitle())
                 .eventCreatedAt(event.getCreatedAt())
-                .eventStartAt(event.getEventStartAt())
-                .eventEndAt(event.getEventEndAt())
+                .eventUpdatedAt(event.getUpdatedAt())
+                .eventStartDate(event.getEventStartDate())
+                .eventEndDate(event.getEventEndDate())
                 .build();
     }
 

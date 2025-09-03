@@ -35,22 +35,22 @@ class EventIntegrationTest {
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
                 .eventContent("간식행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
         Event event2 = Event.builder()
                 .eventTitle("나눔행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 10, 1))
-                .eventEndAt(LocalDate.of(2025, 10, 2))
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
                 .build();
 
         Event event3 = Event.builder()
                 .eventTitle("운동행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 4))
-                .eventEndAt(LocalDate.of(2025, 9, 5))
+                .eventStartDate(LocalDate.of(2025, 9, 4))
+                .eventEndDate(LocalDate.of(2025, 9, 5))
                 .build();
 
         eventRepository.save(event1);
@@ -72,14 +72,14 @@ class EventIntegrationTest {
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.length()").value(3))
                 .andExpect(jsonPath("$.result[0].title").value("운동행사"))
-                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-04"))
-                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-05"))
+                .andExpect(jsonPath("$.result[0].eventStartDate").value("2025-09-04"))
+                .andExpect(jsonPath("$.result[0].eventEndDate").value("2025-09-05"))
                 .andExpect(jsonPath("$.result[1].title").value("나눔행사"))
-                .andExpect(jsonPath("$.result[1].eventStartAt").value("2025-10-01"))
-                .andExpect(jsonPath("$.result[1].eventEndAt").value("2025-10-02"))
+                .andExpect(jsonPath("$.result[1].eventStartDate").value("2025-10-01"))
+                .andExpect(jsonPath("$.result[1].eventEndDate").value("2025-10-02"))
                 .andExpect(jsonPath("$.result[2].title").value("간식행사"))
-                .andExpect(jsonPath("$.result[2].eventStartAt").value("2025-09-01"))
-                .andExpect(jsonPath("$.result[2].eventEndAt").value("2025-09-02"));
+                .andExpect(jsonPath("$.result[2].eventStartDate").value("2025-09-01"))
+                .andExpect(jsonPath("$.result[2].eventEndDate").value("2025-09-02"));
 
     }
 
@@ -94,11 +94,11 @@ class EventIntegrationTest {
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.length()").value(2))
                 .andExpect(jsonPath("$.result[0].title").value("운동행사"))
-                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-04"))
-                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-05"))
+                .andExpect(jsonPath("$.result[0].eventStartDate").value("2025-09-04"))
+                .andExpect(jsonPath("$.result[0].eventEndDate").value("2025-09-05"))
                 .andExpect(jsonPath("$.result[1].title").value("간식행사"))
-                .andExpect(jsonPath("$.result[1].eventStartAt").value("2025-09-01"))
-                .andExpect(jsonPath("$.result[1].eventEndAt").value("2025-09-02"));
+                .andExpect(jsonPath("$.result[1].eventStartDate").value("2025-09-01"))
+                .andExpect(jsonPath("$.result[1].eventEndDate").value("2025-09-02"));
     }
 
 }

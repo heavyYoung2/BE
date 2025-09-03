@@ -28,15 +28,15 @@ class EventRepositoryTest {
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
                 .eventContent("간식행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
         Event event2 = Event.builder()
                 .eventTitle("나눔행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 10, 1))
-                .eventEndAt(LocalDate.of(2025, 10, 2))
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
                 .build();
 
         eventRepository.save(event1);
@@ -58,22 +58,22 @@ class EventRepositoryTest {
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
                 .eventContent("간식행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
         Event event2 = Event.builder()
                 .eventTitle("나눔행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 10, 1))
-                .eventEndAt(LocalDate.of(2025, 10, 2))
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
                 .build();
 
         Event event3 = Event.builder()
                 .eventTitle("운동행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 4))
-                .eventEndAt(LocalDate.of(2025, 9, 5))
+                .eventStartDate(LocalDate.of(2025, 9, 4))
+                .eventEndDate(LocalDate.of(2025, 9, 5))
                 .build();
 
         eventRepository.save(event1);
@@ -81,7 +81,7 @@ class EventRepositoryTest {
         eventRepository.save(event3);
 
         // when
-        List<Event> result = eventRepository.findAllByEventStartAtBetweenOrderByUpdatedAtDesc(
+        List<Event> result = eventRepository.findAllByEventStartDateBetweenOrderByUpdatedAtDesc(
                 LocalDate.of(2025, 9, 1),
                 LocalDate.of(2025, 9, 30)
         );

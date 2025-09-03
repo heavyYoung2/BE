@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findAllByOrderByUpdatedAtDesc();
-    List<Event> findAllByEventStartAtBetweenOrderByUpdatedAtDesc(LocalDate from, LocalDate to);
+    List<Event> findAllByEventStartDateBetweenOrderByUpdatedAtDesc(LocalDate from, LocalDate to);
 }

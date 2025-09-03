@@ -18,7 +18,8 @@ public class EventResponse {
         private Long eventId;
         private String title;
         private LocalDateTime eventCreatedAt;
-        private LocalDate eventStartAt;
-        private LocalDate eventEndAt;
+        private LocalDateTime eventUpdatedAt;
+        private LocalDate eventStartDate;
+        private LocalDate eventEndDate;
     }
 }

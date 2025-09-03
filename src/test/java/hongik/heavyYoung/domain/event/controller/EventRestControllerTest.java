@@ -39,8 +39,8 @@ class EventRestControllerTest {
                 .eventId(1L)
                 .title("간식행사")
                 .eventCreatedAt(LocalDate.of(2025, 8, 31).atStartOfDay())
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
         given(eventQueryService.getAllEvents(null, null)).willReturn(List.of(eventInfoDTO));
 
@@ -52,8 +52,8 @@ class EventRestControllerTest {
                 .andExpect(jsonPath("$.result[0].eventId").value(1L))
                 .andExpect(jsonPath("$.result[0].title").value("간식행사"))
                 .andExpect(jsonPath("$.result[0].eventCreatedAt").value("2025-08-31T00:00:00"))
-                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-01"))
-                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-02"));
+                .andExpect(jsonPath("$.result[0].eventStartDate").value("2025-09-01"))
+                .andExpect(jsonPath("$.result[0].eventEndDate").value("2025-09-02"));
     }
 
     @Test

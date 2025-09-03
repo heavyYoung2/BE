@@ -37,16 +37,16 @@ class EventQueryServiceImplTest {
                 .id(1L)
                 .eventTitle("간식행사")
                 .eventContent("간식행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
         Event event2 = Event.builder()
                 .id(2L)
                 .eventTitle("나눔행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 10, 1))
-                .eventEndAt(LocalDate.of(2025, 10, 2))
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
                 .build();
 
         events.add(event2);
@@ -77,22 +77,22 @@ class EventQueryServiceImplTest {
                 .id(1L)
                 .eventTitle("간식행사")
                 .eventContent("간식행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
         Event event2 = Event.builder()
                 .id(2L)
                 .eventTitle("나눔행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 4))
-                .eventEndAt(LocalDate.of(2025, 9, 5))
+                .eventStartDate(LocalDate.of(2025, 9, 4))
+                .eventEndDate(LocalDate.of(2025, 9, 5))
                 .build();
 
         events.add(event2);
         events.add(event1);
 
-        given(eventRepository.findAllByEventStartAtBetweenOrderByUpdatedAtDesc(from,to)).willReturn(events);
+        given(eventRepository.findAllByEventStartDateBetweenOrderByUpdatedAtDesc(from,to)).willReturn(events);
 
         // when
         List<EventResponse.EventInfoDTO> result = eventQueryService.getAllEvents(from, to);
