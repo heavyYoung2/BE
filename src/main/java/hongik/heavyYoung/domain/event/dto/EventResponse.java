@@ -25,7 +25,7 @@ public class EventResponse {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime eventCreatedAt;
         @Schema(description = "공지사항 수정 시간", example = "2025-08-31 12:30:45")
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm::ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime eventUpdatedAt;
         @Schema(description = "행사 시작일")
         private LocalDate eventStartDate;

@@ -48,7 +48,7 @@ class EventIntegrationTest {
 
         Event event3 = Event.builder()
                 .eventTitle("운동행사")
-                .eventContent("나눔행사 상세 일정")
+                .eventContent("운동행사 상세 일정")
                 .eventStartDate(LocalDate.of(2025, 9, 4))
                 .eventEndDate(LocalDate.of(2025, 9, 5))
                 .build();
