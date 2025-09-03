@@ -32,7 +32,7 @@ class EventControllerTest {
     private EventQueryService eventQueryService;
 
     @Test
-    @DisplayName("공지사항 전체 조회 성공")
+    @DisplayName("공지사항 조회 성공")
     void getEvents_success() throws Exception {
         // given
         EventResponse.EventInfoDTO eventInfoDTO = EventResponse.EventInfoDTO.builder()
@@ -57,7 +57,7 @@ class EventControllerTest {
     }
 
     @Test
-    @DisplayName("시작일(from)보다 종료일(to)이 앞선 경우")
+    @DisplayName("공지사항 조회시 시작일(from)보다 종료일(to)이 앞선 경우")
     void getEvents_invalidDateRange() throws Exception {
         // given
 
@@ -73,7 +73,7 @@ class EventControllerTest {
     }
 
     @Test
-    @DisplayName("파라미터값이 잘못 들어온 경우 - 시작일(from), 종료일(to) 둘 중 한 가지 값만 들어온 경우")
+    @DisplayName("공지사항 조회시 파라미터값이 잘못 들어온 경우 - 시작일(from), 종료일(to) 둘 중 한 가지 값만 들어온 경우")
     void getEvents_wrongParameter1() throws Exception {
         // given
 
@@ -88,7 +88,7 @@ class EventControllerTest {
     }
 
     @Test
-    @DisplayName("파라미터값이 잘못 들어온 경우 - 시작일(from), 종료일(to)의 날짜 형식(yyyy-MM-dd)이 맞지 않은 경우")
+    @DisplayName("공지사항 조회시 파라미터값이 잘못 들어온 경우 - 시작일(from), 종료일(to)의 날짜 형식(yyyy-MM-dd)이 맞지 않은 경우")
     void getEvents_wrongParameter2() throws Exception {
         // given
 
