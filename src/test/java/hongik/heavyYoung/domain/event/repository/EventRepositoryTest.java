@@ -53,7 +53,7 @@ class EventRepositoryTest {
 
     @Test
     @DisplayName("공지사항 조회(기간별) 성공")
-    void findAllByEventStartAtBetweenOrderByUpdatedAt() {
+    void findAllByEventStartDateBetweenOrderByUpdatedAt() {
         // given
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
