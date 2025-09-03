@@ -22,7 +22,7 @@ class EventRepositoryTest {
     private EventRepository eventRepository;
 
     @Test
-    @DisplayName("공지사항 조회(기간별) 성공")
+    @DisplayName("공지사항 조회(전체) 성공")
     void findAll(){
         // given
         Event event1 = Event.builder()
@@ -47,8 +47,8 @@ class EventRepositoryTest {
 
         // then
         assertThat(result).hasSize(2);
-        assertEquals(result.getFirst().getId(), 1L);
-        assertEquals(result.get(1).getId(),2L);
+        assertEquals(result.getFirst().getEventTitle(), "간식행사");
+        assertEquals(result.get(1).getEventTitle(),"나눔행사");
     }
 
     @Test
@@ -80,6 +80,6 @@ class EventRepositoryTest {
 
         // then
         assertThat(result).hasSize(1);
-        assertThat(result.getFirst().getEventTitle()).isEqualTo("간식행사");
+        assertEquals(result.getFirst().getEventTitle(), "간식행사");
     }
 }
