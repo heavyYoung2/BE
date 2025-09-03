@@ -33,13 +33,12 @@ public class EventQueryServiceImpl implements EventQueryService {
         List<Event> allEvents;
 
         // 시작일, 종료일이 전달된 경우 (기간별 조회)
-        if(from != null &&  to!=null){
-            allEvents = eventRepository.findAllByEventStartAtBetween(from, to);
+        if (from != null &&  to!=null) {
+            allEvents = eventRepository.findAllByEventStartAtBetweenOrderByUpdatedAtDesc(from, to);
         }
-
         // 시작일, 종료일 둘 다 전달되지 않은 경우 (전체 조회)
-        else{
-            allEvents = eventRepository.findAll();
+        else {
+            allEvents = eventRepository.findAllByOrderByUpdatedAtDesc();
         }
 
         return EventResponseConverter.toEventInfoDTOList(allEvents);

@@ -7,6 +7,7 @@ import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +20,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/events")
+@Tag(name = "Event API", description = "공지사항 관련 API")
 @RequiredArgsConstructor
-public class EventController {
+public class EventRestController {
 
     private final EventQueryService eventService;
 
     @Operation(summary = "공지사항 조회")
-    @GetMapping("")
+    @GetMapping
     public ApiResponse<List<EventResponse.EventInfoDTO>> getEvents(
-            @Parameter(description = "시작일 (yyyy-MM-dd)")
+            @Parameter(description = "시작일 (yyyy-MM-dd)", example = "2025-09-01")
             @RequestParam(value = "from", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate from,
 
-            @Parameter(description = "시작일 (yyyy-MM-dd)")
+            @Parameter(description = "종료일 (yyyy-MM-dd)", example = "2025-09-30")
             @RequestParam(value = "to", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate to
@@ -49,5 +51,5 @@ public class EventController {
 
         List<EventResponse.EventInfoDTO> allEvents = eventService.getAllEvents(from, to);
         return ApiResponse.onSuccess(allEvents);
-    };
+    }
 }

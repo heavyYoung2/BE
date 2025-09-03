@@ -15,10 +15,10 @@ public class EventResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EventInfoDTO{
-        Long eventId;
-        String title;
-        LocalDateTime eventCreatedAt;
-        LocalDate eventStartAt;
-        LocalDate eventEndAt;
+        private Long eventId;
+        private String title;
+        private LocalDateTime eventCreatedAt;
+        private LocalDate eventStartAt;
+        private LocalDate eventEndAt;
     }
 }

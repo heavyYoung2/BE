@@ -45,30 +45,33 @@ class EventQueryServiceImplTest {
                 .id(2L)
                 .eventTitle("나눔행사")
                 .eventContent("나눔행사 상세 일정")
-                .eventStartAt(LocalDate.of(2025, 9, 1))
-                .eventEndAt(LocalDate.of(2025, 9, 2))
+                .eventStartAt(LocalDate.of(2025, 10, 1))
+                .eventEndAt(LocalDate.of(2025, 10, 2))
                 .build();
 
-        events.add(event1);
         events.add(event2);
+        events.add(event1);
 
-        given(eventRepository.findAll()).willReturn(events);
+        given(eventRepository.findAllByOrderByUpdatedAtDesc()).willReturn(events);
 
         // when
         List<EventResponse.EventInfoDTO> result = eventQueryService.getAllEvents(null, null);
 
         // then
         assertThat(result).hasSize(2);
-        assertEquals(result.getFirst().getEventId(), 1L);
-        assertEquals(result.get(1).getEventId(),2L);
+        assertEquals(result.getFirst().getEventId(), 2L);
+        assertEquals(result.get(1).getEventId(),1L);
     }
 
     @Test
     @DisplayName("공지사항 조회(기간별) 성공")
     void getAllEventsWithPeriod_success() {
         // given
+        List<Event> events = new ArrayList<>();
+
         LocalDate from = LocalDate.of(2025, 9, 1);
-        LocalDate to = LocalDate.of(2025, 9, 2);
+        LocalDate to = LocalDate.of(2025, 9, 30);
+
 
         Event event1 = Event.builder()
                 .id(1L)
@@ -78,13 +81,24 @@ class EventQueryServiceImplTest {
                 .eventEndAt(LocalDate.of(2025, 9, 2))
                 .build();
 
-        given(eventRepository.findAllByEventStartAtBetween(from,to)).willReturn(List.of(event1));
+        Event event2 = Event.builder()
+                .id(2L)
+                .eventTitle("나눔행사")
+                .eventContent("나눔행사 상세 일정")
+                .eventStartAt(LocalDate.of(2025, 9, 4))
+                .eventEndAt(LocalDate.of(2025, 9, 5))
+                .build();
+
+        events.add(event2);
+        events.add(event1);
+
+        given(eventRepository.findAllByEventStartAtBetweenOrderByUpdatedAtDesc(from,to)).willReturn(events);
 
         // when
         List<EventResponse.EventInfoDTO> result = eventQueryService.getAllEvents(from, to);
 
         // then
-        assertThat(result).hasSize(1);
-        assertEquals(result.getFirst().getEventId(), 1L);
+        assertThat(result).hasSize(2);
+        assertEquals(result.getFirst().getEventId(), 2L);
     }
 }

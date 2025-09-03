@@ -7,5 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-    List<Event> findAllByEventStartAtBetween(LocalDate from, LocalDate to);
+    List<Event> findAllByOrderByUpdatedAtDesc();
+    List<Event> findAllByEventStartAtBetweenOrderByUpdatedAtDesc(LocalDate from, LocalDate to);
 }

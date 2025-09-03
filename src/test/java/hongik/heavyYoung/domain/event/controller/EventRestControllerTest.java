@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.event.controller;
 
-import hongik.heavyYoung.domain.event.config.EventControllerTestConfig;
+import hongik.heavyYoung.domain.event.config.EventRestControllerTestConfig;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.service.EventQueryService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
@@ -21,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(EventController.class)
-@Import(EventControllerTestConfig.class)
-class EventControllerTest {
+@WebMvcTest(EventRestController.class)
+@Import(EventRestControllerTestConfig.class)
+class EventRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

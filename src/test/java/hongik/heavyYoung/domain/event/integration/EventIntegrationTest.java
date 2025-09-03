@@ -2,6 +2,7 @@ package hongik.heavyYoung.domain.event.integration;
 
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,8 +46,21 @@ class EventIntegrationTest {
                 .eventEndAt(LocalDate.of(2025, 10, 2))
                 .build();
 
+        Event event3 = Event.builder()
+                .eventTitle("운동행사")
+                .eventContent("나눔행사 상세 일정")
+                .eventStartAt(LocalDate.of(2025, 9, 4))
+                .eventEndAt(LocalDate.of(2025, 9, 5))
+                .build();
+
         eventRepository.save(event1);
         eventRepository.save(event2);
+        eventRepository.save(event3);
+    }
+
+    @AfterEach
+    void tearDown() {
+        eventRepository.deleteAll();
     }
 
     @Test
@@ -56,13 +70,16 @@ class EventIntegrationTest {
                     .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
-                .andExpect(jsonPath("$.result.length()").value(2))
-                .andExpect(jsonPath("$.result[0].title").value("간식행사"))
-                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-01"))
-                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-02"))
+                .andExpect(jsonPath("$.result.length()").value(3))
+                .andExpect(jsonPath("$.result[0].title").value("운동행사"))
+                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-04"))
+                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-05"))
                 .andExpect(jsonPath("$.result[1].title").value("나눔행사"))
                 .andExpect(jsonPath("$.result[1].eventStartAt").value("2025-10-01"))
-                .andExpect(jsonPath("$.result[1].eventEndAt").value("2025-10-02"));
+                .andExpect(jsonPath("$.result[1].eventEndAt").value("2025-10-02"))
+                .andExpect(jsonPath("$.result[2].title").value("간식행사"))
+                .andExpect(jsonPath("$.result[2].eventStartAt").value("2025-09-01"))
+                .andExpect(jsonPath("$.result[2].eventEndAt").value("2025-09-02"));
 
     }
 
@@ -75,10 +92,13 @@ class EventIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
-                .andExpect(jsonPath("$.result.length()").value(1))
-                .andExpect(jsonPath("$.result[0].title").value("간식행사"))
-                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-01"))
-                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-02"));
+                .andExpect(jsonPath("$.result.length()").value(2))
+                .andExpect(jsonPath("$.result[0].title").value("운동행사"))
+                .andExpect(jsonPath("$.result[0].eventStartAt").value("2025-09-04"))
+                .andExpect(jsonPath("$.result[0].eventEndAt").value("2025-09-05"))
+                .andExpect(jsonPath("$.result[1].title").value("간식행사"))
+                .andExpect(jsonPath("$.result[1].eventStartAt").value("2025-09-01"))
+                .andExpect(jsonPath("$.result[1].eventEndAt").value("2025-09-02"));
     }
 
 }
