@@ -1,7 +1,10 @@
 package hongik.heavyYoung.domain.event.repository;
 
 import hongik.heavyYoung.domain.event.entity.Event;
+import hongik.heavyYoung.domain.event.entity.EventImage;
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.config.TestJpaAuditingConfig;
+import hongik.heavyYoung.global.exception.GeneralException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +93,43 @@ class EventRepositoryTest {
         assertThat(result).hasSize(2);
         assertEquals(result.getFirst().getEventTitle(), "운동행사");
         assertEquals(result.get(1).getEventTitle(), "간식행사");
+    }
+
+    @Test
+    @DisplayName("공지사항 상세 조회(사진포함) 성공")
+    void findByIdWithImages(){
+        // given
+        Event event1 = Event.builder()
+                .eventTitle("간식행사")
+                .eventContent("간식행사 상세 일정")
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
+                .build();
+
+        eventRepository.save(event1);
+
+        EventImage eventImage1 = EventImage.builder()
+                .event(event1)
+                .eventImageUrl("url1")
+                .sortOrder(1)
+                .build();
+
+        EventImage eventImage2 = EventImage.builder()
+                .event(event1)
+                .eventImageUrl("url2")
+                .sortOrder(2)
+                .build();
+
+        event1.getEventImages().add(eventImage1);
+        event1.getEventImages().add(eventImage2);
+
+        // when
+        Event result = eventRepository.findByIdWithImages(event1.getId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.EVENT_NOT_FOUND));
+
+        // then
+        assertThat(result.getEventImages()).hasSize(2);
+        assertThat(result.getEventImages().getFirst().getEventImageUrl())
+                .isEqualTo("url1");
     }
 }

@@ -2,6 +2,7 @@ package hongik.heavyYoung.domain.event.converter;
 
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
+import hongik.heavyYoung.domain.event.entity.EventImage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,5 +25,20 @@ public class EventResponseConverter {
         return events.stream()
                 .map(EventResponseConverter::toEventInfoDTO)
                 .toList();
+    }
+
+    public static EventResponse.EventInfoDetailDTO toEventInfoDetailDTO(Event event) {
+        return EventResponse.EventInfoDetailDTO.builder()
+                .eventId(event.getId())
+                .title(event.getEventTitle())
+                .content(event.getEventContent())
+                .eventStartDate(event.getEventStartDate())
+                .eventEndDate(event.getEventEndDate())
+                .eventCreatedAt(event.getCreatedAt())
+                .eventUpdatedAt(event.getUpdatedAt())
+                .imageUrls(event.getEventImages().stream()
+                        .map(EventImage::getEventImageUrl)
+                        .toList())
+                .build();
     }
 }

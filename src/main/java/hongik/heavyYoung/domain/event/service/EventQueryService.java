@@ -6,5 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface EventQueryService {
-    List<EventResponse.EventInfoDTO> getAllEvents(LocalDate from, LocalDate to);
+    List<EventResponse.EventInfoDTO> findEvents(LocalDate from, LocalDate to);
+    EventResponse.EventInfoDetailDTO findEventDetails(Long id);
 }

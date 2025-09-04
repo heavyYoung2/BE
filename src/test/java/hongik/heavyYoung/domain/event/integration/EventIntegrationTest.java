@@ -1,6 +1,7 @@
 package hongik.heavyYoung.domain.event.integration;
 
 import hongik.heavyYoung.domain.event.entity.Event;
+import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +40,21 @@ class EventIntegrationTest {
                 .eventStartDate(LocalDate.of(2025, 9, 1))
                 .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
+
+        EventImage eventImage1 = EventImage.builder()
+                .event(event1)
+                .eventImageUrl("url1")
+                .sortOrder(1)
+                .build();
+
+        EventImage eventImage2 = EventImage.builder()
+                .event(event1)
+                .eventImageUrl("url2")
+                .sortOrder(2)
+                .build();
+
+        event1.getEventImages().add(eventImage1);
+        event1.getEventImages().add(eventImage2);
 
         Event event2 = Event.builder()
                 .eventTitle("나눔행사")
@@ -99,6 +116,22 @@ class EventIntegrationTest {
                 .andExpect(jsonPath("$.result[1].title").value("간식행사"))
                 .andExpect(jsonPath("$.result[1].eventStartDate").value("2025-09-01"))
                 .andExpect(jsonPath("$.result[1].eventEndDate").value("2025-09-02"));
+    }
+
+    @Test
+    @DisplayName("공지사항 상세 조회(사진포함) 테스트")
+    void getEventDetails() throws Exception{
+        mockMvc.perform(get("/events/{eventId}", 1L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.title").value("간식행사"))
+                .andExpect(jsonPath("$.result.content").value("간식행사 상세 일정"))
+                .andExpect(jsonPath("$.result.eventStartDate").value("2025-09-01"))
+                .andExpect(jsonPath("$.result.eventEndDate").value("2025-09-02"))
+                .andExpect(jsonPath("$.result.imageUrls", hasSize(2)))
+                .andExpect(jsonPath("$.result.imageUrls[0]").value("url1"))
+                .andExpect(jsonPath("$.result.imageUrls[1]").value("url2"));
     }
 
 }

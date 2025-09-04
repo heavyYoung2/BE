@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,7 +43,7 @@ class EventRestControllerTest {
                 .eventStartDate(LocalDate.of(2025, 9, 1))
                 .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
-        given(eventQueryService.getAllEvents(null, null)).willReturn(List.of(eventInfoDTO));
+        given(eventQueryService.findEvents(null, null)).willReturn(List.of(eventInfoDTO));
 
         // when & then
         mockMvc.perform(get("/events")
@@ -51,7 +52,7 @@ class EventRestControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result[0].eventId").value(1L))
                 .andExpect(jsonPath("$.result[0].title").value("간식행사"))
-                .andExpect(jsonPath("$.result[0].eventCreatedAt").value("2025-08-31T00:00:00"))
+                .andExpect(jsonPath("$.result[0].eventCreatedAt").value("2025-08-31 00:00:00"))
                 .andExpect(jsonPath("$.result[0].eventStartDate").value("2025-09-01"))
                 .andExpect(jsonPath("$.result[0].eventEndDate").value("2025-09-02"));
     }
@@ -101,5 +102,38 @@ class EventRestControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(false))
                 .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_PARAMETER.getCode()))
                 .andExpect(jsonPath("$.message").value("잘못된 요청 파라미터입니다."));
+    }
+
+    @Test
+    @DisplayName("공지사항 상세 조회(사진포함) 성공")
+    void getEventDetails() throws Exception {
+        // given
+        EventResponse.EventInfoDetailDTO eventInfoDetailDTO = EventResponse.EventInfoDetailDTO.builder()
+                .eventId(1L)
+                .title("간식행사")
+                .content("간식행사 상세 일정")
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
+                .eventCreatedAt(LocalDate.of(2025, 8, 31).atStartOfDay())
+                .eventUpdatedAt(LocalDate.of(2025, 8, 31).atStartOfDay())
+                .imageUrls(List.of("url1", "url2"))
+                .build();
+
+        given(eventQueryService.findEventDetails(1L)).willReturn(eventInfoDetailDTO);
+
+        // when & then
+        mockMvc.perform(get("/events/{eventId}", 1L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.eventId").value(1))
+                .andExpect(jsonPath("$.result.title").value("간식행사"))
+                .andExpect(jsonPath("$.result.content").value("간식행사 상세 일정"))
+                .andExpect(jsonPath("$.result.eventCreatedAt").value("2025-08-31 00:00:00"))
+                .andExpect(jsonPath("$.result.eventStartDate").value("2025-09-01"))
+                .andExpect(jsonPath("$.result.eventEndDate").value("2025-09-02"))
+                .andExpect(jsonPath("$.result.imageUrls", hasSize(2)))
+                .andExpect(jsonPath("$.result.imageUrls[0]").value("url1"))
+                .andExpect(jsonPath("$.result.imageUrls[1]").value("url2"));
     }
 }

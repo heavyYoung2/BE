@@ -2,7 +2,10 @@ package hongik.heavyYoung.domain.event.service.impl;
 
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
+import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
+import hongik.heavyYoung.global.exception.GeneralException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +33,7 @@ class EventQueryServiceImplTest {
 
     @Test
     @DisplayName("공지사항 조회(전체) 성공")
-    void getAllEvents_success() {
+    void findEvents_success() {
         // given
         List<Event> events = new ArrayList<>();
 
@@ -55,7 +59,7 @@ class EventQueryServiceImplTest {
         given(eventRepository.findAllByOrderByUpdatedAtDesc()).willReturn(events);
 
         // when
-        List<EventResponse.EventInfoDTO> result = eventQueryService.getAllEvents(null, null);
+        List<EventResponse.EventInfoDTO> result = eventQueryService.findEvents(null, null);
 
         // then
         assertThat(result).hasSize(2);
@@ -65,7 +69,7 @@ class EventQueryServiceImplTest {
 
     @Test
     @DisplayName("공지사항 조회(기간별) 성공")
-    void getAllEventsWithPeriod_success() {
+    void findEventsWithPeriod_success() {
         // given
         List<Event> events = new ArrayList<>();
 
@@ -95,10 +99,65 @@ class EventQueryServiceImplTest {
         given(eventRepository.findAllByEventStartDateBetweenOrderByUpdatedAtDesc(from,to)).willReturn(events);
 
         // when
-        List<EventResponse.EventInfoDTO> result = eventQueryService.getAllEvents(from, to);
+        List<EventResponse.EventInfoDTO> result = eventQueryService.findEvents(from, to);
 
         // then
         assertThat(result).hasSize(2);
         assertEquals(result.getFirst().getEventId(), 2L);
     }
+
+    @Test
+    @DisplayName("공지사항 상세 조회(사진포함) 성공")
+    void findEventDetails(){
+        // given
+        Event event1 = Event.builder()
+                .id(1L)
+                .eventTitle("간식행사")
+                .eventContent("간식행사 상세 일정")
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
+                .build();
+
+        EventImage eventImage1 = EventImage.builder()
+                .event(event1)
+                .eventImageUrl("url1")
+                .sortOrder(1)
+                .build();
+
+        EventImage eventImage2 = EventImage.builder()
+                .event(event1)
+                .eventImageUrl("url2")
+                .sortOrder(2)
+                .build();
+
+        event1.getEventImages().add(eventImage1);
+        event1.getEventImages().add(eventImage2);
+
+        given(eventRepository.findByIdWithImages(event1.getId()))
+                .willReturn(Optional.of(event1));
+
+        // when
+        EventResponse.EventInfoDetailDTO result = eventQueryService.findEventDetails(event1.getId());
+
+        // then
+        assertThat(result.getImageUrls()).hasSize(2);
+        assertEquals(result.getContent(), "간식행사 상세 일정");
+        assertEquals(result.getImageUrls().getFirst(), "url1");
+    }
+
+    @Test
+    @DisplayName("공지사항 상세 조회(사진포함) - 존재하지 않는 공지사항의 경우 예외 발생")
+    void findEventDetails_eventNotFound_throwsException() {
+        // given
+        Long notExistingId = 999L;
+        given(eventRepository.findByIdWithImages(notExistingId))
+                .willReturn(Optional.empty());
+
+        // when & then
+        GeneralException exception = assertThrows(GeneralException.class, () ->
+                eventQueryService.findEventDetails(notExistingId));
+
+        assertEquals(ErrorStatus.EVENT_NOT_FOUND, exception.getCode());
+    }
+
 }

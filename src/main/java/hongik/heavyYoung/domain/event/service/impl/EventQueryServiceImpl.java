@@ -5,6 +5,8 @@ import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import hongik.heavyYoung.domain.event.service.EventQueryService;
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
+import hongik.heavyYoung.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class EventQueryServiceImpl implements EventQueryService {
      * @return 조회된 공지사항(Event) 정보 리스트
      */
     @Override
-    public List<EventResponse.EventInfoDTO> getAllEvents(LocalDate from, LocalDate to) {
+    public List<EventResponse.EventInfoDTO> findEvents(LocalDate from, LocalDate to) {
         List<Event> allEvents;
 
         // 시작일, 종료일이 전달된 경우 (기간별 조회)
@@ -41,5 +43,13 @@ public class EventQueryServiceImpl implements EventQueryService {
         }
 
         return EventResponseConverter.toEventInfoDTOList(allEvents);
+    }
+
+    @Override
+    public EventResponse.EventInfoDetailDTO findEventDetails(Long id) {
+        Event event = eventRepository.findByIdWithImages(id)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.EVENT_NOT_FOUND));
+
+        return EventResponseConverter.toEventInfoDetailDTO(event);
     }
 }

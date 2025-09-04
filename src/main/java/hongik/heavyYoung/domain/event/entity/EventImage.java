@@ -23,4 +23,7 @@ public class EventImage extends BaseEntity {
     @Lob
     @Column(name = "event_image_url", nullable = false)
     private String eventImageUrl;
+
+    @Column(name = "sort_order")
+    private int sortOrder;
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -30,4 +32,9 @@ public class Event extends BaseEntity {
 
     @Column(name = "event_end_date")
     private LocalDate eventEndDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC")
+    private List<EventImage> eventImages = new ArrayList<>();
 }
