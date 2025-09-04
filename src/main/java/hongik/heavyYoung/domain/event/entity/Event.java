@@ -25,9 +25,9 @@ public class Event extends BaseEntity {
     @Column(name = "event_content", nullable = false)
     private String eventContent;
 
-    @Column(name = "event_start_at")
-    private LocalDate eventStartAt;
+    @Column(name = "event_start_date")
+    private LocalDate eventStartDate;
 
-    @Column(name = "event_end_at")
-    private LocalDate eventEndAt;
+    @Column(name = "event_end_date")
+    private LocalDate eventEndDate;
 }
