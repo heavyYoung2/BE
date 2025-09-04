@@ -17,7 +17,7 @@ public class EventResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EventInfoDTO{
+    public static class EventInfoDTO {
         @Schema(description = "공지사항 PK")
         private Long eventId;
         @Schema(description = "공지사항 제목")
@@ -38,7 +38,7 @@ public class EventResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EventInfoDetailDTO{
+    public static class EventInfoDetailDTO {
         @Schema(description = "공지사항 PK")
         private Long eventId;
         @Schema(description = "공지사항 제목")
@@ -57,5 +57,14 @@ public class EventResponse {
         private LocalDateTime eventUpdatedAt;
         @Schema(description = "공지사항 사진")
         private List<String> imageUrls;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EventAddResponseDTO{
+        @Schema(description = "공지사항 PK")
+        private Long eventId;
     }
 }

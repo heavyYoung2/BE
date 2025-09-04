@@ -41,4 +41,10 @@ public class EventResponseConverter {
                         .toList())
                 .build();
     }
+
+    public static EventResponse.EventAddResponseDTO toEventAddResponseDTO(Event event) {
+        return EventResponse.EventAddResponseDTO.builder()
+                .eventId(event.getId())
+                .build();
+    }
 }
