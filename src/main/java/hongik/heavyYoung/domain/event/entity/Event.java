@@ -34,7 +34,7 @@ public class Event extends BaseEntity {
     private LocalDate eventEndDate;
 
     @Builder.Default
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sortOrder ASC")
     private List<EventImage> eventImages = new ArrayList<>();
 }

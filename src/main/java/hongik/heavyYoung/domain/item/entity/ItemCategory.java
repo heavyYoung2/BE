@@ -1,7 +1,6 @@
 // src/main/java/com/yourapp/domain/item/entity/ItemCategory.java
 package hongik.heavyYoung.domain.item.entity;
 
-import hongik.heavyYoung.domain.item.enums.ItemCategoryName;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,9 +17,8 @@ public class ItemCategory extends BaseEntity {
     @Column(name = "item_category_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "item_category_name", nullable = false, length = 20)
-    private ItemCategoryName itemCategoryName;
+    @Column(name = "item_category_name", nullable = false, length = 100)
+    private String itemCategoryName;
 
     @Column(name = "total_count", nullable = false)
     @Builder.Default

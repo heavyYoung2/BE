@@ -26,7 +26,7 @@ class EventRepositoryTest {
 
     @Test
     @DisplayName("공지사항 조회(전체) 성공")
-    void findAllByOrderByUpdatedAtDesc(){
+    void findAllByOrderByCreatedAtDesc() {
         // given
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
@@ -46,7 +46,7 @@ class EventRepositoryTest {
         eventRepository.save(event2);
 
         // when
-        List<Event> result = eventRepository.findAllByOrderByUpdatedAtDesc();
+        List<Event> result = eventRepository.findAllByOrderByCreatedAtDesc();
 
         // then
         assertThat(result).hasSize(2);
@@ -56,7 +56,7 @@ class EventRepositoryTest {
 
     @Test
     @DisplayName("공지사항 조회(기간별) 성공")
-    void findAllByEventStartDateBetweenOrderByUpdatedAtDesc() {
+    void findAllByEventStartDateBetweenOrderByCreatedAtDesc() {
         // given
         Event event1 = Event.builder()
                 .eventTitle("간식행사")
@@ -84,7 +84,7 @@ class EventRepositoryTest {
         eventRepository.save(event3);
 
         // when
-        List<Event> result = eventRepository.findAllByEventStartDateBetweenOrderByUpdatedAtDesc(
+        List<Event> result = eventRepository.findAllByEventStartDateBetweenOrderByCreatedAtDesc(
                 LocalDate.of(2025, 9, 1),
                 LocalDate.of(2025, 9, 30)
         );
@@ -128,6 +128,7 @@ class EventRepositoryTest {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.EVENT_NOT_FOUND));
 
         // then
+        assertEquals(result.getEventContent(), "간식행사 상세 일정");
         assertThat(result.getEventImages()).hasSize(2);
         assertThat(result.getEventImages().getFirst().getEventImageUrl())
                 .isEqualTo("url1");

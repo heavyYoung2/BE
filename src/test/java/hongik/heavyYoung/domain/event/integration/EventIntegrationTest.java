@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -83,9 +84,14 @@ class EventIntegrationTest {
     @Test
     @DisplayName("공지사항 조회(전체) 통합테스트")
     void getEvents_All_API() throws Exception{
-        mockMvc.perform(get("/events")
-                    .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+        // given
+
+        //when
+        ResultActions result = mockMvc.perform(get("/events")
+                    .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.length()").value(3))
                 .andExpect(jsonPath("$.result[0].title").value("운동행사"))
@@ -103,11 +109,16 @@ class EventIntegrationTest {
     @Test
     @DisplayName("공지사항 조회(기간별) 통합테스트")
     void getEvents_Period_API() throws Exception{
-        mockMvc.perform(get("/events")
-                        .param("from", "2025-09-01")
-                        .param("to", "2025-09-30")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+        // given
+
+        //when
+        ResultActions result = mockMvc.perform(get("/events")
+                .param("from", "2025-09-01")
+                .param("to", "2025-09-30")
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.length()").value(2))
                 .andExpect(jsonPath("$.result[0].title").value("운동행사"))
@@ -121,9 +132,14 @@ class EventIntegrationTest {
     @Test
     @DisplayName("공지사항 상세 조회(사진포함) 테스트")
     void getEventDetails() throws Exception{
-        mockMvc.perform(get("/events/{eventId}", 1L)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+        // given
+
+        // when
+        ResultActions result = mockMvc.perform(get("/events/{eventId}", 1L)
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.title").value("간식행사"))
                 .andExpect(jsonPath("$.result.content").value("간식행사 상세 일정"))

@@ -56,7 +56,7 @@ class EventQueryServiceImplTest {
         events.add(event2);
         events.add(event1);
 
-        given(eventRepository.findAllByOrderByUpdatedAtDesc()).willReturn(events);
+        given(eventRepository.findAllByOrderByCreatedAtDesc()).willReturn(events);
 
         // when
         List<EventResponse.EventInfoDTO> result = eventQueryService.findEvents(null, null);
@@ -96,7 +96,7 @@ class EventQueryServiceImplTest {
         events.add(event2);
         events.add(event1);
 
-        given(eventRepository.findAllByEventStartDateBetweenOrderByUpdatedAtDesc(from,to)).willReturn(events);
+        given(eventRepository.findAllByEventStartDateBetweenOrderByCreatedAtDesc(from,to)).willReturn(events);
 
         // when
         List<EventResponse.EventInfoDTO> result = eventQueryService.findEvents(from, to);
@@ -108,7 +108,7 @@ class EventQueryServiceImplTest {
 
     @Test
     @DisplayName("공지사항 상세 조회(사진포함) 성공")
-    void findEventDetails(){
+    void findEventDetails() {
         // given
         Event event1 = Event.builder()
                 .id(1L)

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/events")
+@RequestMapping("/admin/event")
 @Tag(name = "Event API - 학생회", description = "학생회 - 공지사항 관련 API")
 @RequiredArgsConstructor
 public class AdminEventRestController {
@@ -21,7 +21,7 @@ public class AdminEventRestController {
     private final AdminEventCommandService adminEventCommandService;
 
     @PostMapping
-    public ApiResponse<EventResponse.EventAddResponseDTO> addEvent(
+    public ApiResponse<EventResponse.EventAddResponseDTO> addEvent (
             @RequestBody @Valid EventRequest.EventAddRequestDTO eventAddRequestDTO
     ) {
         EventResponse.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO);

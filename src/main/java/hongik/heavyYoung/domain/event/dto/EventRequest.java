@@ -1,6 +1,7 @@
 package hongik.heavyYoung.domain.event.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +17,10 @@ public class EventRequest {
     @AllArgsConstructor
     public static class EventAddRequestDTO {
         @Schema(description = "공지사항 제목")
+        @NotBlank(message = "제목은 필수 입력 값입니다.")
         private String title;
         @Schema(description = "공지사항 내용")
+        @NotBlank(message = "내용은 필수 입력 값입니다.")
         private String content;
         @Schema(description = "행사 시작일")
         private LocalDate eventStartDate;

@@ -15,7 +15,6 @@ public class EventResponseConverter {
                 .eventId(event.getId())
                 .title(event.getEventTitle())
                 .eventCreatedAt(event.getCreatedAt())
-                .eventUpdatedAt(event.getUpdatedAt())
                 .eventStartDate(event.getEventStartDate())
                 .eventEndDate(event.getEventEndDate())
                 .build();
@@ -35,7 +34,6 @@ public class EventResponseConverter {
                 .eventStartDate(event.getEventStartDate())
                 .eventEndDate(event.getEventEndDate())
                 .eventCreatedAt(event.getCreatedAt())
-                .eventUpdatedAt(event.getUpdatedAt())
                 .imageUrls(event.getEventImages().stream()
                         .map(EventImage::getEventImageUrl)
                         .toList())

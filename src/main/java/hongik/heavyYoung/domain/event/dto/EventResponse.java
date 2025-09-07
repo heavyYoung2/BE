@@ -25,9 +25,6 @@ public class EventResponse {
         @Schema(description = "공지사항 생성 시간", example = "2025-08-31 00:00:00")
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime eventCreatedAt;
-        @Schema(description = "공지사항 수정 시간", example = "2025-08-31 12:30:45")
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime eventUpdatedAt;
         @Schema(description = "행사 시작일")
         private LocalDate eventStartDate;
         @Schema(description = "행사 종료일")
@@ -52,9 +49,6 @@ public class EventResponse {
         @Schema(description = "공지사항 생성 시간", example = "2025-08-31 00:00:00")
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime eventCreatedAt;
-        @Schema(description = "공지사항 수정 시간", example = "2025-08-31 12:30:45")
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime eventUpdatedAt;
         @Schema(description = "공지사항 사진")
         private List<String> imageUrls;
     }
@@ -63,7 +57,7 @@ public class EventResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EventAddResponseDTO{
+    public static class EventAddResponseDTO {
         @Schema(description = "공지사항 PK")
         private Long eventId;
     }

@@ -15,6 +15,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // COMMON 에러
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "COMMON_001", "잘못된 요청 파라미터입니다."),
     INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "COMMON_002", "시작일은 종료일보다 이후일 수 없습니다."),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON_003", "요청 값이 유효하지 않습니다."),
 
     // EVENT 에러
     EVENT_NOT_FOUND(HttpStatus.NOT_FOUND, "EVENT_001", "존재하지 않는 공지사항입니다."),

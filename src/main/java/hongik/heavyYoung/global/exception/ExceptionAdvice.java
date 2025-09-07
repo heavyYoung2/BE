@@ -5,7 +5,11 @@ import hongik.heavyYoung.global.apiPayload.dto.ReasonDTO;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,6 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.List;
+
 @Slf4j
 @RestControllerAdvice(annotations = RestController.class)
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
@@ -21,6 +27,18 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     // 비즈니스 예외 로그 템플릿
     private static final String BUSINESS_EX_LOG = """
             Business Exception
+            ---------------------------
+            Method      : {}
+            URI         : {}
+            QueryString : {}
+            Code        : {}
+            Message     : {}
+            ---------------------------
+            """;
+
+    // 클라이언트 예외 로그 템플릿
+    private static final String CLIENT_EX_LOG = """
+            Client Exception
             ---------------------------
             Method      : {}
             URI         : {}
@@ -88,7 +106,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         if (request instanceof ServletWebRequest servletWebRequest) {
             HttpServletRequest httpServletRequest = servletWebRequest.getRequest();
             log.error(
-                    SYSTEM_EX_LOG,
+                    CLIENT_EX_LOG,
                     httpServletRequest.getMethod(),
                     httpServletRequest.getRequestURI(),
                     httpServletRequest.getQueryString(),
@@ -100,7 +118,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         // HTTP 정보가 없는 경우
         else {
             log.error(
-                    SYSTEM_EX_LOG,
+                    CLIENT_EX_LOG,
                     "N/A",
                     "N/A",
                     "N/A",
@@ -122,6 +140,113 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 ex,
                 body,
                 null,
+                ErrorStatus.INVALID_PARAMETER.getHttpStatus(),
+                request
+        );
+    }
+
+    // MethodArgumentNotValidException(@Valid 검증 실패) 발생 시 실행되는 예외 처리 메서드
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        // 검증 실패한 모든 필드 에러 메시지 추출
+        List<String> errorMessages = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toList();
+
+        // HTTP 요청이 존재한다면, 상세 HTTP 정보 추출 후 로깅
+        if (request instanceof ServletWebRequest servletWebRequest) {
+            HttpServletRequest httpServletRequest = servletWebRequest.getRequest();
+            log.error(
+                    CLIENT_EX_LOG,
+                    httpServletRequest.getMethod(),
+                    httpServletRequest.getRequestURI(),
+                    httpServletRequest.getQueryString(),
+                    ErrorStatus.VALIDATION_ERROR.getCode(),
+                    errorMessages,
+                    ex
+            );
+        } else {
+            log.error(
+                    CLIENT_EX_LOG,
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    ErrorStatus.VALIDATION_ERROR.getCode(),
+                    errorMessages,
+                    ex
+            );
+        }
+
+        // API 공통 응답 객체 생성 (실패 응답)
+        ApiResponse<Object> body = ApiResponse.onFailure(
+                ErrorStatus.VALIDATION_ERROR.getCode(),
+                ErrorStatus.VALIDATION_ERROR.getMessage(),
+                errorMessages
+        );
+
+        // ResponseEntity 형태로 클라이언트에 응답 반환
+        return super.handleExceptionInternal(
+                ex,
+                body,
+                headers,
+                ErrorStatus.VALIDATION_ERROR.getHttpStatus(),
+                request
+        );
+    }
+
+    // HttpMessageNotReadableException(RequestBody JSON 파싱 오류) 발생 시 실행되는 예외 처리 메서드
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        // HTTP 요청이 존재한다면, 상세 HTTP 정보 추출 후 로깅
+        if (request instanceof ServletWebRequest servletWebRequest) {
+            HttpServletRequest httpServletRequest = servletWebRequest.getRequest();
+            log.error(
+                    CLIENT_EX_LOG,
+                    httpServletRequest.getMethod(),
+                    httpServletRequest.getRequestURI(),
+                    httpServletRequest.getQueryString(),
+                    ErrorStatus.INVALID_PARAMETER.getCode(),
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        // HTTP 정보가 없는 경우
+        else {
+            log.error(
+                    CLIENT_EX_LOG,
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    ErrorStatus.INVALID_PARAMETER.getCode(),
+                    ex.getMessage(),
+                    ex
+            );
+        }
+
+        // API 공통 응답 객체 생성 (실패 응답)
+        ApiResponse<Object> body = ApiResponse.onFailure(
+                ErrorStatus.INVALID_PARAMETER.getCode(),
+                ErrorStatus.INVALID_PARAMETER.getMessage(),
+                null
+        );
+
+        // ResponseEntity 형태로 클라이언트에 응답 반환 (Spring 표준 예외 처리 응답 구조)
+        return super.handleExceptionInternal(
+                ex,
+                body,
+                headers,
                 ErrorStatus.INVALID_PARAMETER.getHttpStatus(),
                 request
         );

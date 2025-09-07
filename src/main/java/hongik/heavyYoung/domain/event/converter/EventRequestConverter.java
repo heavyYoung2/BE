@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventRequestConverter {
 
-    public static Event toNewEntity(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
+    public static Event toNewEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
         return Event.builder()
                 .eventTitle(eventAddRequestDTO.getTitle())
                 .eventContent(eventAddRequestDTO.getContent())

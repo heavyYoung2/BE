@@ -21,8 +21,8 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
     @Override
     @Transactional
     public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
-        Event event = EventRequestConverter.toNewEntity(eventAddRequestDTO);
-        eventRepository.save(event);
-        return EventResponseConverter.toEventAddResponseDTO(event);
+        Event event = EventRequestConverter.toNewEvent(eventAddRequestDTO);
+        Event savedEvent = eventRepository.save(event);
+        return EventResponseConverter.toEventAddResponseDTO(savedEvent);
     }
 }

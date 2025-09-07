@@ -25,7 +25,7 @@ public class EventRestController {
 
     @Operation(summary = "공지사항 조회")
     @GetMapping
-    public ApiResponse<List<EventResponse.EventInfoDTO>> getEvents(
+    public ApiResponse<List<EventResponse.EventInfoDTO>> getEvents (
             @Parameter(description = "시작일 (yyyy-MM-dd)", example = "2025-09-01")
             @RequestParam(value = "from", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
