@@ -26,4 +26,12 @@ public class EventImage extends BaseEntity {
 
     @Column(name = "sort_order")
     private int sortOrder;
+
+    protected void setEvent(Event event) {
+        this.event = event;
+    }
+
+    protected void removeEvent() {
+        this.event = null;
+    }
 }

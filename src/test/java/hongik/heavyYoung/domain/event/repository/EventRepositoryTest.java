@@ -120,8 +120,8 @@ class EventRepositoryTest {
                 .sortOrder(2)
                 .build();
 
-        event1.getEventImages().add(eventImage1);
-        event1.getEventImages().add(eventImage2);
+        event1.addEventImage(eventImage1);
+        event1.addEventImage(eventImage2);
 
         // when
         Event result = eventRepository.findByIdWithImages(event1.getId())
