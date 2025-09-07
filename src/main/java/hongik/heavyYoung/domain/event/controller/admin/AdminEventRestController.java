@@ -27,6 +27,4 @@ public class AdminEventRestController {
         EventResponse.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO);
         return ApiResponse.onSuccess(eventAddResponseDTO);
     }
-
-
 }

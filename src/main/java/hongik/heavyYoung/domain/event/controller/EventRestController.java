@@ -58,5 +58,4 @@ public class EventRestController {
         EventResponse.EventInfoDetailDTO eventDetails = eventService.findEventDetails(eventId);
         return ApiResponse.onSuccess(eventDetails);
     }
-
 }
