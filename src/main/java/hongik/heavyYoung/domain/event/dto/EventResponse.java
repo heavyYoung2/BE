@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class EventResponse {
-
+    // 공지사항 기본 정보 DTO
     @Getter
     @Builder
     @NoArgsConstructor
@@ -31,6 +31,7 @@ public class EventResponse {
         private LocalDate eventEndDate;
     }
 
+    // 공지사항 상세 정보 DTO
     @Getter
     @Builder
     @NoArgsConstructor
@@ -53,6 +54,8 @@ public class EventResponse {
         private List<String> imageUrls;
     }
 
+
+    // 공지사항 생성시 응답 DTO
     @Getter
     @Builder
     @NoArgsConstructor

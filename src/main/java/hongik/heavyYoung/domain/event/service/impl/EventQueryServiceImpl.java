@@ -45,6 +45,15 @@ public class EventQueryServiceImpl implements EventQueryService {
         return EventResponseConverter.toEventInfoDTOList(allEvents);
     }
 
+    /**
+     * 주어진 id에 해당하는 공지사항(Event)의 상세 정보를 조회합니다.
+     * 존재하지 않는 공지사항일 경우, GeneralException(EVENT_NOT_FOUND)가 발생합니다.
+     *
+     *
+     * @param id 조회할 공지사항의 PK
+     * @return 공지사항 상세 정보(제목, 내용, 시작일, 종료일, 생성일자)와 공지사항에 게시된 이미지 목록을 포함한 DTO
+     * @throws GeneralException 해당 ID의 공지사항이 존재하지 않을 경우 발생
+     */
     @Override
     public EventResponse.EventInfoDetailDTO findEventDetails(Long id) {
         Event event = eventRepository.findByIdWithImages(id)

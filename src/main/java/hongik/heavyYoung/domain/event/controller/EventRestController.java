@@ -52,7 +52,7 @@ public class EventRestController {
 
     @Operation(summary = "공지사항 상세 조회")
     @GetMapping("/{eventId}")
-    public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails(
+    public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails (
             @PathVariable("eventId") Long eventId
     ) {
         EventResponse.EventInfoDetailDTO eventDetails = eventService.findEventDetails(eventId);

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 public class EventRequest {
-
+    // 공지사항 생성 요청 DTO
     @Getter
     @Builder
     @NoArgsConstructor

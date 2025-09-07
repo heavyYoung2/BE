@@ -18,10 +18,17 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
 
     private final EventRepository eventRepository;
 
+    /**
+     * 새로운 공지사항(Event)을 생성합니다.
+     *
+     * @param eventAddRequestDTO 공지사항 생성에 필요한 제목, 내용, 행사 시작/종료일 정보를 담은 DTO
+     * @return 생성된 공지사항의 PK를 담은 응답 DTO
+     */
     @Override
     @Transactional
     public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
         Event event = EventRequestConverter.toNewEvent(eventAddRequestDTO);
+        // TODO 사진 업로드 방식 결정 후, 공지사항(Event)에 사진 추가 로직 필요
         Event savedEvent = eventRepository.save(event);
         return EventResponseConverter.toEventAddResponseDTO(savedEvent);
     }
