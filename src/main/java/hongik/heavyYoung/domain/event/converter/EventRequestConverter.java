@@ -2,9 +2,7 @@ package hongik.heavyYoung.domain.event.converter;
 
 import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.domain.event.entity.Event;
-import org.springframework.stereotype.Component;
 
-@Component
 public class EventRequestConverter {
 
     public static Event toNewEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {

@@ -3,11 +3,9 @@ package hongik.heavyYoung.domain.event.converter;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class EventResponseConverter {
     // 공지사항 기본 정보
     public static EventResponse.EventInfoDTO toEventInfoDTO(Event event) {

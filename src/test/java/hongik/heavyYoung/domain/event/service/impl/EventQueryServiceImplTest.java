@@ -5,7 +5,8 @@ import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
-import hongik.heavyYoung.global.exception.GeneralException;
+import hongik.heavyYoung.global.exception.customException.EventException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class EventQueryServiceImplTest {
@@ -30,6 +33,11 @@ class EventQueryServiceImplTest {
 
     @InjectMocks
     private EventQueryServiceImpl eventQueryService;
+
+    @BeforeEach
+    void resetMocks() {
+        reset(eventRepository);
+    }
 
     @Test
     @DisplayName("공지사항 조회(전체) 성공")
@@ -65,6 +73,8 @@ class EventQueryServiceImplTest {
         assertThat(result).hasSize(2);
         assertEquals(result.getFirst().getEventId(), 2L);
         assertEquals(result.get(1).getEventId(),1L);
+
+        verify(eventRepository).findAllByOrderByCreatedAtDesc();
     }
 
     @Test
@@ -104,6 +114,8 @@ class EventQueryServiceImplTest {
         // then
         assertThat(result).hasSize(2);
         assertEquals(result.getFirst().getEventId(), 2L);
+
+        verify(eventRepository).findAllByEventStartDateBetweenOrderByCreatedAtDesc(from, to);
     }
 
     @Test
@@ -142,7 +154,9 @@ class EventQueryServiceImplTest {
         // then
         assertThat(result.getImageUrls()).hasSize(2);
         assertEquals(result.getContent(), "간식행사 상세 일정");
-        assertEquals(result.getImageUrls().getFirst(), "url1");
+        assertThat(result.getImageUrls()).containsExactly("url1", "url2");
+
+        verify(eventRepository).findByIdWithImages(event1.getId());
     }
 
     @Test
@@ -154,10 +168,11 @@ class EventQueryServiceImplTest {
                 .willReturn(Optional.empty());
 
         // when & then
-        GeneralException exception = assertThrows(GeneralException.class, () ->
+        EventException exception = assertThrows(EventException.class, () ->
                 eventQueryService.findEventDetails(notExistingId));
 
         assertEquals(ErrorStatus.EVENT_NOT_FOUND, exception.getCode());
+        verify(eventRepository).findByIdWithImages(notExistingId);
     }
 
 }

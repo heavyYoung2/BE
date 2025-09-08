@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +36,11 @@ class AdminEventIntegrationTest {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @AfterEach
+    void tearDown() {
+        eventRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("공지사항 생성 성공")
@@ -61,5 +66,10 @@ class AdminEventIntegrationTest {
         // then
         Event savedEvent = eventRepository.findAll().getFirst();
         result.andExpect(jsonPath("$.result.eventId").value(savedEvent.getId()));
+
+        assertEquals("간식행사", savedEvent.getEventTitle());
+        assertEquals("간식행사 세부 일정", savedEvent.getEventContent());
+        assertEquals(LocalDate.of(2025, 9, 1), savedEvent.getEventStartDate());
+        assertEquals(LocalDate.of(2025, 9, 2), savedEvent.getEventEndDate());
     }
 }

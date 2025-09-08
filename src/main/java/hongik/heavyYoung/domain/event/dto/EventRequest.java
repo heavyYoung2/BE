@@ -2,6 +2,7 @@ package hongik.heavyYoung.domain.event.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class EventRequest {
     public static class EventAddRequestDTO {
         @Schema(description = "공지사항 제목")
         @NotBlank(message = "제목은 필수 입력 값입니다.")
+        @Size(max = 100, message = "제목은 최대 100자 까지 입력 가능합니다.")
         private String title;
         @Schema(description = "공지사항 내용")
         @NotBlank(message = "내용은 필수 입력 값입니다.")

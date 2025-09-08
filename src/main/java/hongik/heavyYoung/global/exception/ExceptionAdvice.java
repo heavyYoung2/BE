@@ -5,6 +5,7 @@ import hongik.heavyYoung.global.apiPayload.dto.ReasonDTO;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -248,6 +249,59 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 body,
                 headers,
                 ErrorStatus.INVALID_PARAMETER.getHttpStatus(),
+                request
+        );
+    }
+
+    // ConstraintViolationException(@Validated 검증 실패, 파라미터 제약 위반) 발생 시 실행되는 예외 처리 메서드
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolation(
+            ConstraintViolationException ex,
+            WebRequest request
+    ) {
+        // 검증 실패한 모든 메시지 추출
+        List<String> errorMessages = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .toList();
+
+        // HTTP 요청이 존재한다면, 상세 HTTP 정보 추출 후 로깅
+        if (request instanceof ServletWebRequest servletWebRequest) {
+            HttpServletRequest httpServletRequest = servletWebRequest.getRequest();
+            log.error(
+                    CLIENT_EX_LOG,
+                    httpServletRequest.getMethod(),
+                    httpServletRequest.getRequestURI(),
+                    httpServletRequest.getQueryString(),
+                    ErrorStatus.VALIDATION_ERROR.getCode(),
+                    errorMessages,
+                    ex
+            );
+        } else {
+            log.error(
+                    CLIENT_EX_LOG,
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    ErrorStatus.VALIDATION_ERROR.getCode(),
+                    errorMessages,
+                    ex
+            );
+        }
+
+        // API 공통 응답 객체 생성 (실패 응답)
+        ApiResponse<Object> body = ApiResponse.onFailure(
+                ErrorStatus.VALIDATION_ERROR.getCode(),
+                ErrorStatus.VALIDATION_ERROR.getMessage(),
+                errorMessages
+        );
+
+        // ResponseEntity 형태로 클라이언트에 응답 반환
+        return super.handleExceptionInternal(
+                ex,
+                body,
+                null,
+                ErrorStatus.VALIDATION_ERROR.getHttpStatus(),
                 request
         );
     }

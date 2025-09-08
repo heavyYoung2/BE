@@ -33,6 +33,8 @@ class EventIntegrationTest {
     @Autowired
     private EventRepository eventRepository;
 
+    private Long savedEventId;
+
     @BeforeEach
     void setUp(){
         Event event1 = Event.builder()
@@ -56,6 +58,9 @@ class EventIntegrationTest {
 
         event1.getEventImages().add(eventImage1);
         event1.getEventImages().add(eventImage2);
+
+        event1 = eventRepository.save(event1); // 저장 후 id 세팅됨
+        savedEventId = event1.getId();
 
         Event event2 = Event.builder()
                 .eventTitle("나눔행사")
@@ -86,7 +91,7 @@ class EventIntegrationTest {
     void getEvents_All_API() throws Exception{
         // given
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/events")
                     .accept(MediaType.APPLICATION_JSON));
 
@@ -111,7 +116,7 @@ class EventIntegrationTest {
     void getEvents_Period_API() throws Exception{
         // given
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/events")
                 .param("from", "2025-09-01")
                 .param("to", "2025-09-30")
@@ -135,10 +140,10 @@ class EventIntegrationTest {
         // given
 
         // when
-        ResultActions result = mockMvc.perform(get("/events/{eventId}", 1L)
+        ResultActions result = mockMvc.perform(get("/events/{eventId}", savedEventId)
                 .accept(MediaType.APPLICATION_JSON));
 
-        //then
+        // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.title").value("간식행사"))

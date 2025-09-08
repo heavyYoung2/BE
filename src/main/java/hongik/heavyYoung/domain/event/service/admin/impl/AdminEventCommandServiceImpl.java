@@ -28,8 +28,8 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
     @Transactional
     public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
         Event event = EventRequestConverter.toNewEvent(eventAddRequestDTO);
-        // TODO 사진 업로드 방식 결정 후, 공지사항(Event)에 사진 추가 로직 필요
         Event savedEvent = eventRepository.save(event);
+        // TODO 사진 업로드 방식 결정 후, 공지사항(Event)에 사진 추가 로직 필요
         return EventResponseConverter.toEventAddResponseDTO(savedEvent);
     }
 }

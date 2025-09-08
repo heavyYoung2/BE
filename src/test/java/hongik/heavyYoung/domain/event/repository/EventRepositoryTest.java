@@ -132,5 +132,6 @@ class EventRepositoryTest {
         assertThat(result.getEventImages()).hasSize(2);
         assertThat(result.getEventImages().getFirst().getEventImageUrl())
                 .isEqualTo("url1");
+        assertThat(result.getEventImages()).extracting(EventImage::getSortOrder).containsExactly(1, 2);
     }
 }

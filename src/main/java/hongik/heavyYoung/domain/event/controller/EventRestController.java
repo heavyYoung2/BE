@@ -8,8 +8,10 @@ import hongik.heavyYoung.global.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/events")
+@Validated
 @Tag(name = "Event API - 학생", description = "학생 - 공지사항 관련 API")
 @RequiredArgsConstructor
 public class EventRestController {
@@ -53,7 +56,7 @@ public class EventRestController {
     @Operation(summary = "공지사항 상세 조회")
     @GetMapping("/{eventId}")
     public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails (
-            @PathVariable("eventId") Long eventId
+            @PathVariable("eventId") @Positive(message = "eventId는 1 이상이어야 합니다.")Long eventId
     ) {
         EventResponse.EventInfoDetailDTO eventDetails = eventService.findEventDetails(eventId);
         return ApiResponse.onSuccess(eventDetails);
