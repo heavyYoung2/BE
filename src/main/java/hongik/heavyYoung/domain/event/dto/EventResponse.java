@@ -52,7 +52,7 @@ public class EventResponse {
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime eventCreatedAt;
         @Builder.Default
-        @Schema(description = "공지사항 사진")
+        @Schema(description = "공지사항 사진 URL 목록(정렬: sortOrder 오름차순)")
         private List<String> imageUrls = Collections.emptyList();
     }
 

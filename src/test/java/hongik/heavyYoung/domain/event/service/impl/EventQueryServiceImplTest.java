@@ -34,11 +34,6 @@ class EventQueryServiceImplTest {
     @InjectMocks
     private EventQueryServiceImpl eventQueryService;
 
-    @BeforeEach
-    void resetMocks() {
-        reset(eventRepository);
-    }
-
     @Test
     @DisplayName("공지사항 조회(전체) 성공")
     void findEvents_success() {

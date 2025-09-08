@@ -143,8 +143,8 @@ class AdminEventRestControllerTest {
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("isSuccess").value(false))
-                .andExpect(jsonPath("code").value(ErrorStatus.INVALID_DATE_RANGE.getCode()));
+                .andExpect(jsonPath("$.isSuccess").value(false))
+                .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_DATE_RANGE.getCode()));
 
         verifyNoInteractions(adminEventCommandService);
     }
@@ -166,8 +166,8 @@ class AdminEventRestControllerTest {
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("isSuccess").value(false))
-                .andExpect(jsonPath("code").value(ErrorStatus.INVALID_PARAMETER.getCode()));
+                .andExpect(jsonPath("$.isSuccess").value(false))
+                .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_PARAMETER.getCode()));
 
         verifyNoInteractions(adminEventCommandService);
     }

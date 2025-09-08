@@ -56,8 +56,8 @@ class EventIntegrationTest {
                 .sortOrder(2)
                 .build();
 
-        event1.getEventImages().add(eventImage1);
-        event1.getEventImages().add(eventImage2);
+        event1.addEventImage(eventImage1);
+        event1.addEventImage(eventImage2);
 
         event1 = eventRepository.save(event1); // 저장 후 id 세팅됨
         savedEventId = event1.getId();
