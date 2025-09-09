@@ -1,7 +1,7 @@
-package hongik.heavyYoung.domain.event.controller;
+package hongik.heavyYoung.domain.event.controller.general;
 
 import hongik.heavyYoung.domain.event.dto.EventResponse;
-import hongik.heavyYoung.domain.event.service.EventQueryService;
+import hongik.heavyYoung.domain.event.service.general.EventQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.GeneralException;

@@ -1,10 +1,10 @@
-package hongik.heavyYoung.domain.event.service.impl;
+package hongik.heavyYoung.domain.event.service.general.impl;
 
 import hongik.heavyYoung.domain.event.converter.EventResponseConverter;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
-import hongik.heavyYoung.domain.event.service.EventQueryService;
+import hongik.heavyYoung.domain.event.service.general.EventQueryService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.EventException;
 import lombok.RequiredArgsConstructor;

@@ -109,13 +109,11 @@ class EventRepositoryTest {
         eventRepository.save(event1);
 
         EventImage eventImage1 = EventImage.builder()
-                .event(event1)
                 .eventImageUrl("url1")
                 .sortOrder(1)
                 .build();
 
         EventImage eventImage2 = EventImage.builder()
-                .event(event1)
                 .eventImageUrl("url2")
                 .sortOrder(2)
                 .build();

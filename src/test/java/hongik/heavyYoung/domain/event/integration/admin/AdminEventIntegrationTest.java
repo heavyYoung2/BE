@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.event.integration;
+package hongik.heavyYoung.domain.event.integration.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hongik.heavyYoung.domain.event.dto.EventRequest;

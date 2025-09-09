@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
-@Validated
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class AdminEventCommandServiceImpl implements AdminEventCommandService {
 
@@ -27,7 +26,6 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      * @return 생성된 공지사항의 PK를 담은 응답 DTO
      */
     @Override
-    @Transactional
     public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
         Event event = EventRequestConverter.toNewEvent(eventAddRequestDTO);
         Event savedEvent = eventRepository.save(event);

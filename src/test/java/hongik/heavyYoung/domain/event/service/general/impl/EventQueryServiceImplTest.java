@@ -1,12 +1,12 @@
-package hongik.heavyYoung.domain.event.service.impl;
+package hongik.heavyYoung.domain.event.service.general.impl;
 
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
+import hongik.heavyYoung.domain.event.service.general.impl.EventQueryServiceImpl;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.EventException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)

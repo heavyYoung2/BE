@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.event.integration;
+package hongik.heavyYoung.domain.event.integration.general;
 
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
@@ -45,13 +45,11 @@ class EventIntegrationTest {
                 .build();
 
         EventImage eventImage1 = EventImage.builder()
-                .event(event1)
                 .eventImageUrl("url1")
                 .sortOrder(1)
                 .build();
 
         EventImage eventImage2 = EventImage.builder()
-                .event(event1)
                 .eventImageUrl("url2")
                 .sortOrder(2)
                 .build();

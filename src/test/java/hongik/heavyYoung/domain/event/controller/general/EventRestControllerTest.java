@@ -1,8 +1,8 @@
-package hongik.heavyYoung.domain.event.controller;
+package hongik.heavyYoung.domain.event.controller.general;
 
 import hongik.heavyYoung.domain.event.config.EventRestControllerTestConfig;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
-import hongik.heavyYoung.domain.event.service.EventQueryService;
+import hongik.heavyYoung.domain.event.service.general.EventQueryService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

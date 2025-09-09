@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.event.service;
+package hongik.heavyYoung.domain.event.service.general;
 
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 
