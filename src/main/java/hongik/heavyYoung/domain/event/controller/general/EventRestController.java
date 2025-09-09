@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventRestController {
 
-    private final EventQueryService eventService;
+    private final EventQueryService eventQueryService;
 
     @Operation(summary = "공지사항 조회")
     @GetMapping
@@ -49,7 +49,7 @@ public class EventRestController {
             throw new GeneralException(ErrorStatus.INVALID_DATE_RANGE);
         }
 
-        List<EventResponse.EventInfoDTO> allEvents = eventService.findEvents(from, to);
+        List<EventResponse.EventInfoDTO> allEvents = eventQueryService.findEvents(from, to);
         return ApiResponse.onSuccess(allEvents);
     }
 
@@ -58,7 +58,7 @@ public class EventRestController {
     public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails (
             @PathVariable("eventId") @Positive(message = "eventId는 1 이상이어야 합니다.")Long eventId
     ) {
-        EventResponse.EventInfoDetailDTO eventDetails = eventService.findEventDetails(eventId);
+        EventResponse.EventInfoDetailDTO eventDetails = eventQueryService.findEventDetails(eventId);
         return ApiResponse.onSuccess(eventDetails);
     }
 }
