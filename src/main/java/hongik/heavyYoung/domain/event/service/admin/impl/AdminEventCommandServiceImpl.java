@@ -10,8 +10,10 @@ import hongik.heavyYoung.domain.event.service.admin.AdminEventCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AdminEventCommandServiceImpl implements AdminEventCommandService {

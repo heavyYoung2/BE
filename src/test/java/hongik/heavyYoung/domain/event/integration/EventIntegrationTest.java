@@ -76,7 +76,6 @@ class EventIntegrationTest {
                 .eventEndDate(LocalDate.of(2025, 9, 5))
                 .build();
 
-        eventRepository.save(event1);
         eventRepository.save(event2);
         eventRepository.save(event3);
     }
