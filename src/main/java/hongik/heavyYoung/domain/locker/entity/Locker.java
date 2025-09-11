@@ -17,8 +17,11 @@ public class Locker extends BaseEntity {
     @Column(name = "locker_id")
     private Long id;
 
-    @Column(name = "locker_number", nullable = false, length = 20)
-    private String lockerNumber;
+    @Column(name = "locker_section", nullable = false, length = 20)
+    private String lockerSection;
+
+    @Column(name = "locker_number", nullable = false)
+    private int lockerNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "locker_status", nullable = false, length = 20)

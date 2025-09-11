@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -30,4 +32,22 @@ public class Event extends BaseEntity {
 
     @Column(name = "event_end_date")
     private LocalDate eventEndDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC")
+    private List<EventImage> eventImages = new ArrayList<>();
+
+    /** 연관관계 편의 메서드 */
+    public void addEventImage(EventImage image) {
+        if (image == null) return;
+        this.eventImages.add(image);
+        image.setEvent(this);
+    }
+
+    public void removeEventImage(EventImage image) {
+        if (image == null) return;
+        this.eventImages.remove(image);
+        image.removeEvent();
+    }
 }
