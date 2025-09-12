@@ -158,8 +158,7 @@ class EventQueryServiceImplTest {
     void findEventDetails_eventNotFound_throwsException() {
         // given
         Long notExistingId = 999L;
-        given(eventRepository.findByIdWithImages(notExistingId))
-                .willReturn(Optional.empty());
+        given(eventRepository.findByIdWithImages(notExistingId)).willReturn(Optional.empty());
 
         // when & then
         EventException exception = assertThrows(EventException.class, () ->

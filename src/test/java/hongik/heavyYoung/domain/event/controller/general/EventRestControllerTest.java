@@ -166,9 +166,10 @@ class EventRestControllerTest {
     @DisplayName("공지사항 상세 조회(사진포함)시 PathVariable 형식 오류인 경우")
     void getEventDetails_wrongPathVariable() throws Exception {
         // given
+        String eventId = "HI";
 
         // when
-        ResultActions result = mockMvc.perform(get("/events/{eventId}", "HI")
+        ResultActions result = mockMvc.perform(get("/events/{eventId}", eventId)
                 .accept(MediaType.APPLICATION_JSON));
 
         // then

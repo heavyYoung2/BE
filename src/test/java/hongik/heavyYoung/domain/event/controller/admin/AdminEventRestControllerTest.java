@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -173,4 +174,38 @@ class AdminEventRestControllerTest {
         verifyNoInteractions(adminEventCommandService);
     }
 
+    @Test
+    @DisplayName("공지사항 삭제 성공")
+    void deleteEvent_success() throws Exception {
+        // given
+        Long eventId = 1L;
+        doNothing().when(adminEventCommandService).deleteEvent(eventId);
+
+        // when
+        ResultActions result = mockMvc.perform(delete("/admin/event/{eventId}", eventId));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result").doesNotExist());
+
+        verify(adminEventCommandService).deleteEvent(eventId);
+    }
+
+    @Test
+    @DisplayName("공지사항 삭제 실패 - eventId 형식 오류")
+    void deleteEvent_fail_wrongEventId() throws Exception {
+        // given
+        String eventId = "HI";
+
+        // when
+        ResultActions result = mockMvc.perform(delete("/admin/event/{eventId}", eventId));
+
+        // then
+        result.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess"). value(false))
+                .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_PARAMETER.getCode()));
+
+        verifyNoInteractions(adminEventCommandService);
+    }
 }

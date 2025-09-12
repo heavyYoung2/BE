@@ -46,7 +46,6 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
         event.updateByDTO(eventPutRequestDTO);
-
         return EventResponseConverter.toEventPutResponseDTO(event);
     }
 }
