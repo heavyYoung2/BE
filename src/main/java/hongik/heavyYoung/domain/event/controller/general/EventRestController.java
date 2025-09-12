@@ -56,7 +56,7 @@ public class EventRestController {
     @Operation(summary = "공지사항 상세 조회")
     @GetMapping("/{eventId}")
     public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails (
-            @PathVariable("eventId") @Positive(message = "eventId는 1 이상이어야 합니다.")Long eventId
+            @PathVariable("eventId") @Positive(message = "eventId는 1 이상이어야 합니다.") Long eventId
     ) {
         EventResponse.EventInfoDetailDTO eventDetails = eventQueryService.findEventDetails(eventId);
         return ApiResponse.onSuccess(eventDetails);

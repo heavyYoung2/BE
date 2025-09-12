@@ -7,10 +7,11 @@ import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import hongik.heavyYoung.domain.event.service.admin.AdminEventCommandService;
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
+import hongik.heavyYoung.global.exception.customException.EventException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 @Service
 @Transactional
@@ -31,5 +32,21 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
         Event savedEvent = eventRepository.save(event);
         // TODO 사진 업로드 방식 결정 후, 공지사항(Event)에 사진 추가 로직 필요
         return EventResponseConverter.toEventAddResponseDTO(savedEvent);
+    }
+
+    @Override
+    public void deleteEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
+        eventRepository.delete(event);
+    }
+
+    @Override
+    public EventResponse.EventPutResponseDTO updateEvent(Long eventId, EventRequest.EventPutRequestDTO eventPutRequestDTO) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
+        event.updateByDTO(eventPutRequestDTO);
+
+        return EventResponseConverter.toEventPutResponseDTO(event);
     }
 }

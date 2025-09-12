@@ -1,5 +1,6 @@
 package hongik.heavyYoung.domain.event.entity;
 
+import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,5 +50,29 @@ public class Event extends BaseEntity {
         if (image == null) return;
         this.eventImages.remove(image);
         image.removeEvent();
+    }
+
+    /** 수정 관련 메서드 */
+    public void updateByDTO(EventRequest.EventPutRequestDTO eventPutRequestDTO) {
+        this.changeEventTitle(eventPutRequestDTO.getTitle());
+        this.changeEventContent(eventPutRequestDTO.getContent());
+        this.changeEventStartDate(eventPutRequestDTO.getEventStartDate());
+        this.changeEventEndDate(eventPutRequestDTO.getEventEndDate());
+    }
+
+    public void changeEventTitle(String title) {
+        this.eventTitle = title;
+    }
+
+    public void changeEventContent(String content) {
+        this.eventContent = content;
+    }
+
+    public void changeEventStartDate(LocalDate eventStartDate) {
+        this.eventStartDate = eventStartDate;
+    }
+
+    public void changeEventEndDate(LocalDate eventEndDate) {
+        this.eventEndDate = eventEndDate;
     }
 }
