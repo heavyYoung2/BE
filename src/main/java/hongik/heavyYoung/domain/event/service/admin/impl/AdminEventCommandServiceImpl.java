@@ -34,7 +34,6 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
         return EventResponseConverter.toEventAddResponseDTO(savedEvent);
     }
 
-
     /**
      * 기존에 존재하는 공지사항(Event)을 삭제합니다.
      * 존재하지 않는 공지사항일 경우, EventException(EVENT_NOT_FOUND)가 발생합니다.
@@ -50,6 +49,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
 
     /**
      * 기존에 존재하는 공지사항(Event)의 내용을 수정합니다.
+     * 존재하지 않는 공지사항일 경우, EventException(EVENT_NOT_FOUND)가 발생합니다.
      *
      * @param eventId 수정할 공지사항의 PK
      * @param eventPutRequestDTO 공지사항 수정에 필요한 제목, 내용, 행사 시작/종료일 정보를 담은 DTO

@@ -129,6 +129,8 @@ class AdminEventCommandServiceImplTest {
         assertEquals(event.getEventContent(), "수정된행사 세부 일정");
         assertEquals(event.getEventStartDate(), LocalDate.of(2025,10,1));
         assertEquals(event.getEventEndDate(), LocalDate.of(2025,10,2));
+
+        verify(eventRepository).findById(eventId);
     }
 
     @Test
@@ -153,6 +155,4 @@ class AdminEventCommandServiceImplTest {
         assertEquals(ErrorStatus.EVENT_NOT_FOUND, eventException.getCode());
         verify(eventRepository).findById(notExistingId);
     }
-
-
 }

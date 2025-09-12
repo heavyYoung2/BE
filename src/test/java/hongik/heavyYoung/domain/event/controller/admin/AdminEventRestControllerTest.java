@@ -238,8 +238,10 @@ class AdminEventRestControllerTest {
                 .content(objectMapper.writeValueAsString(eventPutRequestDTO)));
 
         // then
-                result.andExpect(status().isOk())
-                        .andExpect(jsonPath("$.isSuccess").value(true))
-                        .andExpect(jsonPath("$.result.eventId").value(eventId));
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.eventId").value(eventId));
+
+        verify(adminEventCommandService).updateEvent(eq(eventId),any(EventRequest.EventPutRequestDTO.class));
     }
 }
