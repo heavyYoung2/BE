@@ -49,6 +49,8 @@ class AdminEventRestControllerTest {
     @DisplayName("공지사항 생성 성공")
     void addEvent() throws Exception {
         // given
+        Long eventId = 1L;
+
         EventRequest.EventAddRequestDTO request = EventRequest.EventAddRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부 일정")
@@ -58,7 +60,7 @@ class AdminEventRestControllerTest {
 
         EventResponse.EventAddResponseDTO eventAddResponseDTO =
                 EventResponse.EventAddResponseDTO.builder()
-                        .eventId(1L)
+                        .eventId(eventId)
                         .build();
 
         given(adminEventCommandService.createEvent(any(EventRequest.EventAddRequestDTO.class)))
@@ -72,7 +74,7 @@ class AdminEventRestControllerTest {
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
-                .andExpect(jsonPath("$.result.eventId").value(1));
+                .andExpect(jsonPath("$.result.eventId").value(eventId));
 
         verify(adminEventCommandService).createEvent(any(EventRequest.EventAddRequestDTO.class));
     }
