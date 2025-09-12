@@ -23,6 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -207,5 +208,36 @@ class AdminEventRestControllerTest {
                 .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_PARAMETER.getCode()));
 
         verifyNoInteractions(adminEventCommandService);
+    }
+
+    @Test
+    @DisplayName("공지사항 수정 성공")
+    void updateEvent_success() throws Exception {
+        // given
+        Long eventId = 1L;
+
+        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+                .title("수정된행사")
+                .content("수정된행사 세부 일정")
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
+                .build();
+
+        EventResponse.EventPutResponseDTO eventPutResponseDTO =
+                EventResponse.EventPutResponseDTO.builder()
+                        .eventId(eventId)
+                        .build();
+
+        given(adminEventCommandService.updateEvent(eq(eventId),any(EventRequest.EventPutRequestDTO.class))).willReturn(eventPutResponseDTO);
+
+        // when
+        ResultActions result = mockMvc.perform(put("/admin/event/{eventId}", eventId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(eventPutRequestDTO)));
+
+        // then
+                result.andExpect(status().isOk())
+                        .andExpect(jsonPath("$.isSuccess").value(true))
+                        .andExpect(jsonPath("$.result.eventId").value(eventId));
     }
 }

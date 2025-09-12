@@ -24,6 +24,7 @@ import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -144,5 +145,33 @@ class AdminEventIntegrationTest {
 
         // then
         assertThat(eventRepository.findById(eventId)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("공지사항 수정 성공")
+    void updateEvent_success() throws Exception {
+        // given
+        Long eventId = savedEventId;
+
+        EventRequest.EventPutRequestDTO request = EventRequest.EventPutRequestDTO.builder()
+                .title("수정된행사")
+                .content("수정된행사 세부 일정")
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
+                .build();
+
+        // when
+        ResultActions result = mockMvc.perform(put("/admin/event/{eventId}", eventId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.eventId").value(eventId));
+
+        Event updatedEvent = eventRepository.findById(eventId).orElseThrow();
+        assertEquals(updatedEvent.getEventTitle(), "수정된행사");
+        assertEquals(updatedEvent.getEventContent(), "수정된행사 세부 일정");
     }
 }

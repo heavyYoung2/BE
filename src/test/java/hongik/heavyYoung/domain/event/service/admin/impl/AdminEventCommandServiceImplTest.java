@@ -35,7 +35,7 @@ class AdminEventCommandServiceImplTest {
 
     @Test
     @DisplayName("공지사항 생성 성공")
-    void createEvent() {
+    void createEvent_success() {
         // given
         EventRequest.EventAddRequestDTO eventAddRequestDTO = EventRequest.EventAddRequestDTO.builder()
                 .title("간식행사")
@@ -90,10 +90,67 @@ class AdminEventCommandServiceImplTest {
         given(eventRepository.findById(notExistingId)).willReturn(Optional.empty());
 
         // when & then
-        EventException exception = assertThrows(EventException.class, () ->
+        EventException eventException = assertThrows(EventException.class, () ->
                 adminEventCommandService.deleteEvent(notExistingId));
 
-        assertEquals(ErrorStatus.EVENT_NOT_FOUND, exception.getCode());
+        assertEquals(ErrorStatus.EVENT_NOT_FOUND, eventException.getCode());
+        verify(eventRepository).findById(notExistingId);
+    }
+
+    @Test
+    @DisplayName("공지사항 수정 성공")
+    void updateEvent_success() {
+        // given
+        Long eventId = 1L;
+
+        Event event = Event.builder()
+                .id(eventId)
+                .eventTitle("간식행사")
+                .eventContent("간식행사 세부 일정")
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
+                .build();
+
+        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+                .title("수정된행사")
+                .content("수정된행사 세부 일정")
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
+                .build();
+
+        given(eventRepository.findById(eventId)).willReturn(Optional.of(event));
+
+        // when
+        EventResponse.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO);
+
+        // then
+        assertThat(eventPutResponseDTO.getEventId()).isEqualTo(1L);
+        assertEquals(event.getEventTitle(),"수정된행사");
+        assertEquals(event.getEventContent(), "수정된행사 세부 일정");
+        assertEquals(event.getEventStartDate(), LocalDate.of(2025,10,1));
+        assertEquals(event.getEventEndDate(), LocalDate.of(2025,10,2));
+    }
+
+    @Test
+    @DisplayName("공지사항 수정 실패 - 존재하지 않는 공지사항")
+    void updateEvent_fail_notExistingEvent() {
+        // given
+        Long notExistingId = 999L;
+
+        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+                .title("수정된행사")
+                .content("수정된행사 세부 일정")
+                .eventStartDate(LocalDate.of(2025, 10, 1))
+                .eventEndDate(LocalDate.of(2025, 10, 2))
+                .build();
+
+        given(eventRepository.findById(notExistingId)).willReturn(Optional.empty());
+
+        // when & then
+        EventException eventException = assertThrows(EventException.class, () ->
+                adminEventCommandService.updateEvent(notExistingId, eventPutRequestDTO));
+
+        assertEquals(ErrorStatus.EVENT_NOT_FOUND, eventException.getCode());
         verify(eventRepository).findById(notExistingId);
     }
 
