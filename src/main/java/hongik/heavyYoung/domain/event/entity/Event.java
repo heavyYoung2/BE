@@ -1,5 +1,7 @@
 package hongik.heavyYoung.domain.event.entity;
 
+import hongik.heavyYoung.domain.event.command.CreateEventCommand;
+import hongik.heavyYoung.domain.event.command.UpdateEventCommand;
 import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
@@ -52,27 +54,21 @@ public class Event extends BaseEntity {
         image.removeEvent();
     }
 
+    /** 생성 관련 메서드 */
+    public static Event create(CreateEventCommand createEventCommand) {
+        return Event.builder().
+                eventTitle(createEventCommand.title())
+                .eventContent(createEventCommand.content())
+                .eventStartDate(createEventCommand.startDate())
+                .eventEndDate(createEventCommand.endDate())
+                .build();
+    }
+
     /** 수정 관련 메서드 */
-    public void updateByDTO(EventRequest.EventPutRequestDTO eventPutRequestDTO) {
-        this.changeEventTitle(eventPutRequestDTO.getTitle());
-        this.changeEventContent(eventPutRequestDTO.getContent());
-        this.changeEventStartDate(eventPutRequestDTO.getEventStartDate());
-        this.changeEventEndDate(eventPutRequestDTO.getEventEndDate());
-    }
-
-    public void changeEventTitle(String title) {
-        this.eventTitle = title;
-    }
-
-    public void changeEventContent(String content) {
-        this.eventContent = content;
-    }
-
-    public void changeEventStartDate(LocalDate eventStartDate) {
-        this.eventStartDate = eventStartDate;
-    }
-
-    public void changeEventEndDate(LocalDate eventEndDate) {
-        this.eventEndDate = eventEndDate;
+    public void update(UpdateEventCommand updateEventCommand) {
+        this.eventTitle = updateEventCommand.title();
+        this.eventContent = updateEventCommand.content();
+        this.eventStartDate = updateEventCommand.startDate();
+        this.eventEndDate = updateEventCommand.endDate();
     }
 }

@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminEventCommandServiceImplTest {
@@ -79,6 +78,7 @@ class AdminEventCommandServiceImplTest {
         adminEventCommandService.deleteEvent(eventId);
 
         // then
+        verify(eventRepository).findById(eventId);
         verify(eventRepository).delete(event);
     }
 
@@ -95,6 +95,7 @@ class AdminEventCommandServiceImplTest {
 
         assertEquals(ErrorStatus.EVENT_NOT_FOUND, eventException.getCode());
         verify(eventRepository).findById(notExistingId);
+        verify(eventRepository, never()).delete(any(Event.class));
     }
 
     @Test
@@ -154,5 +155,6 @@ class AdminEventCommandServiceImplTest {
 
         assertEquals(ErrorStatus.EVENT_NOT_FOUND, eventException.getCode());
         verify(eventRepository).findById(notExistingId);
+        verify(eventRepository, never()).save(any(Event.class));
     }
 }

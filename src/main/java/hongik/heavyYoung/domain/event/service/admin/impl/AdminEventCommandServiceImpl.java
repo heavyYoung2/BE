@@ -1,6 +1,7 @@
 package hongik.heavyYoung.domain.event.service.admin.impl;
 
-import hongik.heavyYoung.domain.event.converter.EventRequestConverter;
+import hongik.heavyYoung.domain.event.command.CreateEventCommand;
+import hongik.heavyYoung.domain.event.command.UpdateEventCommand;
 import hongik.heavyYoung.domain.event.converter.EventResponseConverter;
 import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
@@ -28,7 +29,8 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      */
     @Override
     public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
-        Event event = EventRequestConverter.toNewEvent(eventAddRequestDTO);
+        CreateEventCommand createEventCommand = CreateEventCommand.from(eventAddRequestDTO);
+        Event event = Event.create(createEventCommand);
         Event savedEvent = eventRepository.save(event);
         // TODO 사진 업로드 방식 결정 후, 공지사항(Event)에 사진 추가 로직 필요
         return EventResponseConverter.toEventAddResponseDTO(savedEvent);
@@ -44,6 +46,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
     public void deleteEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
+        // TODO S3 추가 이후, S3 버킷에서 이미지 삭제 기능 추가
         eventRepository.delete(event);
     }
 
@@ -59,7 +62,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
     public EventResponse.EventPutResponseDTO updateEvent(Long eventId, EventRequest.EventPutRequestDTO eventPutRequestDTO) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
-        event.updateByDTO(eventPutRequestDTO);
+        event.update(UpdateEventCommand.from(eventPutRequestDTO));
         return EventResponseConverter.toEventPutResponseDTO(event);
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
+import hongik.heavyYoung.domain.event.repository.EventImageRepository;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,9 @@ class AdminEventIntegrationTest {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EventImageRepository eventImageRepository;
 
     private Long savedEventId;
 
@@ -105,7 +109,7 @@ class AdminEventIntegrationTest {
                 .build();
 
         // when
-        ResultActions result = mockMvc.perform(post("/admin/event")
+        ResultActions result = mockMvc.perform(post("/admin/events")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
@@ -136,7 +140,7 @@ class AdminEventIntegrationTest {
         Long eventId = savedEventId;
 
         // when
-        ResultActions result = mockMvc.perform(delete("/admin/event/{eventId}", eventId));
+        ResultActions result = mockMvc.perform(delete("/admin/events/{eventId}", eventId));
 
         // then
         result.andExpect(status().isOk())
@@ -145,6 +149,7 @@ class AdminEventIntegrationTest {
 
         // then
         assertThat(eventRepository.findById(eventId)).isEmpty();
+        assertThat(eventImageRepository.findAllByEventId(eventId)).isEmpty();
     }
 
     @Test
@@ -161,7 +166,7 @@ class AdminEventIntegrationTest {
                 .build();
 
         // when
-        ResultActions result = mockMvc.perform(put("/admin/event/{eventId}", eventId)
+        ResultActions result = mockMvc.perform(put("/admin/events/{eventId}", eventId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
