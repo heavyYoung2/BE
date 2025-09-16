@@ -9,7 +9,7 @@
 | 박형진 | 안제웅 | 윤현일 |
 |:------:|:------:|:------:|
 | <img src="https://github.com/gud0217.png" width="200" height="200" /> | <img src="https://github.com/ajwoong.png" width="200" height="200" /> | <img src="https://github.com/yhi9839.png" width="200" height="200" /> |
-| PL | BE | BE |
+| BE | BE | BE |
 | [GitHub](https://github.com/gud0217) | [GitHub](https://github.com/ajwoong) | [GitHub](https://github.com/yhi9839) |
 
 ## ⚙️ 기술 스택
