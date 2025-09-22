@@ -30,4 +30,24 @@ public class EventRequest {
         private LocalDate eventEndDate;
         // TODO 사진 업로드 방식 결정 후, imageUrl 혹은 Multipart 추가
     }
+
+    // 공지사항 수정 요청 DTO
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EventPutRequestDTO {
+        @Schema(description = "공지사항 제목")
+        @NotBlank(message = "제목은 필수 입력 값입니다.")
+        @Size(max = 100, message = "제목은 최대 100자 까지 입력 가능합니다.")
+        private String title;
+        @Schema(description = "공지사항 내용")
+        @NotBlank(message = "내용은 필수 입력 값입니다.")
+        private String content;
+        @Schema(description = "행사 시작일")
+        private LocalDate eventStartDate;
+        @Schema(description = "행사 종료일")
+        private LocalDate eventEndDate;
+        // TODO 사진 업로드 방식 결정 후, imageUrl 혹은 Multipart 추가
+    }
 }

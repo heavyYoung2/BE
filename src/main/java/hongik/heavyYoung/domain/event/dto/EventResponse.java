@@ -66,4 +66,14 @@ public class EventResponse {
         @Schema(description = "공지사항 PK")
         private Long eventId;
     }
+
+    // 공지사항 수정시 응답 DTO
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EventPutResponseDTO {
+        @Schema(description = "수정된 공지사항 PK")
+        private Long eventId;
+    }
 }

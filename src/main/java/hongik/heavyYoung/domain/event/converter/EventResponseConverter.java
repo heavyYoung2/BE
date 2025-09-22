@@ -45,4 +45,10 @@ public class EventResponseConverter {
                 .eventId(event.getId())
                 .build();
     }
+
+    public static EventResponse.EventPutResponseDTO toEventPutResponseDTO(Event event) {
+        return EventResponse.EventPutResponseDTO.builder()
+                .eventId(event.getId())
+                .build();
+    }
 }

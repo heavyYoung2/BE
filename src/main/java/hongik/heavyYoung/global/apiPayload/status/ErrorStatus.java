@@ -19,6 +19,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // EVENT 에러
     EVENT_NOT_FOUND(HttpStatus.NOT_FOUND, "EVENT_001", "존재하지 않는 공지사항입니다."),
+    EVENT_INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "EVENT_002", "시작일은 종료일보다 이후일 수 없습니다."),
+    EVENT_INVALID_DATE_COMBINATION(HttpStatus.BAD_REQUEST, "EVENT_003", "시작일과 종료일은 모두 입력하거나 모두 비워야 합니다."),
 
     // USER 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_001", "해당 유저가 존재하지 않습니다.");

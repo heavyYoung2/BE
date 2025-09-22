@@ -1,5 +1,8 @@
 package hongik.heavyYoung.domain.event.entity;
 
+import hongik.heavyYoung.domain.event.command.CreateEventCommand;
+import hongik.heavyYoung.domain.event.command.UpdateEventCommand;
+import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,5 +52,23 @@ public class Event extends BaseEntity {
         if (image == null) return;
         this.eventImages.remove(image);
         image.removeEvent();
+    }
+
+    /** 생성 관련 메서드 */
+    public static Event create(CreateEventCommand createEventCommand) {
+        return Event.builder().
+                eventTitle(createEventCommand.title())
+                .eventContent(createEventCommand.content())
+                .eventStartDate(createEventCommand.startDate())
+                .eventEndDate(createEventCommand.endDate())
+                .build();
+    }
+
+    /** 수정 관련 메서드 */
+    public void update(UpdateEventCommand updateEventCommand) {
+        this.eventTitle = updateEventCommand.title();
+        this.eventContent = updateEventCommand.content();
+        this.eventStartDate = updateEventCommand.startDate();
+        this.eventEndDate = updateEventCommand.endDate();
     }
 }

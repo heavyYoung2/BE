@@ -22,6 +22,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,6 +49,8 @@ class AdminEventRestControllerTest {
     @DisplayName("공지사항 생성 성공")
     void addEvent() throws Exception {
         // given
+        Long eventId = 1L;
+
         EventRequest.EventAddRequestDTO request = EventRequest.EventAddRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부 일정")
@@ -56,21 +60,21 @@ class AdminEventRestControllerTest {
 
         EventResponse.EventAddResponseDTO eventAddResponseDTO =
                 EventResponse.EventAddResponseDTO.builder()
-                        .eventId(1L)
+                        .eventId(eventId)
                         .build();
 
         given(adminEventCommandService.createEvent(any(EventRequest.EventAddRequestDTO.class)))
                 .willReturn(eventAddResponseDTO);
 
         // when
-        ResultActions result = mockMvc.perform(post("/admin/event")
+        ResultActions result = mockMvc.perform(post("/admin/events")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(true))
-                .andExpect(jsonPath("$.result.eventId").value(1));
+                .andExpect(jsonPath("$.result.eventId").value(eventId));
 
         verify(adminEventCommandService).createEvent(any(EventRequest.EventAddRequestDTO.class));
     }
@@ -88,7 +92,7 @@ class AdminEventRestControllerTest {
                 .build();
 
         // when
-        ResultActions result = mockMvc.perform(post("/admin/event")
+        ResultActions result = mockMvc.perform(post("/admin/events")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
@@ -107,7 +111,7 @@ class AdminEventRestControllerTest {
         // given
 
         // when
-        ResultActions result = mockMvc.perform(post("/admin/event")
+        ResultActions result = mockMvc.perform(post("/admin/events")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
             {
@@ -127,50 +131,70 @@ class AdminEventRestControllerTest {
     }
 
     @Test
-    @DisplayName("공지사항 생성 실패 - 시작일(startDate)보다 종료일(endDate)이 앞선 경우")
-    void addEvent_invalidDateRange() throws Exception{
+    @DisplayName("공지사항 삭제 성공")
+    void deleteEvent_success() throws Exception {
         // given
-        EventRequest.EventAddRequestDTO request = EventRequest.EventAddRequestDTO.builder()
-                .title("간식행사")
-                .content("간식행사 세부 일정")
-                .eventStartDate(LocalDate.of(2025, 9, 2))
-                .eventEndDate(LocalDate.of(2025, 9, 1))
-                .build();
+        Long eventId = 1L;
+        doNothing().when(adminEventCommandService).deleteEvent(eventId);
 
         // when
-        ResultActions result = mockMvc.perform(post("/admin/event")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+        ResultActions result = mockMvc.perform(delete("/admin/events/{eventId}", eventId));
 
         // then
-        result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(false))
-                .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_DATE_RANGE.getCode()));
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result").doesNotExist());
 
-        verifyNoInteractions(adminEventCommandService);
+        verify(adminEventCommandService).deleteEvent(eventId);
     }
 
     @Test
-    @DisplayName("공지사항 생성 실패 - 시작일(startDate), 종료일(endDate)중 한 가지 값만 들어온 경우")
-    void addEvent_onlyOneDate() throws Exception{
+    @DisplayName("공지사항 삭제 실패 - eventId 형식 오류")
+    void deleteEvent_fail_wrongEventId() throws Exception {
         // given
-        EventRequest.EventAddRequestDTO request = EventRequest.EventAddRequestDTO.builder()
-                .title("간식행사")
-                .content("간식행사 세부 일정")
-                .eventStartDate(LocalDate.of(2025, 9, 2))
-                .build();
+        String eventId = "HI";
 
         // when
-        ResultActions result = mockMvc.perform(post("/admin/event")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+        ResultActions result = mockMvc.perform(delete("/admin/events/{eventId}", eventId));
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.isSuccess").value(false))
+                .andExpect(jsonPath("$.isSuccess"). value(false))
                 .andExpect(jsonPath("$.code").value(ErrorStatus.INVALID_PARAMETER.getCode()));
 
         verifyNoInteractions(adminEventCommandService);
     }
 
+    @Test
+    @DisplayName("공지사항 수정 성공")
+    void updateEvent_success() throws Exception {
+        // given
+        Long eventId = 1L;
+
+        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+                .title("수정된행사")
+                .content("수정된행사 세부 일정")
+                .eventStartDate(LocalDate.of(2025, 9, 1))
+                .eventEndDate(LocalDate.of(2025, 9, 2))
+                .build();
+
+        EventResponse.EventPutResponseDTO eventPutResponseDTO =
+                EventResponse.EventPutResponseDTO.builder()
+                        .eventId(eventId)
+                        .build();
+
+        given(adminEventCommandService.updateEvent(eq(eventId),any(EventRequest.EventPutRequestDTO.class))).willReturn(eventPutResponseDTO);
+
+        // when
+        ResultActions result = mockMvc.perform(put("/admin/events/{eventId}", eventId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(eventPutRequestDTO)));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.eventId").value(eventId));
+
+        verify(adminEventCommandService).updateEvent(eq(eventId),any(EventRequest.EventPutRequestDTO.class));
+    }
 }
