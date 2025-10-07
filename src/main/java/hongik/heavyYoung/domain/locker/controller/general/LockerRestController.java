@@ -28,7 +28,7 @@ public class LockerRestController {
     @Operation(summary = "사물함 전체 조회")
     @GetMapping
     public ApiResponse<List<LockerResponse.LockerInfoDTO>> getAllLockers(
-            @Parameter(description = "사물함 구역", example = "A")
+            @Parameter(description = "사물함 구역", example = "A", required = true)
             @RequestParam(value = "lockerSection")
             @Pattern(regexp = "^[A-I]$", message = "사물함 구역은 A부터 I까지 가능합니다.")
             String lockerSection
