@@ -21,7 +21,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
     private final LockerRepository lockerRepository;
     private static final Long DUMMY_MEMBER_ID = 1L;
 
-
     /**
      * 섹션 별 전체 사물함 정보를 조회합니다.
      * A,B,C,D,E,F 섹션에 맞게 사물함의 정보를 조회할 수 있습니다.
