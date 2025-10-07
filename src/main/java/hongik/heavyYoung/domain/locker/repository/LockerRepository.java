@@ -14,6 +14,7 @@ public interface LockerRepository extends JpaRepository<Locker, Long> {
     LEFT JOIN LockerAssignment la ON la.locker = l AND la.isCurrentSemester = true
     LEFT JOIN la.member m
     WHERE l.lockerSection = :lockerSection
+    ORDER BY l.lockerNumber ASC
 """)
     List<Object[]> findAllWithCurrentSemesterAssign(@Param("lockerSection") String lockerSection);
 }
