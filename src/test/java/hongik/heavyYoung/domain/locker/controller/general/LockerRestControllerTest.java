@@ -3,6 +3,7 @@ package hongik.heavyYoung.domain.locker.controller.general;
 import hongik.heavyYoung.domain.locker.config.LockerRestControllerTestConfig;
 import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,4 +74,22 @@ class LockerRestControllerTest {
                 .andExpect(jsonPath("$.result[1].lockerNumber").value("A2"))
                 .andExpect(jsonPath("$.result[1].lockerStatus").value("AVAILABLE"));
     }
+
+    @Test
+    @DisplayName("사물함 전체 조회시 구역(lockerSection) 파라미터가 A~I가 아닌 경우")
+    void getAllLockers_invalidLockerSection() throws Exception {
+        // given
+
+        // when
+        ResultActions result = mockMvc.perform(get("/lockers")
+                .param("lockerSection", "a")
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.isSuccess").value(false))
+                .andExpect(jsonPath("$.code").value(ErrorStatus.VALIDATION_ERROR.getCode()))
+                .andExpect(jsonPath("$.message").value("요청 값이 유효하지 않습니다."));
+    }
+
 }
