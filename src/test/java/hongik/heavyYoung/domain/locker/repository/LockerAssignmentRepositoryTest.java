@@ -3,10 +3,10 @@ package hongik.heavyYoung.domain.locker.repository;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
-import hongik.heavyYoung.domain.member.repository.MemberRepository;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.enums.MemberStatus;
 import hongik.heavyYoung.domain.member.enums.StudentFeeStatus;
+import hongik.heavyYoung.domain.member.repository.MemberRepository;
 import hongik.heavyYoung.global.config.TestJpaAuditingConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,27 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.util.List;
+import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import(TestJpaAuditingConfig.class)
-class LockerRepositoryTest {
-
-    @Autowired
-    private LockerRepository lockerRepository;
+class LockerAssignmentRepositoryTest {
 
     @Autowired
     private LockerAssignmentRepository lockerAssignmentRepository;
 
     @Autowired
+    private LockerRepository lockerRepository;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @Test
-    @DisplayName("A 구역 사물함 전체 조회 성공")
-    void findAllWithCurrentSemesterAssign_findSection_A() {
+    @DisplayName("사용자 현재 학기 사물함 배정 내용 조회")
+    void findByMember_IdAndIsCurrentSemesterTrue_success() {
         // given
         Locker locker1 = Locker.builder()
                 .lockerSection("A")
@@ -48,29 +47,8 @@ class LockerRepositoryTest {
                 .lockerStatus(LockerStatus.IN_USE)
                 .build();
 
-        Locker locker3 = Locker.builder()
-                .lockerSection("A")
-                .lockerNumber(3)
-                .lockerStatus(LockerStatus.BROKEN)
-                .build();
-
-        Locker locker4 = Locker.builder()
-                .lockerSection("A")
-                .lockerNumber(4)
-                .lockerStatus(LockerStatus.AVAILABLE)
-                .build();
-
-        Locker locker5 = Locker.builder()
-                .lockerSection("B")
-                .lockerNumber(1)
-                .lockerStatus(LockerStatus.AVAILABLE)
-                .build();
-
         lockerRepository.save(locker1);
         lockerRepository.save(locker2);
-        lockerRepository.save(locker3);
-        lockerRepository.save(locker4);
-        lockerRepository.save(locker5);
 
         Member member1 = Member.builder()
                 .studentId("C011117")
@@ -110,20 +88,18 @@ class LockerRepositoryTest {
                 .build();
 
         lockerAssignmentRepository.save(lockerAssignment1);
-        lockerAssignmentRepository.save(lockerAssignment2);
 
+        Long loginMemberId = member1.getId();
 
         // when
-        List<Object[]> result = lockerRepository.findAllWithCurrentSemesterAssign("A");
+        Optional<LockerAssignment> result = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(loginMemberId);
 
         // then
-        assertThat(result).hasSize(4);
-
-        Locker resultLocker = (Locker) result.getFirst()[0];
-        Member resultMember = (Member) result.getFirst()[1];
-
-        assertEquals(resultLocker.getLockerSection(), "A");
-        assertEquals(resultLocker.getLockerNumber(), 1);
-        assertEquals(resultMember.getStudentId(), "C011117");
+        LockerAssignment lockerAssignment = result.get();
+        assertEquals(lockerAssignment.getLocker().getLockerSection(), "A");
+        assertEquals(lockerAssignment.getLocker().getLockerNumber(), 1);
+        assertEquals(lockerAssignment.getMember().getStudentId(), "C011117");
     }
+
+
 }

@@ -25,6 +25,9 @@ public class LockerRestController {
 
     private final LockerQueryService lockerQueryService;
 
+    // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
+    private static final Long DUMMY_MEMBER_ID = 1L;
+
     @Operation(summary = "사물함 전체 조회")
     @GetMapping
     public ApiResponse<List<LockerResponse.LockerInfoDTO>> getAllLockers(
@@ -33,14 +36,16 @@ public class LockerRestController {
             @Pattern(regexp = "^[A-I]$", message = "사물함 구역은 A부터 I까지 가능합니다.")
             String lockerSection
     ) {
-        List<LockerResponse.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection);
+        // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
+        List<LockerResponse.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection, DUMMY_MEMBER_ID);
         return ApiResponse.onSuccess(allLockers);
     }
 
     @Operation(summary = "나의 사물함 조회")
     @GetMapping("/me")
     public ApiResponse<LockerResponse.MyLockerInfoDTO> getMyLocker() {
-        LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker();
+        // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
+        LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker(DUMMY_MEMBER_ID);
         return ApiResponse.onSuccess(myLocker);
     }
 }

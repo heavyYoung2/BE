@@ -1,8 +1,8 @@
 package hongik.heavyYoung.domain.locker.integration.general;
 
-
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
+import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.locker.repository.LockerAssignmentRepository;
 import hongik.heavyYoung.domain.locker.repository.LockerRepository;
@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -30,6 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Sql(statements = {
+        "ALTER TABLE member AUTO_INCREMENT = 1",
+        "ALTER TABLE locker AUTO_INCREMENT = 1",
+        "ALTER TABLE locker_assignment AUTO_INCREMENT = 1",
+        "ALTER TABLE member_application AUTO_INCREMENT = 1",
+        "ALTER TABLE application AUTO_INCREMENT = 1"
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class LockerIntegrationTest {
 
     @Autowired
@@ -159,6 +167,23 @@ class LockerIntegrationTest {
                 .andExpect(jsonPath("$.result[2].lockerStatus").value("BROKEN"))
                 .andExpect(jsonPath("$.result[3].lockerNumber").value("A4"))
                 .andExpect(jsonPath("$.result[3].lockerStatus").value("AVAILABLE"));
+    }
+
+    @Test
+    @DisplayName("나의 사물함 조회 성공")
+    void getMyLocker_API() throws Exception {
+        // given
+
+        // when
+        ResultActions result = mockMvc.perform(get("/lockers/me")
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.lockerId").value(1L))
+                .andExpect(jsonPath("$.result.lockerNumber").value("A1"))
+                .andExpect(jsonPath("$.result.lockerRentalStatus").value(LockerRentalStatus.RENTING.name()));
     }
 
 }
