@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface LockerQueryService {
     List<LockerResponse.LockerInfoDTO> findAllLockers(String lockerSection);
+    LockerResponse.MyLockerInfoDTO findMyLocker();
 }
