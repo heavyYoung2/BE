@@ -2,6 +2,8 @@ package hongik.heavyYoung.domain.locker.controller.general;
 
 import hongik.heavyYoung.domain.locker.config.LockerRestControllerTestConfig;
 import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
+import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,21 +43,23 @@ class LockerRestControllerTest {
     @DisplayName("A구역 사물함 전체 조회 성공")
     void getAllLockers_getSection_A_success() throws Exception {
         // given
+        Long loginMemberId = 1L;
+
         LockerResponse.LockerInfoDTO lockerInfoDTO1 = LockerResponse.LockerInfoDTO.builder()
                 .lockerId(1L)
                 .lockerNumber("A1")
                 .studentId("C011117")
                 .studentName("안제웅")
-                .lockerStatus("MY")
+                .lockerStatus(LockerStatus.MY.name())
                 .build();
 
         LockerResponse.LockerInfoDTO lockerInfoDTO2 = LockerResponse.LockerInfoDTO.builder()
                 .lockerId(2L)
                 .lockerNumber("A2")
-                .lockerStatus("AVAILABLE")
+                .lockerStatus(LockerStatus.AVAILABLE.name())
                 .build();
 
-        given(lockerQueryService.findAllLockers("A")).willReturn(List.of(lockerInfoDTO1, lockerInfoDTO2));
+        given(lockerQueryService.findAllLockers("A", loginMemberId)).willReturn(List.of(lockerInfoDTO1, lockerInfoDTO2));
 
         // when
         ResultActions result = mockMvc.perform(get("/lockers")
@@ -69,10 +73,10 @@ class LockerRestControllerTest {
                 .andExpect(jsonPath("$.result[0].lockerNumber").value("A1"))
                 .andExpect(jsonPath("$.result[0].studentId").value("C011117"))
                 .andExpect(jsonPath("$.result[0].studentName").value("안제웅"))
-                .andExpect(jsonPath("$.result[0].lockerStatus").value("MY"))
+                .andExpect(jsonPath("$.result[0].lockerStatus").value(LockerStatus.MY.name()))
                 .andExpect(jsonPath("$.result[1].lockerId").value(2L))
                 .andExpect(jsonPath("$.result[1].lockerNumber").value("A2"))
-                .andExpect(jsonPath("$.result[1].lockerStatus").value("AVAILABLE"));
+                .andExpect(jsonPath("$.result[1].lockerStatus").value(LockerStatus.AVAILABLE.name()));
     }
 
     @Test
@@ -90,6 +94,32 @@ class LockerRestControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(false))
                 .andExpect(jsonPath("$.code").value(ErrorStatus.VALIDATION_ERROR.getCode()))
                 .andExpect(jsonPath("$.message").value("요청 값이 유효하지 않습니다."));
+    }
+
+    @Test
+    @DisplayName("나의 사물함 조회 성공")
+    void getMyLocker_success() throws Exception {
+        // given
+        Long loginMemberId = 1L;
+
+        LockerResponse.MyLockerInfoDTO myLockerInfoDTO = LockerResponse.MyLockerInfoDTO.builder()
+                .lockerId(1L)
+                .lockerNumber("A1")
+                .lockerRentalStatus(LockerRentalStatus.RENTING.name())
+                .build();
+
+        given(lockerQueryService.findMyLocker(loginMemberId)).willReturn(myLockerInfoDTO);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/lockers/me")
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.result.lockerId").value(1L))
+                .andExpect(jsonPath("$.result.lockerNumber").value("A1"))
+                .andExpect(jsonPath("$.result.lockerRentalStatus").value(LockerRentalStatus.RENTING.name()));
     }
 
 }

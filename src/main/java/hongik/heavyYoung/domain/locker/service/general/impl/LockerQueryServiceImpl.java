@@ -29,7 +29,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
     private final MemberApplicationRepository memberApplicationRepository;
 
     // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디 제거
-    private static final Long DUMMY_MEMBER_ID = 1L;
 
     /**
      * 섹션 별 전체 사물함 정보를 조회합니다.
@@ -41,15 +40,15 @@ public class LockerQueryServiceImpl implements LockerQueryService {
      */
     @Override
     @Cacheable(value = "lockers", key = "#lockerSection")
-    public List<LockerResponse.LockerInfoDTO> findAllLockers(String lockerSection) {
+    public List<LockerResponse.LockerInfoDTO> findAllLockers(String lockerSection, Long memberId) {
         List<Object[]> lockerMember = lockerRepository.findAllWithCurrentSemesterAssign(lockerSection);
 
         return lockerMember.stream()
                 .map(row -> {
                     Locker locker = (Locker) row[0];
                     Member member = (Member) row[1];
-                    // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
-                    return LockerResponseConverter.toLockerInfoDTO(locker, member, DUMMY_MEMBER_ID);
+
+                    return LockerResponseConverter.toLockerInfoDTO(locker, member, memberId);
                 })
                 .toList();
     }
@@ -63,9 +62,9 @@ public class LockerQueryServiceImpl implements LockerQueryService {
      * @return 나의 사물함 정보
      */
     @Override
-    public LockerResponse.MyLockerInfoDTO findMyLocker() {
+    public LockerResponse.MyLockerInfoDTO findMyLocker(Long memberId) {
         // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
-        Optional<LockerAssignment> lockerAssignment = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(DUMMY_MEMBER_ID);
+        Optional<LockerAssignment> lockerAssignment = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(memberId);
 
         if (lockerAssignment.isPresent()) {
             Locker locker = lockerAssignment.get().getLocker();
@@ -73,7 +72,7 @@ public class LockerQueryServiceImpl implements LockerQueryService {
         }
 
         // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
-        boolean lockerRequested = memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(DUMMY_MEMBER_ID, ApplicationType.LOCKER_MAIN);
+        boolean lockerRequested = memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(memberId, ApplicationType.LOCKER_MAIN);
 
         if (lockerRequested) {
             return LockerResponseConverter.toMyLockerInfoDTO(null, LockerRentalStatus.RENTAL_REQUESTED);
