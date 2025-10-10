@@ -1,17 +1,23 @@
 package hongik.heavyYoung.domain.locker.service.general.impl;
 
+import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.locker.converter.LockerResponseConverter;
 import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.entity.Locker;
+import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
+import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
+import hongik.heavyYoung.domain.locker.repository.LockerAssignmentRepository;
 import hongik.heavyYoung.domain.locker.repository.LockerRepository;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
 import hongik.heavyYoung.domain.member.entity.Member;
+import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,6 +25,10 @@ import java.util.List;
 public class LockerQueryServiceImpl implements LockerQueryService {
 
     private final LockerRepository lockerRepository;
+    private final LockerAssignmentRepository lockerAssignmentRepository;
+    private final MemberApplicationRepository memberApplicationRepository;
+
+    // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디 제거
     private static final Long DUMMY_MEMBER_ID = 1L;
 
     /**
@@ -38,8 +48,27 @@ public class LockerQueryServiceImpl implements LockerQueryService {
                 .map(row -> {
                     Locker locker = (Locker) row[0];
                     Member member = (Member) row[1];
+                    // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
                     return LockerResponseConverter.toLockerInfoDTO(locker, member, DUMMY_MEMBER_ID);
                 })
                 .toList();
+    }
+
+    @Override
+    public LockerResponse.MyLockerInfoDTO findMyLocker() {
+        Optional<LockerAssignment> lockerAssignment = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(DUMMY_MEMBER_ID);
+
+        if (lockerAssignment.isPresent()) {
+            Locker locker = lockerAssignment.get().getLocker();
+            return LockerResponseConverter.toMyLockerInfoDTO(locker, LockerRentalStatus.RENTING);
+        }
+
+        boolean lockerRequested = memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(DUMMY_MEMBER_ID, ApplicationType.LOCKER_MAIN);
+
+        if (lockerRequested) {
+            return LockerResponseConverter.toMyLockerInfoDTO(null, LockerRentalStatus.RENTAL_REQUESTED);
+        } else {
+            return LockerResponseConverter.toMyLockerInfoDTO(null, LockerRentalStatus.NO_RENTAL);
+        }
     }
 }

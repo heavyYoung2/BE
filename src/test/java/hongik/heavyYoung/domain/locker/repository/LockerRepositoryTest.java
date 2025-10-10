@@ -3,7 +3,7 @@ package hongik.heavyYoung.domain.locker.repository;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
-import hongik.heavyYoung.domain.member.MemberRepository;
+import hongik.heavyYoung.domain.member.repository.MemberRepository;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.enums.MemberStatus;
 import hongik.heavyYoung.domain.member.enums.StudentFeeStatus;

@@ -36,4 +36,11 @@ public class LockerRestController {
         List<LockerResponse.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection);
         return ApiResponse.onSuccess(allLockers);
     }
+
+    @Operation(summary = "나의 사물함 조회")
+    @GetMapping("/me")
+    public ApiResponse<LockerResponse.MyLockerInfoDTO> getMyLocker() {
+        LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker();
+        return ApiResponse.onSuccess(myLocker);
+    }
 }

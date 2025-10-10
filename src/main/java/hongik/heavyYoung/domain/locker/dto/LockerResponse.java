@@ -24,4 +24,18 @@ public class LockerResponse {
         @Schema(description = "사물함 소유 학생 이름")
         private String studentName;
     }
+
+    // 나의 사물함 정보 DTO
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MyLockerInfoDTO {
+        @Schema(description = "사물함 PK")
+        private Long lockerId;
+        @Schema(description = "사물함 번호")
+        private String lockerNumber;
+        @Schema(description = "사물함 대여 상태")
+        private String lockerRentalStatus;
+    }
 }
