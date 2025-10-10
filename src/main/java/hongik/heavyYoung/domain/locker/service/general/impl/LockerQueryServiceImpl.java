@@ -54,8 +54,17 @@ public class LockerQueryServiceImpl implements LockerQueryService {
                 .toList();
     }
 
+    /**
+     * 로그인된 사용자의 사물함 정보를 조회합니다.
+     * 1. 사용자가 사물함을 대여중인 상황에는 사물함 PK, 사물함 번호, 사물함 대여 상태(RENTING)로 응답합니다.
+     * 2. 사용자가 사물함 대여중이지는 않지만, 사물함 대여를 신청중인 상황에는 사물함 대여 상태(RENTAL_REQUESTED)로 응답합니다.
+     * 3. 사용자가 사물함 대여중이지 않고, 사물함 대여를 신청하지 않은 상황에는 사물함 대여 상태(NO_RENTAL)로 응답합니다.
+     *
+     * @return 나의 사물함 정보
+     */
     @Override
     public LockerResponse.MyLockerInfoDTO findMyLocker() {
+        // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
         Optional<LockerAssignment> lockerAssignment = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(DUMMY_MEMBER_ID);
 
         if (lockerAssignment.isPresent()) {
@@ -63,6 +72,7 @@ public class LockerQueryServiceImpl implements LockerQueryService {
             return LockerResponseConverter.toMyLockerInfoDTO(locker, LockerRentalStatus.RENTING);
         }
 
+        // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
         boolean lockerRequested = memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(DUMMY_MEMBER_ID, ApplicationType.LOCKER_MAIN);
 
         if (lockerRequested) {
