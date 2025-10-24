@@ -60,6 +60,8 @@ public class JwtProvider {
             throw new QrException(ErrorStatus.QR_AUTH_INVALID_SIGNATURE);
         } catch (ExpiredJwtException e) {
             throw new QrException(ErrorStatus.QR_AUTH_EXPIRED);
+        } catch (MalformedJwtException e) {
+            throw new QrException(ErrorStatus.QR_AUTH_INVALID_FORMAT);
         }
     }
 }
