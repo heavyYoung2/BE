@@ -1,10 +1,15 @@
 package hongik.heavyYoung.domain.event.entity;
 
+import hongik.heavyYoung.domain.event.command.CreateEventCommand;
+import hongik.heavyYoung.domain.event.command.UpdateEventCommand;
+import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -30,4 +35,40 @@ public class Event extends BaseEntity {
 
     @Column(name = "event_end_date")
     private LocalDate eventEndDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC")
+    private List<EventImage> eventImages = new ArrayList<>();
+
+    /** 연관관계 편의 메서드 */
+    public void addEventImage(EventImage image) {
+        if (image == null) return;
+        this.eventImages.add(image);
+        image.setEvent(this);
+    }
+
+    public void removeEventImage(EventImage image) {
+        if (image == null) return;
+        this.eventImages.remove(image);
+        image.removeEvent();
+    }
+
+    /** 생성 관련 메서드 */
+    public static Event create(CreateEventCommand createEventCommand) {
+        return Event.builder().
+                eventTitle(createEventCommand.title())
+                .eventContent(createEventCommand.content())
+                .eventStartDate(createEventCommand.startDate())
+                .eventEndDate(createEventCommand.endDate())
+                .build();
+    }
+
+    /** 수정 관련 메서드 */
+    public void update(UpdateEventCommand updateEventCommand) {
+        this.eventTitle = updateEventCommand.title();
+        this.eventContent = updateEventCommand.content();
+        this.eventStartDate = updateEventCommand.startDate();
+        this.eventEndDate = updateEventCommand.endDate();
+    }
 }
