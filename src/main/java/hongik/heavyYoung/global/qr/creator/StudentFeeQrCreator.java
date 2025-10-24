@@ -30,7 +30,7 @@ public class StudentFeeQrCreator implements QrPayloadCreator {
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         String studentId = member.getStudentId();
-        boolean feePaid = member.getStudentFeeStatus().equals(StudentFeeStatus.PAID);
+        boolean feePaid = member.getStudentFeeStatus() == StudentFeeStatus.PAID;
 
         return StudentFeeQrPayload.builder()
                 .qrType(QrType.STUDENT_FEE)
