@@ -1,8 +1,7 @@
 package hongik.heavyYoung.global.qr.payload;
 
 import hongik.heavyYoung.global.qr.QrType;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Map;
 
@@ -10,10 +9,10 @@ import java.util.Map;
 @Builder
 public class StudentFeeQrPayload implements QrPayload {
 
-    private final QrType qrType;
-    private final Long memberId;
-    private final String studentId;
-    private final boolean feeStatus;
+    private QrType qrType;
+    private Long memberId;
+    private String studentId;
+    private boolean feePaid;
 
 
     @Override
@@ -22,8 +21,7 @@ public class StudentFeeQrPayload implements QrPayload {
                 "qrType", qrType,
                 "memberId", memberId,
                 "studentId", studentId,
-                "feeStatus", feeStatus
+                "feePaid", feePaid
         );
     }
-
 }

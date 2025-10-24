@@ -14,5 +14,5 @@ public class QrTokenResponseDTO {
     @Schema(description = "QR내부 정보")
     private String qrToken;
     @Schema(description = "학생회비 납부 여부")
-    private boolean isStudentFeePaid;
+    private boolean studentFeePaid;
 }

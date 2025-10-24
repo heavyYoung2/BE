@@ -8,5 +8,5 @@ import lombok.Getter;
 @Builder
 public class StudentFeeResponseDTO {
     @Schema(description = "학생회비 납부 결과")
-    private Boolean isApproved;
+    private boolean approved;
 }

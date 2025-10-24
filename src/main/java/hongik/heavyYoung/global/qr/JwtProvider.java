@@ -2,12 +2,12 @@ package hongik.heavyYoung.global.qr;
 
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.QrException;
+import hongik.heavyYoung.global.qr.payload.QrPayload;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
 public class JwtProvider {
     @Value("${jwt.secret}")
     private String secret; // Base64 난수 문자열
@@ -35,16 +34,17 @@ public class JwtProvider {
     }
 
     // 토큰 생성
-    public String generateQrToken(Map<String, Object> claims) {
+    public String generateQrToken(QrPayload qrPayload) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + expiration * 100000); // TODO : 개발 이후 1분으로 변경
-        String subject = claims.get("memberId").toString();
+        Map<String, Object> map = qrPayload.toMap();
+        String subject = map.get("memberId").toString();
 
         return Jwts.builder()
                 .subject(subject)               // 발행 대상 (memberId)
                 .issuedAt(now)                  // 발행 시간
                 .expiration(exp)                // 만료 시간
-                .claims(claims)                 // 클레임
+                .claims(map)                    // 클레임
                 .signWith(key)                  // 서명에 사용할 키
                 .compact();                     // JWT 생성 및 직렬화
     }

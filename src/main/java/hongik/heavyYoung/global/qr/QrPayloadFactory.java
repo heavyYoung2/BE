@@ -4,6 +4,7 @@ import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.QrException;
 import hongik.heavyYoung.global.qr.creator.QrPayloadCreator;
 import hongik.heavyYoung.global.qr.payload.QrPayload;
+import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,8 +26,16 @@ public class QrPayloadFactory {
     public QrPayload create(QrType qrType, Long memberId) {
         QrPayloadCreator creator = creators.get(qrType);
         if (creator == null) {
-            throw new QrException(ErrorStatus.QR_AUTH_TYPE_MISMATCH);
+            throw new QrException(ErrorStatus.QR_AUTH_TYPE_NOT_FOUND);
         }
         return creator.create(memberId);
     }
+
+    public QrPayload createFromClaims(QrType qrType, Claims claims) {
+        QrPayloadCreator creator = creators.get(qrType);
+        if (creator == null)
+            throw new QrException(ErrorStatus.QR_AUTH_TYPE_NOT_FOUND);
+        return creator.createFromClaims(claims);
+    }
+
 }

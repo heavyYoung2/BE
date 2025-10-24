@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class QrManager {
         QrPayload qrPayload = qrPayloadFactory.create(qrType, memberId);
 
         // qrPayload -> JWT 서명/발급
-        String qrToken = jwtProvider.generateQrToken(qrPayload.toMap());
+        String qrToken = jwtProvider.generateQrToken(qrPayload);
 
         return qrToken;
     }
@@ -34,17 +32,20 @@ public class QrManager {
     /**
      * qr정보 가져오기
      */
-    public Map<String,Object> decodeQrToken(QrType qrType, String qrToken) {
+    public QrPayload decodeQrToken(QrType qrType, String qrToken) {
 
         // 토큰 파싱
         Claims claims = jwtProvider.getClaims(qrToken);
 
+        // 페이로드 생성
+        QrPayload qrPayload = qrPayloadFactory.createFromClaims(qrType, claims);
+
         // QR 타입 검증
-        if (!claims.get("qrType").equals(qrType.name())) {
+        if (qrPayload.getQrType() != qrType) {
             throw new QrException(ErrorStatus.QR_AUTH_TYPE_MISMATCH);
         }
 
-        return Map.copyOf(claims);
+        return qrPayload;
     }
 
 }
