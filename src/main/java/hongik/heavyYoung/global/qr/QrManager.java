@@ -1,5 +1,6 @@
 package hongik.heavyYoung.global.qr;
 
+import hongik.heavyYoung.global.jwt.JwtProvider;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.QrException;
 import hongik.heavyYoung.global.qr.payload.QrPayload;
@@ -7,6 +8,8 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -18,10 +21,10 @@ public class QrManager {
     /**
      * qrToken 생성
      */
-    public String generateQrToken(QrType qrType, Long memberId) {
+    public String generateQrToken(QrType qrType, Map<String, Object> context) {
 
         // QrPayloadFactory를 통해, qrType에 맞는 qrPayload 생성
-        QrPayload qrPayload = qrPayloadFactory.create(qrType, memberId);
+        QrPayload qrPayload = qrPayloadFactory.create(qrType, context);
 
         // qrPayload -> JWT 서명/발급
         String qrToken = jwtProvider.generateQrToken(qrPayload);

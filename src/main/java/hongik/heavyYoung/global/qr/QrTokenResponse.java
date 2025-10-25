@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QrTokenResponseDTO {
+public class QrTokenResponse {
     @Schema(description = "QR내부 정보")
     private String qrToken;
     @Schema(description = "학생회비 납부 여부")

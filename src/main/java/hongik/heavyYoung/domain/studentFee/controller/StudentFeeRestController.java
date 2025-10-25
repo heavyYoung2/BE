@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.studentFee.controller;
 
 import hongik.heavyYoung.domain.studentFee.service.StudentFeeQueryService;
-import hongik.heavyYoung.global.qr.QrTokenResponseDTO;
+import hongik.heavyYoung.global.qr.QrTokenResponse;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +20,7 @@ public class StudentFeeRestController {
 
     @Operation(summary = "학생회비 납부여부 QR 생성")
     @GetMapping("")
-    public ApiResponse<QrTokenResponseDTO> generateStudentFeeQrToken() {
+    public ApiResponse<QrTokenResponse> generateStudentFeeQrToken() {
         return ApiResponse.onSuccess(studentFeeQueryService.generateStudentFeeQrToken());
     }
 }

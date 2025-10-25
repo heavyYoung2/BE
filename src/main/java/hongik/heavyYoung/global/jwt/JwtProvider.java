@@ -1,4 +1,4 @@
-package hongik.heavyYoung.global.qr;
+package hongik.heavyYoung.global.jwt;
 
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.QrException;
@@ -33,7 +33,7 @@ public class JwtProvider {
         this.jwtParser = Jwts.parser().verifyWith(this.key).build();
     }
 
-    // 토큰 생성
+    // QR용 토큰 생성
     public String generateQrToken(QrPayload qrPayload) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + expiration * 100000); // TODO : 개발 이후 1분으로 변경
@@ -51,7 +51,6 @@ public class JwtProvider {
 
     // 클레임 추출
     public Claims getClaims(String token) {
-
         try {
             return jwtParser.
                     parseSignedClaims(token)

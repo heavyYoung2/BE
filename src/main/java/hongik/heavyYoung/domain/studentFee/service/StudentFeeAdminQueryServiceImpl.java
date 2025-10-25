@@ -5,7 +5,7 @@ import hongik.heavyYoung.domain.studentFee.dto.StudentFeeRequestDTO;
 import hongik.heavyYoung.domain.studentFee.dto.StudentFeeResponseDTO;
 import hongik.heavyYoung.global.qr.QrManager;
 import hongik.heavyYoung.global.qr.QrType;
-import hongik.heavyYoung.global.qr.payload.StudentFeeQrPayload;
+import hongik.heavyYoung.global.qr.payload.StudentFeePayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class StudentFeeAdminQueryServiceImpl implements StudentFeeAdminQueryServ
         String qrToken = studentFeeRequestDTO.getQrToken();
 
         // qrPayload 가져오기
-        StudentFeeQrPayload qrPayload = (StudentFeeQrPayload) qrManager.decodeQrToken(QrType.STUDENT_FEE, qrToken);
+        StudentFeePayload qrPayload = (StudentFeePayload) qrManager.decodeQrToken(QrType.STUDENT_FEE, qrToken);
 
         return StudentFeeConverter.toStudentFeeResponseDTO(qrPayload.isFeePaid());
     }

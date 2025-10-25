@@ -23,12 +23,12 @@ public class QrPayloadFactory {
                 .collect(Collectors.toMap(QrPayloadCreator::getType, Function.identity()));
     }
 
-    public QrPayload create(QrType qrType, Long memberId) {
+    public QrPayload create(QrType qrType, Map<String, Object> context) {
         QrPayloadCreator creator = creators.get(qrType);
         if (creator == null) {
             throw new QrException(ErrorStatus.QR_AUTH_TYPE_NOT_FOUND);
         }
-        return creator.create(memberId);
+        return creator.create(context);
     }
 
     public QrPayload createFromClaims(QrType qrType, Claims claims) {

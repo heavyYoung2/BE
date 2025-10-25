@@ -2,8 +2,8 @@ package hongik.heavyYoung.global.qr;
 
 public class QrConverter {
 
-    public static QrTokenResponseDTO toQrTokenResponseDTO(String qrToken, boolean isStudentFeePaid) {
-        return QrTokenResponseDTO.builder()
+    public static QrTokenResponse toQrTokenResponseDTO(String qrToken, boolean isStudentFeePaid) {
+        return QrTokenResponse.builder()
                 .qrToken(qrToken)
                 .studentFeePaid(isStudentFeePaid)
                 .build();

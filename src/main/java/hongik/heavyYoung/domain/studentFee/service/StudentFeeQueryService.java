@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.studentFee.service;
 
-import hongik.heavyYoung.global.qr.QrTokenResponseDTO;
+import hongik.heavyYoung.global.qr.QrTokenResponse;
 
 public interface StudentFeeQueryService {
-    QrTokenResponseDTO generateStudentFeeQrToken();
+    QrTokenResponse generateStudentFeeQrToken();
 }
