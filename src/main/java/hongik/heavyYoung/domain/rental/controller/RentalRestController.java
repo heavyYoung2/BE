@@ -20,7 +20,7 @@ public class RentalRestController {
     private final RentalQueryService rentalQueryService;
 
     @Operation(description = "물품 대여 QR 생성")
-    @GetMapping("{item-category-id}/qr-tokens")
+    @GetMapping("/{item-category-id}/qr-tokens")
     public ApiResponse<QrTokenResponse> generateRentalQrToken(
             @PathVariable("item-category-id") Long itemCategoryId
     ) {
@@ -28,7 +28,7 @@ public class RentalRestController {
     }
 
     @Operation(description = "물품 반납 QR 생성")
-    @GetMapping("{rental-history-id}/return/qr-tokens")
+    @GetMapping("/{rental-history-id}/return/qr-tokens")
     public ApiResponse<QrTokenResponse> generateReturnRentalQrToken(
             @PathVariable("rental-history-id") Long rentalHistoryId
     ) {

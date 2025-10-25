@@ -11,6 +11,7 @@ import java.util.Map;
 public class ReturnPayload implements QrPayload {
 
     private QrType qrType;
+    private Long memberId;
     private String studentId;
     private String studentName;
     private Long rentalHistoryId;
@@ -19,6 +20,7 @@ public class ReturnPayload implements QrPayload {
     public Map<String, Object> toMap() {
         return Map.of(
                 "qrType", qrType,
+                "memberId", memberId,
                 "studentId", studentId,
                 "studentName", studentName,
                 "rentalHistoryId", rentalHistoryId

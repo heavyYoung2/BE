@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class ReturnPayloadCreator implements QrPayloadCreator{
+public class ReturnPayloadCreator implements QrPayloadCreator {
     private final ObjectMapper objectMapper;
 
     @Override
@@ -24,6 +24,7 @@ public class ReturnPayloadCreator implements QrPayloadCreator{
     public QrPayload create(Map<String, Object> context) {
         return ReturnPayload.builder()
                 .qrType(QrType.RETURN_ITEM)
+                .memberId((Long) context.get("memberId"))
                 .studentId((String) context.get("studentId"))
                 .studentName((String) context.get("studentName"))
                 .rentalHistoryId((Long) context.get("rentalHistoryId"))

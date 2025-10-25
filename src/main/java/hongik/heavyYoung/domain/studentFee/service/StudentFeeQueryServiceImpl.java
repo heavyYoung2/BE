@@ -58,7 +58,7 @@ public class StudentFeeQueryServiceImpl implements StudentFeeQueryService {
         String qrToken = qrManager.generateQrToken(QrType.STUDENT_FEE, context);
 
         // 응답 반환
-        return QrConverter.toQrTokenResponseDTO(qrToken, feePaid);
+        return QrConverter.toQrTokenResponse(qrToken, feePaid);
     }
 
     // TODO: 이걸 어떻게 빼면 좋을까

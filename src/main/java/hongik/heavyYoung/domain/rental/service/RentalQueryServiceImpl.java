@@ -52,7 +52,7 @@ public class RentalQueryServiceImpl implements RentalQueryService {
         String qrToken = qrManager.generateQrToken(QrType.RENTAL, context);
 
         // 응답 반환
-        return QrConverter.toQrTokenResponseDTO(qrToken, feePaid);
+        return QrConverter.toQrTokenResponse(qrToken, feePaid);
     }
 
     @Override
@@ -64,15 +64,16 @@ public class RentalQueryServiceImpl implements RentalQueryService {
 
         // 반납 아이디
         Map<String, Object> context = Map.of(
+                "memberId", member.getId(),
                 "studentId", member.getStudentId(),
                 "studentName", member.getStudentName(),
                 "rentalHistoryId", rentalHistoryId
         );
 
         // qr 토큰 생성
-        String qrToken = qrManager.generateQrToken(QrType.RENTAL, context);
+        String qrToken = qrManager.generateQrToken(QrType.RETURN_ITEM, context);
 
-        return QrConverter.toQrTokenResponseDTO(qrToken, true);
+        return QrConverter.toQrTokenResponse(qrToken, true);
     }
 
     // TODO: 이걸 어떻게 빼면 좋을까
