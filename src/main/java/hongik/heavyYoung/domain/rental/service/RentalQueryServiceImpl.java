@@ -1,9 +1,8 @@
 package hongik.heavyYoung.domain.rental.service;
 
 import hongik.heavyYoung.domain.member.entity.Member;
-import hongik.heavyYoung.domain.member.enums.StudentFeeStatus;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
-import hongik.heavyYoung.domain.studentFee.repository.StudentFeeRepository;
+import hongik.heavyYoung.domain.studentFee.service.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;
 import hongik.heavyYoung.global.qr.*;
@@ -21,7 +20,7 @@ public class RentalQueryServiceImpl implements RentalQueryService {
 
     private final MemberRepository memberRepository;
     private final QrManager qrManager;
-    private final StudentFeeRepository studentFeeRepository;
+    private final StudentFeeStatusService studentFeeStatusService;
 
 
     @Override
@@ -32,8 +31,7 @@ public class RentalQueryServiceImpl implements RentalQueryService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 회비 납부 여부 갱신
-        StudentFeeStatus studentFeeStatus = refreshStudentFeeStatus(member);
-        boolean feePaid = studentFeeStatus.equals(StudentFeeStatus.PAID);
+        boolean feePaid = studentFeeStatusService.isStudentFeePaid(member);
 
         // 블랙리스트 확인
         LocalDate blacklistUntil = member.getBlacklistUntil();
@@ -74,18 +72,5 @@ public class RentalQueryServiceImpl implements RentalQueryService {
         String qrToken = qrManager.generateQrToken(QrType.RETURN_ITEM, context);
 
         return QrConverter.toQrTokenResponse(qrToken, true);
-    }
-
-    // TODO: 이걸 어떻게 빼면 좋을까
-    private StudentFeeStatus refreshStudentFeeStatus(Member member) {
-        if (member.getStudentFeeStatus() == StudentFeeStatus.YET) {
-            member.updateStudentFeeStatus(
-                    studentFeeRepository.existsByStudentId(member.getStudentId())
-                            ? StudentFeeStatus.PAID
-                            : StudentFeeStatus.NOT_PAID
-            );
-        }
-
-        return member.getStudentFeeStatus();
     }
 }

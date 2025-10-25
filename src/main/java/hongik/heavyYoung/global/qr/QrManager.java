@@ -27,9 +27,7 @@ public class QrManager {
         QrPayload qrPayload = qrPayloadFactory.create(qrType, context);
 
         // qrPayload -> JWT 서명/발급
-        String qrToken = jwtProvider.generateQrToken(qrPayload);
-
-        return qrToken;
+        return jwtProvider.generateQrToken(qrPayload);
     }
 
     /**

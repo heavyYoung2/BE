@@ -1,9 +1,7 @@
 package hongik.heavyYoung.domain.studentFee.service;
 
 import hongik.heavyYoung.domain.member.entity.Member;
-import hongik.heavyYoung.domain.member.enums.StudentFeeStatus;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
-import hongik.heavyYoung.domain.studentFee.repository.StudentFeeRepository;
 import hongik.heavyYoung.global.exception.customException.MemberException;
 import hongik.heavyYoung.global.qr.QrConverter;
 import hongik.heavyYoung.global.qr.QrManager;
@@ -22,8 +20,8 @@ import java.util.Map;
 public class StudentFeeQueryServiceImpl implements StudentFeeQueryService {
 
     private final MemberRepository memberRepository;
-    private final StudentFeeRepository studentFeeRepository;
     private final QrManager qrManager;
+    private final StudentFeeStatusService studentFeeStatusService;
 
     /**
      * 사용자의 학생회비 납부 여부가 포함된 QrToken 생성한다. </br>
@@ -44,8 +42,7 @@ public class StudentFeeQueryServiceImpl implements StudentFeeQueryService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 회비 납부 여부 갱신
-        StudentFeeStatus studentFeeStatus = refreshStudentFeeStatus(member);
-        boolean feePaid = studentFeeStatus.equals(StudentFeeStatus.PAID);
+        boolean feePaid = studentFeeStatusService.isStudentFeePaid(member);
 
         // qrPayload에 들어갈 내용 생성
         Map<String, Object> context = Map.of(
@@ -61,16 +58,4 @@ public class StudentFeeQueryServiceImpl implements StudentFeeQueryService {
         return QrConverter.toQrTokenResponse(qrToken, feePaid);
     }
 
-    // TODO: 이걸 어떻게 빼면 좋을까
-    private StudentFeeStatus refreshStudentFeeStatus(Member member) {
-        if (member.getStudentFeeStatus() == StudentFeeStatus.YET) {
-            member.updateStudentFeeStatus(
-                    studentFeeRepository.existsByStudentId(member.getStudentId())
-                            ? StudentFeeStatus.PAID
-                            : StudentFeeStatus.NOT_PAID
-            );
-        }
-
-        return member.getStudentFeeStatus();
-    }
 }
