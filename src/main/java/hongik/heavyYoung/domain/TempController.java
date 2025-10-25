@@ -20,7 +20,7 @@ public class TempController {
 
     @GetMapping("/test2")
     public ApiResponse<TempResponse.TempTestDTO> test2() {
-        throw new GeneralException(ErrorStatus.USER_NOT_FOUND);
+        throw new GeneralException(ErrorStatus.MEMBER_NOT_FOUND);
     }
 
     @GetMapping("/test3")

@@ -53,4 +53,8 @@ public class Member extends BaseEntity {
     @Column(name = "member_status", nullable = false, length = 50)
     @Builder.Default
     private MemberStatus memberStatus = MemberStatus.PENDING;
+
+    public void updateStudentFeeStatus(StudentFeeStatus studentFeeStatus) {
+        this.studentFeeStatus = studentFeeStatus;
+    }
 }
