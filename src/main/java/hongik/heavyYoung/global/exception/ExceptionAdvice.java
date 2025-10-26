@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -350,6 +351,58 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 body,
                 null,
                 ErrorStatus.INTERNAL_SERVER_ERROR.getHttpStatus(),
+                request
+        );
+    }
+
+    // MissingServletRequestParameterException(RequestParam 누락) 발생 시 실행되는 예외 처리 메서드
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(
+            MissingServletRequestParameterException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        // 누락된 파라미터 이름으로 메시지 생성
+        List<String> errorMessages = List.of(ex.getParameterName() + " 파라미터는 필수입니다.");
+
+        // HTTP 요청이 존재한다면, 상세 HTTP 정보 추출 후 로깅
+        if (request instanceof ServletWebRequest servletWebRequest) {
+            HttpServletRequest httpServletRequest = servletWebRequest.getRequest();
+            log.error(
+                    CLIENT_EX_LOG,
+                    httpServletRequest.getMethod(),
+                    httpServletRequest.getRequestURI(),
+                    httpServletRequest.getQueryString(),
+                    ErrorStatus.INVALID_PARAMETER.getCode(),
+                    errorMessages,
+                    ex
+            );
+        } else {
+            log.error(
+                    CLIENT_EX_LOG,
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    ErrorStatus.INVALID_PARAMETER.getCode(),
+                    errorMessages,
+                    ex
+            );
+        }
+
+        // API 공통 응답 객체 생성 (실패 응답)
+        ApiResponse<Object> body = ApiResponse.onFailure(
+                ErrorStatus.INVALID_PARAMETER.getCode(),
+                ErrorStatus.INVALID_PARAMETER.getMessage(),
+                errorMessages
+        );
+
+        // ResponseEntity 형태로 클라이언트에 응답 반환
+        return super.handleExceptionInternal(
+                ex,
+                body,
+                headers,
+                ErrorStatus.INVALID_PARAMETER.getHttpStatus(),
                 request
         );
     }
