@@ -36,9 +36,12 @@ public class SwaggerConfig {
                 .version("1.0.0");
 
         // 서버 정보
-        Server server = new Server()
+        Server prod = new Server()
+                .url("http://13.209.21.247:8080")
+                .description("prod");
+        Server local = new Server()
                 .url("http://localhost:8080")
-                .description("로컬");
+                .description("local");
 
         // 보안 요구사항
         SecurityRequirement securityRequirement = new SecurityRequirement()
@@ -58,7 +61,8 @@ public class SwaggerConfig {
         // OpenAPI 문서 객체
         return new OpenAPI()
                 .info(info)
-                .addServersItem(server)
+                .addServersItem(prod)
+                .addServersItem(local)
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }
