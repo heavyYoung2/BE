@@ -37,7 +37,7 @@ public class SwaggerConfig {
 
         // 서버 정보
         Server prod = new Server()
-                .url("http://13.209.21.247:8080")
+                .url("http://13.209.220.192:8080/")
                 .description("prod");
         Server local = new Server()
                 .url("http://localhost:8080")
