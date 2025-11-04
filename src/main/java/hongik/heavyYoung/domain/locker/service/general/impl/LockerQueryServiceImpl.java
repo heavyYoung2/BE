@@ -12,7 +12,6 @@ import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +38,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
      * @return 섹션 별 전체 사물함 정보 리스트
      */
     @Override
-    @Cacheable(value = "lockers", key = "#lockerSection")
     public List<LockerResponse.LockerInfoDTO> findAllLockers(String lockerSection, Long memberId) {
         List<Object[]> lockerMember = lockerRepository.findAllWithCurrentSemesterAssign(lockerSection);
 
