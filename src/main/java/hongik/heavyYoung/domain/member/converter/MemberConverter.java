@@ -8,8 +8,8 @@ public class MemberConverter {
 
     public static MemberResponseDTO.BlacklistInfo toBlacklistInfo(
             boolean blacklisted,
-            LocalDate blacklistUntil
-    ) {
+            LocalDate blacklistUntil) {
+
         return MemberResponseDTO.BlacklistInfo.builder()
                 .blacklisted(blacklisted)
                 .blacklistUntil(blacklistUntil)
