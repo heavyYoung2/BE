@@ -7,10 +7,9 @@ import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.member.entity.Member;
 
 public class LockerResponseConverter {
-    // 사물함 기본 정보
-    public static LockerResponse.LockerInfoDTO toLockerInfoDTO(Locker locker, Member member, Long memberId) {
-        String lockerStatus = convertLockerStatus(locker, member, memberId);
 
+    // 사물함 기본 정보
+    public static LockerResponse.LockerInfoDTO toLockerInfoDTO(Locker locker, Member member, String lockerStatus) {
         return LockerResponse.LockerInfoDTO.builder()
                 .lockerId(locker.getId())
                 .lockerNumber(locker.getLockerSection() + locker.getLockerNumber())
@@ -20,28 +19,20 @@ public class LockerResponseConverter {
                 .build();
     }
 
-    private static String convertLockerStatus(Locker locker, Member member, Long memberId) {
-        if(member != null && member.getId().equals(memberId)) {
-            return LockerStatus.MY.name();
-        }
-        return locker.getLockerStatus().name();
+    // 나의 사물함 정보 (사물함 배정 o)
+    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(Locker locker, LockerRentalStatus lockerRentalStatus) {
+        return LockerResponse.MyLockerInfoDTO.builder()
+                .lockerId(locker.getId())
+                .lockerNumber(locker.getLockerSection() + locker.getLockerNumber())
+                .lockerRentalStatus(lockerRentalStatus.name())
+                .build();
     }
 
-    // 나의 사물함 정보
-    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(Locker locker, LockerRentalStatus lockerRentalStatus) {
-        if(locker == null) {
-            return LockerResponse.MyLockerInfoDTO.builder()
-                    .lockerRentalStatus(lockerRentalStatus.name())
-                    .build();
-        }
-
-        else {
-            return LockerResponse.MyLockerInfoDTO.builder()
-                    .lockerId(locker.getId())
-                    .lockerNumber(locker.getLockerSection() + locker.getLockerNumber())
-                    .lockerRentalStatus(lockerRentalStatus.name())
-                    .build();
-        }
+    // 나의 사물함 정보 (사물함 배정 x)
+    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(LockerRentalStatus lockerRentalStatus){
+        return LockerResponse.MyLockerInfoDTO.builder()
+                .lockerRentalStatus(lockerRentalStatus.name())
+                .build();
     }
 }
 

@@ -6,6 +6,7 @@ import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
+import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.locker.repository.LockerAssignmentRepository;
 import hongik.heavyYoung.domain.locker.repository.LockerRepository;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
@@ -32,7 +33,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
     /**
      * 섹션 별 전체 사물함 정보를 조회합니다.
      * A,B,C,D,E,F 섹션에 맞게 사물함의 정보를 조회할 수 있습니다.
-     * 처음 가져올 때 DB 에서 정보를 가져오고, 이후 Redis 활용 캐시에서 정보를 가져옵니다.
      *
      * @param lockerSection 사물함 섹션 번호
      * @return 섹션 별 전체 사물함 정보 리스트
@@ -46,7 +46,11 @@ public class LockerQueryServiceImpl implements LockerQueryService {
                     Locker locker = (Locker) row[0];
                     Member member = (Member) row[1];
 
-                    return LockerResponseConverter.toLockerInfoDTO(locker, member, memberId);
+                    String lockerStatus = (member != null && member.getId().equals(memberId))
+                            ? LockerStatus.MY.name()
+                            : locker.getLockerStatus().name();
+
+                    return LockerResponseConverter.toLockerInfoDTO(locker, member, lockerStatus);
                 })
                 .toList();
     }
@@ -73,9 +77,9 @@ public class LockerQueryServiceImpl implements LockerQueryService {
         boolean lockerRequested = memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(memberId, ApplicationType.LOCKER_MAIN);
 
         if (lockerRequested) {
-            return LockerResponseConverter.toMyLockerInfoDTO(null, LockerRentalStatus.RENTAL_REQUESTED);
+            return LockerResponseConverter.toMyLockerInfoDTO(LockerRentalStatus.RENTAL_REQUESTED);
         } else {
-            return LockerResponseConverter.toMyLockerInfoDTO(null, LockerRentalStatus.NO_RENTAL);
+            return LockerResponseConverter.toMyLockerInfoDTO(LockerRentalStatus.NO_RENTAL);
         }
     }
 }
