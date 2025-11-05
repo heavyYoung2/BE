@@ -41,4 +41,10 @@ public class RentalRestController {
     public ApiResponse<RentalResponseDTO.MemberRentalInfo> getRentalStatus() {
         return ApiResponse.onSuccess(rentalQueryService.getRentalStatus());
     }
+
+    @Operation(summary = "전체 대여 내역 조회")
+    @GetMapping("/me/history")
+    public ApiResponse<RentalResponseDTO.RentalHistoryInfo> getRentalHistory() {
+        return ApiResponse.onSuccess(rentalQueryService.getRentalHistory());
+    }
 }

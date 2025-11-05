@@ -10,6 +10,7 @@ import hongik.heavyYoung.domain.rental.repository.ItemRentalHistoryRepository;
 import hongik.heavyYoung.domain.studentFee.service.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;
+import hongik.heavyYoung.global.exception.customException.RentalException;
 import hongik.heavyYoung.global.qr.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -97,24 +98,50 @@ public class RentalQueryServiceImpl implements RentalQueryService {
         // 반납하지 않은 대여 내역 리스트
         List<ItemRentalHistory> itemRentalHistories = itemRentalHistoryRepository.findCurrentWithItemAndCategory(member);
 
-        LocalDateTime now = LocalDateTime.now();
-
         // 대여 정보들
         List<RentalResponseDTO.RentalItemInfo> rentalItemInfos = new ArrayList<>();
         for (ItemRentalHistory itemRentalHistory : itemRentalHistories) {
-            String itemName = itemRentalHistory.getItem().getItemCategory().getItemCategoryName();
-
-            RentalStatus status = itemRentalHistory.getExpectedReturnAt().isBefore(now)
-                    ? RentalStatus.OVERDUE
-                    : RentalStatus.RENTING;
-
-            RentalResponseDTO.RentalItemInfo rentalItemInfo = RentalConverter.toRentalItemInfo(itemRentalHistory, itemName, status);
+            RentalStatus rentalStatus = resolveStatus(itemRentalHistory, LocalDateTime.now());
+            RentalResponseDTO.RentalItemInfo rentalItemInfo = RentalConverter.toRentalItemInfo(itemRentalHistory, rentalStatus);
             rentalItemInfos.add(rentalItemInfo);
         }
 
-        // TODO: 블랙리스트 계산 로직
+        // TODO: 블랙리스트 예상 기간 계산 로직
         LocalDate expectedBlacklistUntil = null;
 
         return RentalConverter.toMemberRentalInfo(expectedBlacklistUntil, rentalItemInfos);
+    }
+
+    @Override
+    public RentalResponseDTO.RentalHistoryInfo getRentalHistory() {
+
+        // 멤버 정보 받아오기
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 대여 정보 가져오기
+        List<ItemRentalHistory> itemRentalHistories = itemRentalHistoryRepository.findAllByMemberOrderByCreatedAtDesc(member);
+
+        // 대여 정보들
+        List<RentalResponseDTO.RentalItemHistoryInfo> rentalItemHistoryInfos = new ArrayList<>();
+        for(ItemRentalHistory itemRentalHistory : itemRentalHistories) {
+            RentalStatus rentalStatus = resolveStatus(itemRentalHistory, LocalDateTime.now());
+
+            RentalResponseDTO.RentalItemHistoryInfo rentalItemHistoryInfo = RentalConverter.toRentalItemHistoryInfo(itemRentalHistory, rentalStatus);
+            rentalItemHistoryInfos.add(rentalItemHistoryInfo);
+        }
+
+        return RentalConverter.toMemberRentalInfo(rentalItemHistoryInfos);
+    }
+
+    // 대여 상태 계산
+    private RentalStatus resolveStatus(ItemRentalHistory itemRentalHistory, LocalDateTime now) {
+        if (itemRentalHistory.getReturnedAt() != null) {
+            return RentalStatus.RETURNED;
+        } else if (itemRentalHistory.getExpectedReturnAt().isBefore(now)) {
+            return RentalStatus.OVERDUE;
+        } else {
+            return RentalStatus.RENTING;
+        }
     }
 }

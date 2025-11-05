@@ -18,4 +18,14 @@ public interface ItemRentalHistoryRepository extends JpaRepository<ItemRentalHis
              and h.returnedAt is null
            """)
     List<ItemRentalHistory> findCurrentWithItemAndCategory(@Param("member") Member member);
+
+    @Query("""
+        select h
+        from ItemRentalHistory h
+        join fetch h.item i
+        join fetch i.itemCategory c
+        where h.member = :member
+        order by h.createdAt desc
+        """)
+    List<ItemRentalHistory> findAllByMemberOrderByCreatedAtDesc(@Param("member") Member member);
 }

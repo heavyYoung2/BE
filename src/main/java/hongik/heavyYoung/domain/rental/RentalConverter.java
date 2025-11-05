@@ -10,8 +10,7 @@ import java.util.List;
 public class RentalConverter {
     public static RentalResponseDTO.MemberRentalInfo toMemberRentalInfo(
             LocalDate expectedBlacklistUntil,
-            List<RentalResponseDTO.RentalItemInfo> rentalItemInfos
-    ) {
+            List<RentalResponseDTO.RentalItemInfo> rentalItemInfos) {
 
         return RentalResponseDTO.MemberRentalInfo.builder()
                 .expectedBlacklistUntil(expectedBlacklistUntil)
@@ -19,13 +18,36 @@ public class RentalConverter {
                 .build();
     }
 
-    public static RentalResponseDTO.RentalItemInfo toRentalItemInfo(ItemRentalHistory itemRentalHistory, String itemName, RentalStatus rentalStatus) {
+    public static RentalResponseDTO.RentalItemInfo toRentalItemInfo(
+            ItemRentalHistory itemRentalHistory,
+            RentalStatus rentalStatus) {
 
         return RentalResponseDTO.RentalItemInfo.builder()
                 .rentalHistoryId(itemRentalHistory.getId())
-                .itemName(itemName)
+                .itemName(itemRentalHistory.getItem().getItemCategory().getItemCategoryName())
                 .rentalStartedAt(LocalDate.from(itemRentalHistory.getRentalStartAt()))
                 .rentalEndedAt(LocalDate.from(itemRentalHistory.getExpectedReturnAt()))
+                .rentalStatus(rentalStatus)
+                .build();
+    }
+
+    public static RentalResponseDTO.RentalHistoryInfo toMemberRentalInfo(
+            List<RentalResponseDTO.RentalItemHistoryInfo> rentalItemHistoryInfos) {
+
+        return RentalResponseDTO.RentalHistoryInfo.builder()
+                .items(rentalItemHistoryInfos)
+                .build();
+    }
+
+    public static RentalResponseDTO.RentalItemHistoryInfo toRentalItemHistoryInfo(
+            ItemRentalHistory itemRentalHistory,
+            RentalStatus rentalStatus) {
+
+        return RentalResponseDTO.RentalItemHistoryInfo.builder()
+                .rentalHistoryId(itemRentalHistory.getId())
+                .itemName(itemRentalHistory.getItem().getItemCategory().getItemCategoryName())
+                .rentalStartedAt(LocalDate.from(itemRentalHistory.getRentalStartAt()))
+                .returnedAt(itemRentalHistory.getReturnedAt() != null ? LocalDate.from(itemRentalHistory.getReturnedAt()) : null)
                 .rentalStatus(rentalStatus)
                 .build();
     }
