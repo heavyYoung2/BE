@@ -4,7 +4,6 @@ import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
-import hongik.heavyYoung.domain.event.service.general.impl.EventQueryServiceImpl;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.EventException;
 import org.junit.jupiter.api.DisplayName;
