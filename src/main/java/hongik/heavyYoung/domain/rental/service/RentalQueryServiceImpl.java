@@ -10,7 +10,6 @@ import hongik.heavyYoung.domain.rental.repository.ItemRentalHistoryRepository;
 import hongik.heavyYoung.domain.studentFee.service.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;
-import hongik.heavyYoung.global.exception.customException.RentalException;
 import hongik.heavyYoung.global.qr.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -109,7 +108,7 @@ public class RentalQueryServiceImpl implements RentalQueryService {
         // TODO: 블랙리스트 예상 기간 계산 로직
         LocalDate expectedBlacklistUntil = null;
 
-        return RentalConverter.toMemberRentalInfo(expectedBlacklistUntil, rentalItemInfos);
+        return RentalConverter.toRentalInfo(expectedBlacklistUntil, rentalItemInfos);
     }
 
     @Override
@@ -131,7 +130,7 @@ public class RentalQueryServiceImpl implements RentalQueryService {
             rentalItemHistoryInfos.add(rentalItemHistoryInfo);
         }
 
-        return RentalConverter.toMemberRentalInfo(rentalItemHistoryInfos);
+        return RentalConverter.toRentalHistoryInfo(rentalItemHistoryInfos);
     }
 
     // 대여 상태 계산

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class RentalConverter {
-    public static RentalResponseDTO.MemberRentalInfo toMemberRentalInfo(
+    public static RentalResponseDTO.MemberRentalInfo toRentalInfo(
             LocalDate expectedBlacklistUntil,
             List<RentalResponseDTO.RentalItemInfo> rentalItemInfos) {
 
@@ -31,7 +31,7 @@ public class RentalConverter {
                 .build();
     }
 
-    public static RentalResponseDTO.RentalHistoryInfo toMemberRentalInfo(
+    public static RentalResponseDTO.RentalHistoryInfo toRentalHistoryInfo(
             List<RentalResponseDTO.RentalItemHistoryInfo> rentalItemHistoryInfos) {
 
         return RentalResponseDTO.RentalHistoryInfo.builder()
