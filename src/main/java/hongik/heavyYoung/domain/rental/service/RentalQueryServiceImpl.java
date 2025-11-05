@@ -2,6 +2,11 @@ package hongik.heavyYoung.domain.rental.service;
 
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
+import hongik.heavyYoung.domain.rental.RentalConverter;
+import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
+import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;
+import hongik.heavyYoung.domain.rental.enums.RentalStatus;
+import hongik.heavyYoung.domain.rental.repository.ItemRentalHistoryRepository;
 import hongik.heavyYoung.domain.studentFee.service.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;
@@ -11,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,6 +29,7 @@ public class RentalQueryServiceImpl implements RentalQueryService {
     private final MemberRepository memberRepository;
     private final QrManager qrManager;
     private final StudentFeeStatusService studentFeeStatusService;
+    private final ItemRentalHistoryRepository itemRentalHistoryRepository;
 
 
     @Override
@@ -72,5 +81,40 @@ public class RentalQueryServiceImpl implements RentalQueryService {
         String qrToken = qrManager.generateQrToken(QrType.RETURN_ITEM, context);
 
         return QrConverter.toQrTokenResponse(qrToken, true);
+    }
+
+    /**
+     * 대여 현황 조회
+     * @return RentalResponseDTO.MemberRentalInfo
+     */
+    @Override
+    public RentalResponseDTO.MemberRentalInfo getRentalStatus() {
+
+        // 멤버 정보 받아오기
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 반납하지 않은 대여 내역 리스트
+        List<ItemRentalHistory> itemRentalHistories = itemRentalHistoryRepository.findCurrentWithItemAndCategory(member);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // 대여 정보들
+        List<RentalResponseDTO.RentalItemInfo> rentalItemInfos = new ArrayList<>();
+        for (ItemRentalHistory itemRentalHistory : itemRentalHistories) {
+            String itemName = itemRentalHistory.getItem().getItemCategory().getItemCategoryName();
+
+            RentalStatus status = itemRentalHistory.getExpectedReturnAt().isBefore(now)
+                    ? RentalStatus.OVERDUE
+                    : RentalStatus.RENTING;
+
+            RentalResponseDTO.RentalItemInfo rentalItemInfo = RentalConverter.toRentalItemInfo(itemRentalHistory, itemName, status);
+            rentalItemInfos.add(rentalItemInfo);
+        }
+
+        // TODO: 블랙리스트 계산 로직
+        LocalDate expectedBlacklistUntil = null;
+
+        return RentalConverter.toMemberRentalInfo(expectedBlacklistUntil, rentalItemInfos);
     }
 }

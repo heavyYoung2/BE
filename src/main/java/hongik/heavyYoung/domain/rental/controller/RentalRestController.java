@@ -1,5 +1,6 @@
 package hongik.heavyYoung.domain.rental.controller;
 
+import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 import hongik.heavyYoung.domain.rental.service.RentalQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.qr.QrTokenResponse;
@@ -33,5 +34,11 @@ public class RentalRestController {
             @PathVariable("rental-history-id") Long rentalHistoryId
     ) {
         return ApiResponse.onSuccess(rentalQueryService.generateReturnRentalQrToken(rentalHistoryId));
+    }
+
+    @Operation(summary = "내 대여 현황 조회")
+    @GetMapping("/me")
+    public ApiResponse<RentalResponseDTO.MemberRentalInfo> getRentalStatus() {
+        return ApiResponse.onSuccess(rentalQueryService.getRentalStatus());
     }
 }
