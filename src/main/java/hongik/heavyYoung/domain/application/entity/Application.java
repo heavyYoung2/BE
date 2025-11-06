@@ -40,10 +40,6 @@ public class Application extends BaseEntity {
     @Builder.Default
     private int applicationMemberCount = 0;
 
-    @Column(name = "can_apply", nullable = false)
-    @Builder.Default
-    private boolean canApply = true;
-
     @Column(name = "can_assign", nullable = false)
     @Builder.Default
     private boolean canAssign = true;

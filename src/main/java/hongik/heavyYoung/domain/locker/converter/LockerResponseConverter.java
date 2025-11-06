@@ -1,10 +1,14 @@
 package hongik.heavyYoung.domain.locker.converter;
 
+import hongik.heavyYoung.domain.application.entity.Application;
 import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.member.entity.Member;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class LockerResponseConverter {
 
@@ -29,10 +33,35 @@ public class LockerResponseConverter {
     }
 
     // 나의 사물함 정보 (사물함 배정 x)
-    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(LockerRentalStatus lockerRentalStatus){
+    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(LockerRentalStatus lockerRentalStatus) {
         return LockerResponse.MyLockerInfoDTO.builder()
                 .lockerRentalStatus(lockerRentalStatus.name())
                 .build();
+    }
+
+
+    // 사물함 신청 정보
+    public static LockerResponse.LockerApplicationInfoDTO toLockerApplicationInfoDTO(Application lockerApplication) {
+        boolean isInTimeRange = !LocalDateTime.now().isBefore(lockerApplication.getApplicationStartAt()) && !LocalDateTime.now().isAfter(lockerApplication.getApplicationEndAt());
+        boolean hasCapacity = lockerApplication.getApplicationMemberCount() < lockerApplication.getApplicationCanCount();
+        boolean canApply = isInTimeRange && hasCapacity;
+
+        return LockerResponse.LockerApplicationInfoDTO.builder()
+                .applicationId(lockerApplication.getId())
+                .applicationStartAt(lockerApplication.getApplicationStartAt())
+                .applicationEndAt(lockerApplication.getApplicationEndAt())
+                .semester(lockerApplication.getApplicationSemester())
+                .applicationType(lockerApplication.getApplicationType().name())
+                .canApply(canApply)
+                .canAssign(lockerApplication.isCanAssign())
+                .build();
+    }
+
+    // 사물함 신청 정보 리스트
+    public static List<LockerResponse.LockerApplicationInfoDTO> toLockerApplicationInfoDTOList(List<Application> applications) {
+        return applications.stream()
+                .map(LockerResponseConverter::toLockerApplicationInfoDTO)
+                .toList();
     }
 }
 

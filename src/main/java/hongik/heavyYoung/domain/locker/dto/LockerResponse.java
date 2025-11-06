@@ -1,10 +1,13 @@
 package hongik.heavyYoung.domain.locker.dto;
 
+import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 public class LockerResponse {
     // 사물함 기본 정보 DTO
@@ -37,5 +40,20 @@ public class LockerResponse {
         private String lockerNumber;
         @Schema(description = "사물함 대여 상태")
         private String lockerRentalStatus;
+    }
+
+    // 사물함 신청 정보 DTO
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LockerApplicationInfoDTO {
+        private Long applicationId;
+        private LocalDateTime applicationStartAt;
+        private LocalDateTime applicationEndAt;
+        private String semester;
+        private String applicationType;
+        private boolean canApply;
+        private boolean canAssign;
     }
 }

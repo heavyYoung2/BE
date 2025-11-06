@@ -22,6 +22,12 @@ public enum ErrorStatus implements BaseErrorCode {
     EVENT_INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "EVENT_002", "시작일은 종료일보다 이후일 수 없습니다."),
     EVENT_INVALID_DATE_COMBINATION(HttpStatus.BAD_REQUEST, "EVENT_003", "시작일과 종료일은 모두 입력하거나 모두 비워야 합니다."),
 
+    // LOCKER 에러
+    LOCKER_APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "LOCKER_001", "현재 신청이 불가능합니다."),
+    NO_AVAILABLE_LOCKER(HttpStatus.NOT_FOUND, "LOCKER_002", "신청 가능한 사물함이 없습니다."),
+    NO_LOCKER_STRATEGY(HttpStatus.NOT_FOUND, "LOCKER_003", "사물함 신청 전략이 존재하지 않습니다."),
+    ALREADY_APPLIED(HttpStatus.NOT_FOUND, "LOCKER_004", "사물함을 이미 신청하였습니다."),
+
     // USER 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_001", "해당 유저가 존재하지 않습니다."),
 

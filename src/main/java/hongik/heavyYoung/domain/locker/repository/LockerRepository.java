@@ -1,11 +1,15 @@
 package hongik.heavyYoung.domain.locker.repository;
 
 import hongik.heavyYoung.domain.locker.entity.Locker;
+import hongik.heavyYoung.domain.locker.enums.LockerStatus;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LockerRepository extends JpaRepository<Locker, Long> {
     @Query("""
@@ -17,4 +21,9 @@ public interface LockerRepository extends JpaRepository<Locker, Long> {
     ORDER BY l.lockerNumber ASC
 """)
     List<Object[]> findAllWithCurrentSemesterAssign(@Param("lockerSection") String lockerSection);
+
+    int countByLockerStatus(LockerStatus lockerStatus);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Locker> findFirstByLockerStatus(LockerStatus lockerStatus);
 }
