@@ -4,7 +4,7 @@ import hongik.heavyYoung.domain.item.converter.ItemConverter;
 import hongik.heavyYoung.domain.item.dto.ItemResponseDTO;
 import hongik.heavyYoung.domain.item.entity.ItemCategory;
 import hongik.heavyYoung.domain.item.repository.ItemCategoryRepository;
-import hongik.heavyYoung.global.exception.GeneralException;
+import hongik.heavyYoung.domain.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemQueryServiceImpl implements ItemQueryService {
 
-    final ItemCategoryRepository itemCategoryRepository;
+    private final ItemCategoryRepository itemCategoryRepository;
+    private final ItemRepository itemRepository;
 
     /**
      * 대여 가능한 물품 카테고리 목록을 조회한다.
