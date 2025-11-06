@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.studentFee.service;
 
-import hongik.heavyYoung.domain.studentFee.StudentFeeConverter;
+import hongik.heavyYoung.domain.studentFee.converter.StudentFeeConverter;
 import hongik.heavyYoung.domain.studentFee.dto.StudentFeeRequestDTO;
 import hongik.heavyYoung.domain.studentFee.dto.StudentFeeResponseDTO;
 import hongik.heavyYoung.global.qr.QrManager;
