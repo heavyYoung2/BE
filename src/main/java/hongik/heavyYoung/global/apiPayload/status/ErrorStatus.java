@@ -35,6 +35,10 @@ public enum ErrorStatus implements BaseErrorCode {
     QR_AUTH_TYPE_NOT_FOUND(HttpStatus.BAD_REQUEST, "QR_004", "존재하지 않는 QR 타입입니다."),
     QR_AUTH_INVALID_FORMAT(HttpStatus.UNAUTHORIZED, "QR_005", "토큰 형식이 올바르지 않습니다."),
 
+    // Item 에러
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_001", "해당 물건이 존재하지 않습니다."),
+    ITEM_DELETE_NOT_ALLOWED_WHEN_RENTED(HttpStatus.CONFLICT, "ITEM_002", "대여중인 아이템은 삭제할 수 없습니다."),
+
     // ItemCategory 에러
     ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_001", "해당 카테고리가 존재하지 않습니다.");
 

@@ -29,7 +29,12 @@ public class ItemCategory extends BaseEntity {
     private int availableCount = 0;
 
     public void increaseQuantity() {
-        this.totalCount = this.totalCount + 1;
-        this.availableCount = this.availableCount + 1;
+        this.totalCount++;
+        this.availableCount++;
+    }
+
+    public void decreaseQuantity() {
+        this.totalCount--;
+        this.availableCount--;
     }
 }
