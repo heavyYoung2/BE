@@ -34,4 +34,23 @@ public class ItemConverter {
                 .itemCategory(itemCategory)
                 .build();
     }
+
+    public static ItemResponseDTO.ItemInfo toItemInfo(Item item) {
+
+        return ItemResponseDTO.ItemInfo.builder()
+                .ItemId(item.getId())
+                .rented(item.isRented())
+                .CategoryName(item.getItemCategory().getItemCategoryName())
+                .build();
+    }
+
+    public static ItemResponseDTO.ItemListByCategory toItemListByCategory(List<Item> items) {
+        List<ItemResponseDTO.ItemInfo> itemListByCategories = items.stream()
+                .map(ItemConverter::toItemInfo)
+                .toList();
+
+        return ItemResponseDTO.ItemListByCategory.builder()
+                .items(itemListByCategories)
+                .build();
+    }
 }

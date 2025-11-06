@@ -32,5 +32,10 @@ public class AdminItemRestController {
         return ApiResponse.onSuccess(null);
     }
 
+    @Operation(summary = "물품 리스트 조회")
+    @GetMapping("/{item-category-id}")
+    public ApiResponse<ItemResponseDTO.ItemListByCategory> getItemListByCategoryId(@PathVariable("item-category-id") Long itemCategoryId) {
+        return ApiResponse.onSuccess(itemQueryService.getItemListByCategoryId(itemCategoryId));
+    }
 
 }
