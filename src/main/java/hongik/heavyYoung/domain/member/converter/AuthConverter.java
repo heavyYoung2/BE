@@ -14,6 +14,9 @@ public class AuthConverter {
                 .password(dto.getPassword())
                 .role(MemberRole.USER)
                 .memberStatus(MemberStatus.ACTIVE)
+                .phoneNumber(dto.getPhoneNumber())
+                .studentId(dto.getStudentId())
+                .studentName(dto.getStudentName())
                 .build();
     }
 

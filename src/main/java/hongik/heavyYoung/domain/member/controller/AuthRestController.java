@@ -26,13 +26,13 @@ public class AuthRestController {
     public ApiResponse sendCode(){
         return null;
     }
+    // TODO : redis 설정 이후 javaMailSender로 구현
 
     @Operation(summary = "학교 이메일 인증번호 인증 API")
     @PostMapping("/verify-code")
     public ApiResponse verifyCode(@RequestParam("code") String code){
         return null;
     }
-    // TODO : redis 설정 이후 javaMailSender로 구현
 
     @Operation(summary = "회원 가입 API")
     @PostMapping ("/sign-in")
@@ -43,11 +43,6 @@ public class AuthRestController {
         return ApiResponse.onSuccess(authResponseDTO);
     }
 
-    @Operation(summary = "회원 정보 입력 API")
-    @PostMapping ("/sign-in/add-info")
-    public ApiResponse addInfo(){
-        return null;
-    }
 
     @Operation(summary = "로그인 API")
     @PostMapping ("/login")

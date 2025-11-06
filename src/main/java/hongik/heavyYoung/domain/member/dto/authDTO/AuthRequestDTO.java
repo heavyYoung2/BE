@@ -25,5 +25,19 @@ public class AuthRequestDTO {
         @Schema(description = "비밀번호 확인")
         @NotBlank(message = "비밀번호 확인은 필수 입력 값입니다.")
         private String passwordConfirm;
+
+        @Schema(description = "학번")
+        @NotBlank(message = "학번은 필수 입력 값입니다.")
+        private String studentId;
+
+        @Schema(description = "이름")
+        @NotBlank(message = "이름은 필수 입력 값입니다.")
+        private String studentName;
+
+        @Schema(description = "전화번호")
+        @NotBlank(message = "전화번호는 필수 입력 값입니다.")
+        private String phoneNumber;
+
     }
+
 }
