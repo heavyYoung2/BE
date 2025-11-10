@@ -40,7 +40,7 @@ public class ItemResponseDTO {
     public static class ItemInfo {
         private Long ItemId;
         private boolean rented;
-        private String CategoryName;
+        private String categoryName;
     }
 
     @Getter

@@ -40,7 +40,7 @@ public class ItemConverter {
         return ItemResponseDTO.ItemInfo.builder()
                 .ItemId(item.getId())
                 .rented(item.isRented())
-                .CategoryName(item.getItemCategory().getItemCategoryName())
+                .categoryName(item.getItemCategory().getItemCategoryName())
                 .build();
     }
 
