@@ -32,6 +32,14 @@ public class AdminLockerRestController {
         return ApiResponse.onSuccess(allLockerApplication);
     }
 
+    @GetMapping("/applications/{lockerApplicationId}")
+    public ApiResponse<LockerResponse.LockerApplicationDetailInfoDTO> getLockerApplicationDetail(
+            @PathVariable("lockerApplicationId") Long lockerApplicationId
+    ) {
+        LockerResponse.LockerApplicationDetailInfoDTO lockerApplicationDetail = adminLockerQueryService.findLockerApplicationDetail(lockerApplicationId);
+        return ApiResponse.onSuccess(lockerApplicationDetail);
+    }
+
     @PostMapping("/applications")
     public ApiResponse<Void> addLockerApplication(
             @RequestBody @Valid LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO
@@ -40,6 +48,7 @@ public class AdminLockerRestController {
         if (!ApplicationType.LOCKER.contains(lockerApplicationAddRequestDTO.getApplicationType())) {
             throw new LockerException(ErrorStatus.VALIDATION_ERROR);
         }
+
         adminLockerCommandService.addLockerApplication(lockerApplicationAddRequestDTO);
         return ApiResponse.onSuccess(null);
     }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AdminLockerQueryService {
     List<LockerResponse.LockerApplicationInfoDTO> findAllLockerApplication();
+    LockerResponse.LockerApplicationDetailInfoDTO findLockerApplicationDetail(Long lockerApplicationId);
 }
