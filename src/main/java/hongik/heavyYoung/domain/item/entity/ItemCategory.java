@@ -1,7 +1,9 @@
 // src/main/java/com/yourapp/domain/item/entity/ItemCategory.java
 package hongik.heavyYoung.domain.item.entity;
 
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
+import hongik.heavyYoung.global.exception.customException.ItemException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +36,9 @@ public class ItemCategory extends BaseEntity {
     }
 
     public void decreaseQuantity() {
+        if (this.totalCount <= 0 || this.availableCount <= 0) {
+            throw new ItemException(ErrorStatus.ITEM_QUANTITY_NON_POSITIVE);
+        }
         this.totalCount--;
         this.availableCount--;
     }
