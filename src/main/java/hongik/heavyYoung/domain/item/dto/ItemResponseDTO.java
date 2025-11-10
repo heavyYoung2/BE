@@ -32,4 +32,22 @@ public class ItemResponseDTO {
     public static class ItemList {
         private List<ItemCategoryInfo> itemCategoryInfos;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemInfo {
+        private Long ItemId;
+        private boolean rented;
+        private String categoryName;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemListByCategory {
+        private List<ItemInfo> items;
+    }
 }
