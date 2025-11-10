@@ -32,6 +32,7 @@ public class AuthConverter {
                 .email(member.getEmail())
                 .role(member.getRole())
                 .status(member.getMemberStatus())
+                .studentId(member.getStudentId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .expiresIn(accessExp)

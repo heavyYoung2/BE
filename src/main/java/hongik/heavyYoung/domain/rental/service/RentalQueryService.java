@@ -6,6 +6,6 @@ import hongik.heavyYoung.global.qr.QrTokenResponse;
 public interface RentalQueryService {
     QrTokenResponse generateRentalQrToken(Long itemCategoryId);
     QrTokenResponse generateReturnRentalQrToken(Long rentalHistoryId);
-    RentalResponseDTO.MemberRentalInfo getRentalStatus();
+    RentalResponseDTO.MemberRentalInfo getRentalStatus(Long memberId);
     RentalResponseDTO.RentalHistoryInfo getRentalHistory();
 }

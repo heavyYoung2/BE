@@ -33,6 +33,9 @@ public class AuthResponseDTO {
         @Schema(description = "상태")
         private MemberStatus status;
 
+        @Schema(description = "학번")
+        private String studentId;
+
         @Schema(description = "JWT 액세스 토큰")
         private String accessToken;
 
