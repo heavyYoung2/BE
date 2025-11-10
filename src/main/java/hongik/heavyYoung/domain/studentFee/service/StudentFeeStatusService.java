@@ -2,6 +2,7 @@ package hongik.heavyYoung.domain.studentFee.service;
 
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.enums.StudentFeeStatus;
+import hongik.heavyYoung.domain.studentFee.entity.StudentFee;
 import hongik.heavyYoung.domain.studentFee.repository.StudentFeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,11 @@ public class StudentFeeStatusService {
 
     public boolean isStudentFeePaid(Member member) {
         if (member.getStudentFeeStatus() == StudentFeeStatus.YET) {
-            member.updateStudentFeeStatus(
-                    studentFeeRepository.existsByStudentId(member.getStudentId())
-                            ? StudentFeeStatus.PAID
-                            : StudentFeeStatus.NOT_PAID
+            StudentFee studentFee = studentFeeRepository.findByStudentId(member.getStudentId());
+
+            member.updateStudentFeeStatus(studentFee.isFeePaid()
+                    ? StudentFeeStatus.PAID
+                    : StudentFeeStatus.NOT_PAID
             );
         }
 
