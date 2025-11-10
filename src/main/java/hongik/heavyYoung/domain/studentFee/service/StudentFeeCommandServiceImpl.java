@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
-public class StudentFeeQueryServiceImpl implements StudentFeeQueryService {
+public class StudentFeeCommandServiceImpl implements StudentFeeCommandService {
 
     private final MemberRepository memberRepository;
     private final QrManager qrManager;
