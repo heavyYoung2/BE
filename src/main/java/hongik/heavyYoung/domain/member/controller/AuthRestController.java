@@ -51,8 +51,8 @@ public class AuthRestController {
     @Operation(summary = "로그인 API",
                 description = "이메일, 비밀번호를 통해 로그아웃을 합니다.")
     @PostMapping ("/login")
-    public ApiResponse<?> login(@RequestParam("email") String email, @RequestParam("password") String password){
-        return null;
+    public ApiResponse<AuthResponseDTO.AuthLoginResponseDTO> login(@RequestBody @Valid AuthRequestDTO.AuthLoginInRequestDTO authRequestDTO){
+        return ApiResponse.onSuccess(authService.login(authRequestDTO));
     }
 
     @Operation(summary = "로그아웃 API",

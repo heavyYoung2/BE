@@ -31,7 +31,12 @@ public enum ErrorStatus implements BaseErrorCode {
     // Auth 에러
     MEMBER_ALREADY_EXIST(HttpStatus.FORBIDDEN, "AUTH_001", "해당 이메일의 회원이 이미 존재합니다"),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "AUTH_002", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
-    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "AUTH_003", "학교 이메일 형식이 아닙니다"),
+    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "AUTH_003", "학교 이메일 형식이 아닙니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "AUTH_004", "비밀번호가 올바르지 않습니다."),
+    INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "AUTH_005", "잘못된 JWT 서명입니다."),
+    JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "AUTH_006", "JWT 토큰이 만료되었습니다."),
+    INVALID_JWT_FORMAT(HttpStatus.UNAUTHORIZED, "AUTH_007", "JWT 형식이 올바르지 않습니다."),
+
     // QrToken 에러
     QR_AUTH_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, "QR_001", "QR 토큰 서명이 유효하지 않습니다."),
     QR_AUTH_EXPIRED(HttpStatus.UNAUTHORIZED, "QR_002", "QR 토큰이 만료되었습니다."),

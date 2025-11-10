@@ -8,10 +8,10 @@ import hongik.heavyYoung.domain.member.enums.MemberStatus;
 
 public class AuthConverter {
 
-    public static Member toMemberEntity(AuthRequestDTO.AuthSignUpRequestDTO dto) {
+    public static Member toMemberEntity(AuthRequestDTO.AuthSignUpRequestDTO dto,  String encodedPassword) {
         return Member.builder()
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(encodedPassword)
                 .role(MemberRole.USER)
                 .memberStatus(MemberStatus.ACTIVE)
                 .phoneNumber(dto.getPhoneNumber())
@@ -23,5 +23,19 @@ public class AuthConverter {
     public static AuthResponseDTO.AuthSignUpResponseDTO toAuthSignUpResponseDTO(Member member) {
         return AuthResponseDTO.AuthSignUpResponseDTO.builder()
                 .memberId(member.getId()).build();
+    }
+
+    public static AuthResponseDTO.AuthLoginResponseDTO toAuthLoginResponseDTO(
+            Member member, String accessToken, String refreshToken, long accessExp, long refreshExp) {
+        return AuthResponseDTO.AuthLoginResponseDTO.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .role(member.getRole())
+                .status(member.getMemberStatus())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .expiresIn(accessExp)
+                .refreshExpiresIn(refreshExp)
+                .build();
     }
 }
