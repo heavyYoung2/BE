@@ -15,7 +15,7 @@ public class StudentFeeStatusService {
     private final StudentFeeRepository studentFeeRepository;
 
     public boolean isStudentFeePaid(Member member) {
-        if (member.getStudentFeeStatus() == StudentFeeStatus.YET) {
+        if (member.getStudentFeeStatus() != StudentFeeStatus.PAID) {
             StudentFee studentFee = studentFeeRepository.findByStudentId(member.getStudentId());
 
             member.updateStudentFeeStatus(studentFee.isFeePaid()
