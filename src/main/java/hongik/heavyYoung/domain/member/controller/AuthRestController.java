@@ -23,7 +23,7 @@ public class AuthRestController {
     @Operation(summary = "학교 이메일 인증번호 요청 API",
             description = "학교 이메일을 통해 인증 번호를 전송합니다.")
     @PostMapping("/send-code")
-    public ApiResponse sendCode(){
+    public ApiResponse<?> sendCode(){
         return null;
     }
     // TODO : redis 설정 이후 javaMailSender로 구현
