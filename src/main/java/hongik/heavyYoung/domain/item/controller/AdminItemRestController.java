@@ -39,7 +39,7 @@ public class AdminItemRestController {
     }
 
     @Operation(summary = "개별 물품 삭제")
-    @DeleteMapping("{item-id}")
+    @DeleteMapping("/{item-id}")
     public ApiResponse<?> deleteItem(@PathVariable("item-id") Long itemId) {
         itemCommandService.deleteItem(itemId);
         return ApiResponse.onSuccess(null);
