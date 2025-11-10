@@ -33,6 +33,8 @@ public class AuthRestController {
     public ApiResponse verifyCode(@RequestParam("code") String code){
         return null;
     }
+    // TODO : redis 설정 이후 javaMailSender로 구현 이후 구현
+
 
     @Operation(summary = "회원 가입 API")
     @PostMapping ("/sign-in")
