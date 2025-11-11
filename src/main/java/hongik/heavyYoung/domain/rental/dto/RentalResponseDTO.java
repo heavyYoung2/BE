@@ -51,4 +51,26 @@ public class RentalResponseDTO {
         private LocalDate returnedAt;
         private RentalStatus rentalStatus;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AllRentalHistories {
+        private List<RentalHistory> items;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RentalHistory {
+        private Long rentalHistoryId;
+        private String itemName;
+        private LocalDate rentalStartedAt;
+        private LocalDate rentalEndedAt;
+        private LocalDate returnedAt;
+        private RentalStatus rentalStatus;
+    }
+
 }
