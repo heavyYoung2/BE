@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.rental;
+package hongik.heavyYoung.domain.rental.converter;
 
 import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;

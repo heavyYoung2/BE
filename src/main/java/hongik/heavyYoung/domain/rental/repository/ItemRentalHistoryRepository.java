@@ -28,4 +28,6 @@ public interface ItemRentalHistoryRepository extends JpaRepository<ItemRentalHis
         order by h.createdAt desc
         """)
     List<ItemRentalHistory> findAllByMemberOrderByCreatedAtDesc(@Param("member") Member member);
+
+    List<ItemRentalHistory> findAllByMemberIdAndReturnedAtIsNull(Long memberId);
 }

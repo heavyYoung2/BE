@@ -23,4 +23,8 @@ public class Item extends BaseEntity {
     @Column(name = "is_rented", nullable = false)
     @Builder.Default
     private boolean isRented = false;
+
+    public void updateIsRented(boolean isRented) {
+        this.isRented = isRented;
+    }
 }

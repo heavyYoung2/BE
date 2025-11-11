@@ -2,7 +2,7 @@ package hongik.heavyYoung.domain.rental.service;
 
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
-import hongik.heavyYoung.domain.rental.RentalConverter;
+import hongik.heavyYoung.domain.rental.converter.RentalConverter;
 import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;
 import hongik.heavyYoung.domain.rental.enums.RentalStatus;
@@ -12,6 +12,7 @@ import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;
 import hongik.heavyYoung.global.qr.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class RentalQueryServiceImpl implements RentalQueryService {
 
