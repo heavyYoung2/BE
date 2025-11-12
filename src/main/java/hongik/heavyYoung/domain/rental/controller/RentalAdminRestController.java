@@ -21,7 +21,7 @@ public class RentalAdminRestController {
 
     @Operation(summary = "물품 대여 QR 스캔")
     @PostMapping("/qr")
-    public ApiResponse<?> rentalByQr(@RequestBody RentalRequestDTO.RentalQrToken request) {
+    public ApiResponse<?> rentalByQr(@RequestBody RentalRequestDTO.QrToken request) {
         rentalAdminCommandService.rentalByQr(request);
         return ApiResponse.onSuccess(null);
     }
@@ -30,5 +30,12 @@ public class RentalAdminRestController {
     @GetMapping("")
     public ApiResponse<RentalResponseDTO.AllRentalHistories> getAllRentalHistories() {
         return ApiResponse.onSuccess(rentalAdminQueryService.getAllRentalHistories());
+    }
+
+    @Operation(summary = "물품 반납 QR 스캔")
+    @PostMapping("/return")
+    public ApiResponse<?> returnByQr(@RequestBody RentalRequestDTO.QrToken request) {
+        rentalAdminCommandService.returnByQr(request);
+        return ApiResponse.onSuccess(null);
     }
 }

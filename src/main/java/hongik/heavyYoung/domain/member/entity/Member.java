@@ -57,4 +57,8 @@ public class Member extends BaseEntity {
     public void updateStudentFeeStatus(StudentFeeStatus studentFeeStatus) {
         this.studentFeeStatus = studentFeeStatus;
     }
+
+    public void updateBlacklistUntil(LocalDate blacklistUntil) {
+        this.blacklistUntil = blacklistUntil;
+    }
 }

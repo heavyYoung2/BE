@@ -10,19 +10,25 @@ import hongik.heavyYoung.domain.rental.dto.RentalRequestDTO;
 import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;
 import hongik.heavyYoung.domain.rental.repository.ItemRentalHistoryRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
+import hongik.heavyYoung.global.exception.GeneralException;
 import hongik.heavyYoung.global.exception.customException.ItemCategoryException;
+import hongik.heavyYoung.global.exception.customException.ItemRentalHistoryException;
 import hongik.heavyYoung.global.exception.customException.MemberException;
 import hongik.heavyYoung.global.exception.customException.RentalException;
 import hongik.heavyYoung.global.qr.QrManager;
 import hongik.heavyYoung.global.qr.QrType;
 import hongik.heavyYoung.global.qr.payload.RentalPayload;
+import hongik.heavyYoung.global.qr.payload.ReturnPayload;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -35,7 +41,7 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
     private final MemberRepository memberRepository;
 
     @Override
-    public void rentalByQr(RentalRequestDTO.RentalQrToken rentalQrToken) {
+    public void rentalByQr(RentalRequestDTO.QrToken rentalQrToken) {
 
         String qrToken = rentalQrToken.getQrToken();
         RentalPayload qrPayload = (RentalPayload) qrManager.decodeQrToken(QrType.RENTAL, qrToken);
@@ -84,5 +90,37 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
                 .expectedReturnAt(LocalDateTime.now().plusDays(1))
                 .build();
         itemRentalHistoryRepository.save(itemRentalHistory);
+    }
+
+    @Override
+    public void returnByQr(RentalRequestDTO.QrToken request) {
+
+        String qrToken = request.getQrToken();
+        ReturnPayload qrPayload = (ReturnPayload) qrManager.decodeQrToken(QrType.RETURN_ITEM, qrToken);
+
+        Member member = memberRepository.findById(qrPayload.getMemberId())
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        ItemRentalHistory itemRentalHistory = itemRentalHistoryRepository.findById(qrPayload.getRentalHistoryId())
+                .orElseThrow(() -> new ItemRentalHistoryException(ErrorStatus.ITEM_RENTAL_HISTORY_NOT_FOUND));
+
+        // 이미 반납한 물품 예외 처리
+        if (itemRentalHistory.getReturnedAt() != null) {
+            throw new RentalException(ErrorStatus.ALREADY_RETURN);
+        }
+
+        // itemRentalHistory에 returnedAt 기록
+        itemRentalHistory.updateReturnedAt(LocalDateTime.now());
+
+        // item 상태 변경
+        itemRentalHistory.getItem().updateIsRented(false);
+
+        // itemCategory 수량 + 1
+        itemRentalHistory.getItem().getItemCategory().increaseQuantity();
+
+        // if (expectedReturnAt.before(returnedAt)) 이면 블랙리스트 체크
+        if (itemRentalHistory.getExpectedReturnAt().isBefore(LocalDateTime.now())) {
+            member.updateBlacklistUntil(LocalDate.now().plusDays(1));
+        }
     }
 }
