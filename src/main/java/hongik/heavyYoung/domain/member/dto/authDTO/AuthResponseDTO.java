@@ -55,12 +55,12 @@ public class AuthResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SendCodeResponseDTO {
-        @Schema(description = "전송된 인증코드 (개발용)")
+        @Schema(description = "전송된 인증코드")
         private String code;
     }
 
-    @Getter
     @Builder
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class VerifyCodeResponseDTO {
@@ -68,6 +68,18 @@ public class AuthResponseDTO {
         private String email;
 
         @Schema(description = "결과 메시지", example = "이메일 인증이 완료되었습니다.")
+        private String message;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TempPasswordResponseDTO {
+        @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
+        private String email;
+
+        @Schema(description = "결과 메시지", example = "임시 비밀번호가 발급되었습니다.")
         private String message;
     }
 }

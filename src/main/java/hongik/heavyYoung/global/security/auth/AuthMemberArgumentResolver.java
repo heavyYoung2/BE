@@ -33,14 +33,14 @@ public class AuthMemberArgumentResolver implements HandlerMethodArgumentResolver
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new AuthException(ErrorStatus.UNAUTHORIZED); // 401로 매핑되도록 설정
+            throw new AuthException(ErrorStatus.AUTH_UNAUTHORIZED); // 401로 매핑되도록 설정
         }
         String token = authHeader.substring(7); // "Bearer " 이후
 
         // access 토큰 파싱 → subject = memberId
         Claims claims = jwtProvider.parseAuthClaims(token);
         String sub = claims.getSubject();
-        if (sub == null) throw new AuthException(ErrorStatus.UNAUTHORIZED);
+        if (sub == null) throw new AuthException(ErrorStatus.AUTH_UNAUTHORIZED);
 
         try {
             return Long.valueOf(sub);

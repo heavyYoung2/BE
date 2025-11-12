@@ -72,8 +72,9 @@ public class AuthRestController {
     @Operation(summary = "임시 비밀번호 발급 API",
                 description = "등록된 이메일을 통해 임시 비밀번호가 발급됩니다. 발급이 되는 즉시 비밀번호가 업데이트 됩니다.")
     @PostMapping("/tmp-password")
-    public  ApiResponse<?> getTmpPassword(@RequestParam("password") String password){
-        return null;
+    public  ApiResponse<AuthResponseDTO.TempPasswordResponseDTO> issueTemporaryPassword(@RequestParam("email") String email){
+        AuthResponseDTO.TempPasswordResponseDTO response = authService.issueTemporaryPassword(email);
+        return ApiResponse.onSuccess(response);
     }
 
 }

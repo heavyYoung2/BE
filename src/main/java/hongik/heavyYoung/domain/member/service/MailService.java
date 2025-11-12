@@ -1,5 +1,7 @@
 package hongik.heavyYoung.domain.member.service;
 
+import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
+import hongik.heavyYoung.global.exception.GeneralException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.*;
@@ -26,7 +28,23 @@ public class MailService {
             helper.setText(buildHtml(code), true); // HTML 본문
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException("메일 전송 중 오류가 발생했습니다.", e);
+            throw new GeneralException(ErrorStatus.EMAIL_NOT_SENT);
+        }
+    }
+
+    public void sendTemporaryPassword(String to, String tempPassword) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject("[회비영] 임시 비밀번호 안내");
+            helper.setText(buildTempPasswordHtml(tempPassword), true);
+
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorStatus.EMAIL_NOT_SENT);
         }
     }
 
@@ -41,6 +59,19 @@ public class MailService {
               <p style="color:#666">이 메일은 발신 전용입니다.</p>
             </div>
             """.formatted(code);
+    }
+
+    private String buildTempPasswordHtml(String tempPassword) {
+        return """
+        <div style="font-family: Pretendard, Apple SD Gothic Neo, sans-serif; line-height:1.6;">
+          <h2>회비영 임시 비밀번호 발급</h2>
+          <p>아래의 임시 비밀번호로 로그인 후, 반드시 새 비밀번호로 변경해 주세요.</p>
+          <div style="font-size:24px;font-weight:700;letter-spacing:3px;margin:16px 0;color:#2E46F0;">
+            %s
+          </div>
+          <p style="color:#666;">이 메일은 발신 전용입니다.</p>
+        </div>
+        """.formatted(tempPassword);
     }
 
 

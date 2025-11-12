@@ -152,6 +152,38 @@ public class AuthService {
         return AuthConverter.toVerifyCodeResponseDTO(emailEntity.getEmailAddress());
     }
 
+    @Transactional
+    public AuthResponseDTO.TempPasswordResponseDTO issueTemporaryPassword(String email) {
+        // 회원 존재 하는지 확인
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 임시 비밀번호 생성 (12자리, 영문+숫자+특수문자)
+        String tempPassword = generateTempPassword(12);
+
+        // 비밀번호 암호화 후 DB 업데이트
+        String encodedPassword = passwordEncoder.encode(tempPassword);
+        member.updatePassword(encodedPassword);
+
+        // 이메일 발송
+        mailService.sendTemporaryPassword(email, tempPassword);
+
+        // 응답 DTO 반환
+        return AuthConverter.toTempPasswordResponseDTO(email);
+    }
+
+    private String generateTempPassword(int length) {
+        final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
+
     private boolean isSchoolEmail(String email) {
         return email.endsWith("@g.hongik.ac.kr") || email.endsWith("@mail.hongik.ac.kr");
     }

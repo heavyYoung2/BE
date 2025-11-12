@@ -51,4 +51,11 @@ public class AuthConverter {
                 .message("이메일 인증이 완료되었습니다.")
                 .build();
     }
+
+    public static AuthResponseDTO.TempPasswordResponseDTO toTempPasswordResponseDTO(String email) {
+        return AuthResponseDTO.TempPasswordResponseDTO.builder()
+                .email(email)
+                .message("임시 비밀번호가 발급되었습니다. 이메일을 확인하세요.")
+                .build();
+    }
 }

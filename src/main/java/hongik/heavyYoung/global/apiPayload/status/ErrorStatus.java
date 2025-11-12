@@ -40,7 +40,7 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "AUTH_005", "잘못된 JWT 서명입니다."),
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "AUTH_006", "JWT 토큰이 만료되었습니다."),
     INVALID_JWT_FORMAT(HttpStatus.UNAUTHORIZED, "AUTH_007", "JWT 형식이 올바르지 않습니다."),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_008", "접근 권한이 없습니다."),
+    AUTH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_008", "접근 권한이 없습니다."),
 
     // QrToken 에러
     QR_AUTH_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, "QR_001", "QR 토큰 서명이 유효하지 않습니다."),
@@ -61,10 +61,11 @@ public enum ErrorStatus implements BaseErrorCode {
     ITEM_RENTAL_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_RENTAL_HISTORY_001", "해당 대여 기록이 존재하지 않습니다."),
     ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다."),
 
-    // EmailVerify 에러
-    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL_001", "해당 이메일이 존재하지 않습니다."),
-    EMAIL_CODE_MISMATCH(HttpStatus.BAD_REQUEST, "EMAIL_002", "이메일과 코드가 일치하지 않습니다."),
-    EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "EMAIL_003", "이메일 인증이 되지 않았습니다.");
+    // Email 에러
+    EMAIL_NOT_SENT(HttpStatus.NOT_FOUND, "EMAIL_001", "이메일이 전송되지 않았습니다."),
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL_002", "해당 이메일로 인증 코드가 전송되지 않았습니다."),
+    EMAIL_CODE_MISMATCH(HttpStatus.BAD_REQUEST, "EMAIL_003", "이메일과 코드가 일치하지 않습니다."),
+    EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "EMAIL_004", "이메일 인증이 되지 않았습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
