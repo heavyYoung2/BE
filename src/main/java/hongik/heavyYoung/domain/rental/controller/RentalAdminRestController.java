@@ -28,7 +28,7 @@ public class RentalAdminRestController {
 
     @Operation(summary = "대여 전체 현황 조회")
     @GetMapping("")
-    private ApiResponse<RentalResponseDTO.AllRentalHistories> getAllRentalHistories() {
+    public ApiResponse<RentalResponseDTO.AllRentalHistories> getAllRentalHistories() {
         return ApiResponse.onSuccess(rentalAdminQueryService.getAllRentalHistories());
     }
 }
