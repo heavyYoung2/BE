@@ -1,6 +1,5 @@
-package hongik.heavyYoung.global.auth;
+package hongik.heavyYoung.global.security.auth;
 
-import hongik.heavyYoung.domain.member.service.AuthService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.AuthException;
 import hongik.heavyYoung.global.jwt.JwtProvider;

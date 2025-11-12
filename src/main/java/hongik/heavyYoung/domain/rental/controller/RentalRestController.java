@@ -3,9 +3,10 @@ package hongik.heavyYoung.domain.rental.controller;
 import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 import hongik.heavyYoung.domain.rental.service.RentalQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
-import hongik.heavyYoung.global.auth.AuthMemberId;
+import hongik.heavyYoung.global.security.auth.AuthMemberId;
 import hongik.heavyYoung.global.qr.QrTokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,7 @@ public class RentalRestController {
 
     @Operation(summary = "내 대여 현황 조회")
     @GetMapping("/me")
-    public ApiResponse<RentalResponseDTO.MemberRentalInfo> getRentalStatus(@AuthMemberId Long memberId) {
+    public ApiResponse<RentalResponseDTO.MemberRentalInfo> getRentalStatus(@Parameter(hidden = true) @AuthMemberId Long memberId) {
         return ApiResponse.onSuccess(rentalQueryService.getRentalStatus(memberId));
     }
 

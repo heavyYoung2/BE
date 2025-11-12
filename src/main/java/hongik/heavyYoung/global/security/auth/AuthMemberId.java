@@ -1,4 +1,4 @@
-package hongik.heavyYoung.global.auth;
+package hongik.heavyYoung.global.security.auth;
 
 import java.lang.annotation.*;
 

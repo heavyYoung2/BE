@@ -1,6 +1,6 @@
 package hongik.heavyYoung.global.config;
 
-import hongik.heavyYoung.global.auth.AuthMemberArgumentResolver;
+import hongik.heavyYoung.global.security.auth.AuthMemberArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
