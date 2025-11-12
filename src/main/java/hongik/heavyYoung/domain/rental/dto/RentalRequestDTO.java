@@ -11,7 +11,7 @@ public class RentalRequestDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RentalQrToken {
+    public static class QrToken {
         private String qrToken;
     }
 }
