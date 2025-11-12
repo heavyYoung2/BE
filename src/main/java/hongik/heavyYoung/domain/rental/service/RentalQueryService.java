@@ -7,5 +7,5 @@ public interface RentalQueryService {
     QrTokenResponse generateRentalQrToken(Long itemCategoryId);
     QrTokenResponse generateReturnRentalQrToken(Long rentalHistoryId);
     RentalResponseDTO.MemberRentalInfo getRentalStatus();
-    RentalResponseDTO.RentalHistoryInfo getRentalHistory();
+    RentalResponseDTO.AllRentalHistories getRentalHistory();
 }

@@ -21,40 +21,44 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "student_id", nullable = false, length = 20)
+    @Column(name = "student_id")//, nullable = true, length = 20)
     private String studentId;
 
-    @Column(name = "student_name", nullable = false, length = 20)
+    @Column(name = "student_name")//, nullable = true, length = 20)
     private String studentName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "student_fee_status", nullable = false, length = 20)
+    @Column(name = "student_fee_status")//, nullable = true, length = 20)
     @Builder.Default
     private StudentFeeStatus studentFeeStatus = StudentFeeStatus.YET;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 20)
+    @Column(name = "role")//, nullable = false, length = 20)
     @Builder.Default
     private MemberRole role = MemberRole.USER;
 
-    @Column(name = "phone_number", nullable = false, length = 20)
+    @Column(name = "phone_number")//, nullable = true, length = 20)
     private String phoneNumber;
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email")//, nullable = false, length = 50)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password")//, nullable = false, length = 50)
     private String password;
 
     @Column(name = "blacklist_until")
     private LocalDate blacklistUntil;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "member_status", nullable = false, length = 50)
+    @Column(name = "member_status")//, nullable = true, length = 50)
     @Builder.Default
     private MemberStatus memberStatus = MemberStatus.PENDING;
 
     public void updateStudentFeeStatus(StudentFeeStatus studentFeeStatus) {
         this.studentFeeStatus = studentFeeStatus;
+    }
+
+    public void updateBlacklistUntil(LocalDate blacklistUntil) {
+        this.blacklistUntil = blacklistUntil;
     }
 }

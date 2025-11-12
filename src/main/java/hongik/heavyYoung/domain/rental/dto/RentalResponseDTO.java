@@ -17,38 +17,28 @@ public class RentalResponseDTO {
     @NoArgsConstructor
     public static class MemberRentalInfo {
         private LocalDate expectedBlacklistUntil;
-        private List<RentalItemInfo> items;
+        private List<RentalHistory> items;
     }
 
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RentalItemInfo {
+    public static class AllRentalHistories {
+        private List<RentalHistory> items;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RentalHistory {
         private Long rentalHistoryId;
         private String itemName;
         private LocalDate rentalStartedAt;
         private LocalDate rentalEndedAt;
-        private RentalStatus rentalStatus;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class RentalHistoryInfo {
-        private List<RentalItemHistoryInfo> items;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class RentalItemHistoryInfo {
-        private Long rentalHistoryId;
-        private String itemName;
-        private LocalDate rentalStartedAt;
         private LocalDate returnedAt;
         private RentalStatus rentalStatus;
     }
+
 }

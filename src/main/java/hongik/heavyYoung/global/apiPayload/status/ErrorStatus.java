@@ -34,14 +34,34 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Member 에러
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_001", "해당 멤버가 존재하지 않습니다."),
+    MEMBER_IS_BLACKLIST(HttpStatus.BAD_REQUEST, "MEMBER_002", "블랙리스트 멤버 입니다."),
+    MEMBER_NOT_PAID(HttpStatus.BAD_REQUEST, "MEMBER_003", "학생회비를 납부하지 않았습니다."),
+    MEMBER_HAS_OVERDUE_ITEM(HttpStatus.BAD_REQUEST, "MEMBER_004", "연체된 물품이 존재합니다."),
+    MEMBER_ALREADY_RENTED_SAME_CATEGORY(HttpStatus.BAD_REQUEST, "MEMBER_005", "해당 종류의 물품을 이미 대여했습니다."),
+
+    // Auth 에러
+    MEMBER_ALREADY_EXIST(HttpStatus.FORBIDDEN, "AUTH_001", "해당 이메일의 회원이 이미 존재합니다"),
+    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "AUTH_002", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
+    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "AUTH_003", "학교 이메일 형식이 아닙니다"),
 
     // QrToken 에러
     QR_AUTH_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, "QR_001", "QR 토큰 서명이 유효하지 않습니다."),
     QR_AUTH_EXPIRED(HttpStatus.UNAUTHORIZED, "QR_002", "QR 토큰이 만료되었습니다."),
     QR_AUTH_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "QR_003", "QR 타입이 일치하지 않습니다."),
     QR_AUTH_TYPE_NOT_FOUND(HttpStatus.BAD_REQUEST, "QR_004", "존재하지 않는 QR 타입입니다."),
-    QR_AUTH_INVALID_FORMAT(HttpStatus.UNAUTHORIZED, "QR_005", "토큰 형식이 올바르지 않습니다.");
+    QR_AUTH_INVALID_FORMAT(HttpStatus.UNAUTHORIZED, "QR_005", "토큰 형식이 올바르지 않습니다."),
 
+    // Item 에러
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_001", "해당 물건이 존재하지 않습니다."),
+    ITEM_DELETE_NOT_ALLOWED_WHEN_RENTED(HttpStatus.CONFLICT, "ITEM_002", "대여중인 아이템은 삭제할 수 없습니다."),
+    ITEM_QUANTITY_NON_POSITIVE(HttpStatus.BAD_REQUEST, "ITEM_003", "수량이 0 이하입니다."),
+
+    // ItemCategory 에러
+    ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_001", "해당 카테고리가 존재하지 않습니다."),
+
+    // ItemRentalHistory 에러
+    ITEM_RENTAL_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_RENTAL_HISTORY_001", "해당 대여 기록이 존재하지 않습니다."),
+    ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

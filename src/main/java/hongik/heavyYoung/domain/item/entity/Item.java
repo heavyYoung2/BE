@@ -20,10 +20,11 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "item_category_id", nullable = false)
     private ItemCategory itemCategory;
 
-    @Column(name = "item_code", nullable = false)
-    private int itemCode;
-
     @Column(name = "is_rented", nullable = false)
     @Builder.Default
     private boolean isRented = false;
+
+    public void updateIsRented(boolean isRented) {
+        this.isRented = isRented;
+    }
 }
