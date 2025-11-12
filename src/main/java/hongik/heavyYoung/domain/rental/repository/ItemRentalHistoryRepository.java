@@ -16,6 +16,7 @@ public interface ItemRentalHistoryRepository extends JpaRepository<ItemRentalHis
            join fetch i.itemCategory c
            where h.member = :member
              and h.returnedAt is null
+           order by h.createdAt desc
            """)
     List<ItemRentalHistory> findCurrentWithItemAndCategory(@Param("member") Member member);
 
@@ -28,4 +29,15 @@ public interface ItemRentalHistoryRepository extends JpaRepository<ItemRentalHis
         order by h.createdAt desc
         """)
     List<ItemRentalHistory> findAllByMemberOrderByCreatedAtDesc(@Param("member") Member member);
+
+    List<ItemRentalHistory> findAllByMemberIdAndReturnedAtIsNull(Long memberId);
+
+    @Query("""
+           select h
+           from ItemRentalHistory h
+           join fetch h.item i
+           join fetch i.itemCategory c
+           order by h.createdAt desc
+    """)
+    List<ItemRentalHistory> findAllHistories();
 }

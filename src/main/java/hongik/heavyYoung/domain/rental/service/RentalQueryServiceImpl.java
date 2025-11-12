@@ -2,7 +2,7 @@ package hongik.heavyYoung.domain.rental.service;
 
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
-import hongik.heavyYoung.domain.rental.RentalConverter;
+import hongik.heavyYoung.domain.rental.converter.RentalConverter;
 import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;
 import hongik.heavyYoung.domain.rental.enums.RentalStatus;
@@ -12,6 +12,7 @@ import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;
 import hongik.heavyYoung.global.qr.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class RentalQueryServiceImpl implements RentalQueryService {
 
@@ -98,11 +100,11 @@ public class RentalQueryServiceImpl implements RentalQueryService {
         List<ItemRentalHistory> itemRentalHistories = itemRentalHistoryRepository.findCurrentWithItemAndCategory(member);
 
         // 대여 정보들
-        List<RentalResponseDTO.RentalItemInfo> rentalItemInfos = new ArrayList<>();
+        List<RentalResponseDTO.RentalHistory> rentalItemInfos = new ArrayList<>();
         for (ItemRentalHistory itemRentalHistory : itemRentalHistories) {
             RentalStatus rentalStatus = resolveStatus(itemRentalHistory, LocalDateTime.now());
-            RentalResponseDTO.RentalItemInfo rentalItemInfo = RentalConverter.toRentalItemInfo(itemRentalHistory, rentalStatus);
-            rentalItemInfos.add(rentalItemInfo);
+            RentalResponseDTO.RentalHistory rentalHistory = RentalConverter.toRentalHistory(itemRentalHistory, rentalStatus);
+            rentalItemInfos.add(rentalHistory);
         }
 
         // TODO: 블랙리스트 예상 기간 계산 로직
@@ -112,25 +114,24 @@ public class RentalQueryServiceImpl implements RentalQueryService {
     }
 
     @Override
-    public RentalResponseDTO.RentalHistoryInfo getRentalHistory() {
+    public RentalResponseDTO.AllRentalHistories getRentalHistory() {
 
         // 멤버 정보 받아오기
         Member member = memberRepository.findById(1L)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 대여 정보 가져오기
-        List<ItemRentalHistory> itemRentalHistories = itemRentalHistoryRepository.findAllByMemberOrderByCreatedAtDesc(member);
+        List<ItemRentalHistory> itemRentalHistoryList = itemRentalHistoryRepository.findAllByMemberOrderByCreatedAtDesc(member);
 
         // 대여 정보들
-        List<RentalResponseDTO.RentalItemHistoryInfo> rentalItemHistoryInfos = new ArrayList<>();
-        for(ItemRentalHistory itemRentalHistory : itemRentalHistories) {
+        List<RentalResponseDTO.RentalHistory> rentalHistories = new ArrayList<>();
+        for (ItemRentalHistory itemRentalHistory : itemRentalHistoryList) {
             RentalStatus rentalStatus = resolveStatus(itemRentalHistory, LocalDateTime.now());
-
-            RentalResponseDTO.RentalItemHistoryInfo rentalItemHistoryInfo = RentalConverter.toRentalItemHistoryInfo(itemRentalHistory, rentalStatus);
-            rentalItemHistoryInfos.add(rentalItemHistoryInfo);
+            RentalResponseDTO.RentalHistory rentalHistory = RentalConverter.toRentalHistory(itemRentalHistory, rentalStatus);
+            rentalHistories.add(rentalHistory);
         }
 
-        return RentalConverter.toRentalHistoryInfo(rentalItemHistoryInfos);
+        return RentalConverter.toAllRentalHistories(rentalHistories);
     }
 
     // 대여 상태 계산

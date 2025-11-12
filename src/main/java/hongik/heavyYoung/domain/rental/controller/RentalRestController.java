@@ -45,7 +45,7 @@ public class RentalRestController {
 
     @Operation(summary = "전체 대여 내역 조회")
     @GetMapping("/me/history")
-    public ApiResponse<RentalResponseDTO.RentalHistoryInfo> getRentalHistory() {
+    public ApiResponse<RentalResponseDTO.AllRentalHistories> getRentalHistory() {
         return ApiResponse.onSuccess(rentalQueryService.getRentalHistory());
     }
 }
