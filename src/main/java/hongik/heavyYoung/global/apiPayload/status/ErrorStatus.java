@@ -27,6 +27,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NO_AVAILABLE_LOCKER(HttpStatus.NOT_FOUND, "LOCKER_002", "신청 가능한 사물함이 없습니다."),
     NO_LOCKER_STRATEGY(HttpStatus.NOT_FOUND, "LOCKER_003", "사물함 신청 전략이 존재하지 않습니다."),
     ALREADY_APPLIED(HttpStatus.NOT_FOUND, "LOCKER_004", "사물함을 이미 신청하였습니다."),
+    CAN_NOT_ASSIGN(HttpStatus.NOT_FOUND, "LOCKER_005", "배정할 수 없는 신청내역입니다."),
 
     // USER 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_001", "해당 유저가 존재하지 않습니다."),

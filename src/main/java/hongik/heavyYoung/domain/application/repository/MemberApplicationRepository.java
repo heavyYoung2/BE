@@ -16,5 +16,5 @@ public interface MemberApplicationRepository extends JpaRepository<MemberApplica
 
     boolean existsByMemberAndApplication(Member member, Application application);
 
-    List<MemberApplication> findAllByApplicationId(Long applicationId);
+    List<MemberApplication> findAllByApplicationIdOrderByCreatedAtAsc(Long applicationId);
 }

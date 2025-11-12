@@ -84,5 +84,24 @@ public class LockerResponse {
         }
     }
 
+    // 사물함 배정 내역 정보 DTO
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LockerAssignmentInfoDTO {
+        private Long lockerId;
+        private String lockerNumber;
+        private String studentId;
+        private String studentName;
+    }
 
+    // 사물함 신청 학기 DTO
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SemesterDTO {
+        private String semester;
+    }
 }

@@ -4,6 +4,7 @@ import hongik.heavyYoung.domain.application.entity.Application;
 import hongik.heavyYoung.domain.application.entity.MemberApplication;
 import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.entity.Locker;
+import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.member.entity.Member;
@@ -91,6 +92,28 @@ public class LockerResponseConverter {
                 .canAssign(lockerApplication.isCanAssign())
                 .applicants(applicantDTOs)
                 .build();
+    }
+
+    // 사물함 배정 정보
+    public static LockerResponse.LockerAssignmentInfoDTO toLockerAssignmentInfoDTO(LockerAssignment lockerAssignment) {
+        Locker locker = lockerAssignment.getLocker();
+        Member member = lockerAssignment.getMember();
+
+        String lockerNumber = locker.getLockerSection() + locker.getLockerNumber();
+
+        return LockerResponse.LockerAssignmentInfoDTO.builder()
+                .lockerId(locker.getId())
+                .lockerNumber(lockerNumber)
+                .studentId(member.getStudentId())
+                .studentName(member.getStudentName())
+                .build();
+    }
+
+    // 사물함 배정 정보 리스트
+    public static List<LockerResponse.LockerAssignmentInfoDTO> toLockerAssignmentInfoDTOList(List<LockerAssignment> lockerAssignments) {
+        return lockerAssignments.stream()
+                .map(LockerResponseConverter::toLockerAssignmentInfoDTO)
+                .toList();
     }
 }
 

@@ -47,4 +47,8 @@ public class Application extends BaseEntity {
     @Column(name = "can_assign", nullable = false)
     @Builder.Default
     private boolean canAssign = true;
+
+    public void updateCanAssignToFalse() {
+        this.canAssign = false;
+    }
 }
