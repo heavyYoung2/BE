@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Locale;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,10 +21,11 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final MailService mailService;
 
     // == 회원 가입 == //
     @Transactional
-    public AuthResponseDTO.AuthSignUpResponseDTO signUp(AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO) {
+    public AuthResponseDTO.SignUpResponseDTO signUp(AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO) {
         // 학교 이메일인지 검증
         if(authRequestDTO.getEmail() == null || isSchoolEmail(authRequestDTO.getEmail())) {
             throw new AuthException(ErrorStatus.INVALID_EMAIL);
@@ -47,12 +46,12 @@ public class AuthService {
         Member member = AuthConverter.toMemberEntity(authRequestDTO, encodedPassword);
         memberRepository.save(member);
 
-        return  AuthConverter.toAuthSignUpResponseDTO(member);
+        return  AuthConverter.toSignUpResponseDTO(member);
     }
 
     // == 로그인 == //
     @Transactional(readOnly = true)
-    public AuthResponseDTO.AuthLoginResponseDTO login(AuthRequestDTO.AuthLoginInRequestDTO req) {
+    public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.AuthLoginInRequestDTO req) {
         Member m = memberRepository.findByEmail(req.getEmail())
                 .orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
 
@@ -70,15 +69,25 @@ public class AuthService {
         long accessExp = jwtProvider.getAccessTokenValiditySeconds();
         long refreshExp = jwtProvider.getRefreshTokenValiditySeconds();
 
-        return AuthConverter.toAuthLoginResponseDTO(m, accessToken, refreshToken, accessExp, refreshExp);
+        return AuthConverter.toLoginResponseDTO(m, accessToken, refreshToken, accessExp, refreshExp);
     }
-
 
     // == 로그아웃 == //
     @Transactional
     public void logout(Long memberId) {
         // redis 설정 이후 추가
         // jwt 토큰 기반이기에 백엔드에서 처리할게 없음
+    }
+
+
+    public AuthResponseDTO.SendCodeResponseDTO issueSchoolEmailCode(AuthRequestDTO.SendCodeRequestDTO dto) {
+        String email = dto.getEmail();
+        if (email == null || !isSchoolEmail(email)) {
+            throw new GeneralException(ErrorStatus.INVALID_EMAIL);
+        }
+        String code = "1234"; // 임시 코드, redis 설정 이후 고치기
+        mailService.sendVerificationCode(email, code);
+        return AuthConverter.toSendCodeResponseDTO(code);
     }
 
     private boolean isSchoolEmail(String email) {

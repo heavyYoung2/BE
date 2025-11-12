@@ -20,14 +20,14 @@ public class AuthConverter {
                 .build();
     }
 
-    public static AuthResponseDTO.AuthSignUpResponseDTO toAuthSignUpResponseDTO(Member member) {
-        return AuthResponseDTO.AuthSignUpResponseDTO.builder()
+    public static AuthResponseDTO.SignUpResponseDTO toSignUpResponseDTO(Member member) {
+        return AuthResponseDTO.SignUpResponseDTO.builder()
                 .memberId(member.getId()).build();
     }
 
-    public static AuthResponseDTO.AuthLoginResponseDTO toAuthLoginResponseDTO(
+    public static AuthResponseDTO.LoginResponseDTO toLoginResponseDTO(
             Member member, String accessToken, String refreshToken, long accessExp, long refreshExp) {
-        return AuthResponseDTO.AuthLoginResponseDTO.builder()
+        return AuthResponseDTO.LoginResponseDTO.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .role(member.getRole())
@@ -38,5 +38,10 @@ public class AuthConverter {
                 .expiresIn(accessExp)
                 .refreshExpiresIn(refreshExp)
                 .build();
+    }
+
+    public static AuthResponseDTO.SendCodeResponseDTO toSendCodeResponseDTO(String code) {
+        return AuthResponseDTO.SendCodeResponseDTO.builder()
+                .code(code).build();
     }
 }

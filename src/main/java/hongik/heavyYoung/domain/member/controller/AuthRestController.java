@@ -25,10 +25,12 @@ public class AuthRestController {
     @Operation(summary = "학교 이메일 인증번호 요청 API",
             description = "학교 이메일을 통해 인증 번호를 전송합니다.")
     @PostMapping("/send-code")
-    public ApiResponse<?> sendCode(){
-        return null;
+    public ApiResponse<AuthResponseDTO.SendCodeResponseDTO> sendCode(
+            @RequestBody @Valid AuthRequestDTO.SendCodeRequestDTO dto
+    ){
+        return ApiResponse.onSuccess(authService.issueSchoolEmailCode(dto));
     }
-    // TODO : redis 설정 이후 javaMailSender로 구현
+
 
     @Operation(summary = "학교 이메일 인증번호 인증 API",
                 description = "학교 이메일을 통해 받은 인증번호를 인증합니다.")
@@ -42,10 +44,10 @@ public class AuthRestController {
     @Operation(summary = "회원 가입 API",
                 description = "이메일, 비밀번호, 이름, 학번, 학과, 전화번호를 통해 회원가입을 합니다.")
     @PostMapping ("/sign-in")
-    public ApiResponse<AuthResponseDTO.AuthSignUpResponseDTO> signIn(
-            @RequestBody @Valid AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO
+    public ApiResponse<AuthResponseDTO.SignUpResponseDTO> signIn(
+            @RequestBody @Valid AuthRequestDTO.AuthSignUpRequestDTO dto
     ){
-        AuthResponseDTO.AuthSignUpResponseDTO authResponseDTO = authService.signUp(authRequestDTO);
+        AuthResponseDTO.SignUpResponseDTO authResponseDTO = authService.signUp(dto);
         return ApiResponse.onSuccess(authResponseDTO);
     }
 
@@ -53,8 +55,8 @@ public class AuthRestController {
     @Operation(summary = "로그인 API",
                 description = "이메일, 비밀번호를 통해 로그아웃을 합니다.")
     @PostMapping ("/login")
-    public ApiResponse<AuthResponseDTO.AuthLoginResponseDTO> login(@RequestBody @Valid AuthRequestDTO.AuthLoginInRequestDTO authRequestDTO){
-        return ApiResponse.onSuccess(authService.login(authRequestDTO));
+    public ApiResponse<AuthResponseDTO.LoginResponseDTO> login(@RequestBody @Valid AuthRequestDTO.AuthLoginInRequestDTO dto){
+        return ApiResponse.onSuccess(authService.login(dto));
     }
 
     @Operation(summary = "로그아웃 API",

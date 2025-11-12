@@ -11,7 +11,7 @@ public class AuthResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AuthSignUpResponseDTO {
+    public static class SignUpResponseDTO {
         @Schema(description = "회원 PK")
         private Long memberId;
     }
@@ -20,7 +20,7 @@ public class AuthResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AuthLoginResponseDTO {
+    public static class LoginResponseDTO {
         @Schema(description = "회원 PK")
         private Long memberId;
 
@@ -49,4 +49,13 @@ public class AuthResponseDTO {
         private long refreshExpiresIn;
     }
 
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SendCodeResponseDTO {
+        @Schema(description = "전송된 인증코드 (개발용)")
+        private String code;
+    }
 }
