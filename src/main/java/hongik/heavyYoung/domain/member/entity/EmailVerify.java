@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-@Table(name = "email")
+@Table(name = "email_verify")
 public class EmailVerify extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

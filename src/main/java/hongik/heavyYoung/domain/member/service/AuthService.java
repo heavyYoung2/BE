@@ -43,9 +43,9 @@ public class AuthService {
         if(memberRepository.existsByEmail(email)) {
             throw new AuthException(ErrorStatus.MEMBER_ALREADY_EXIST);
         }
-        // 비밀번호가 일치하는지 검증
+        // 비밀번호와 비밀번호 확인이 일치하는지 검증
         if(!(authRequestDTO.getPassword()).equals(authRequestDTO.getPasswordConfirm())) {
-            throw new AuthException(ErrorStatus.PASSWORD_NOT_MATCH);
+            throw new AuthException(ErrorStatus.PASSWORD_CONFIRM_NOT_MATCH);
         }
 
         // 이메일 인증 선행 여부 검증
@@ -78,7 +78,7 @@ public class AuthService {
             throw  new AuthException(ErrorStatus.INVALID_EMAIL);
         }
         if (!passwordEncoder.matches(req.getPassword(), m.getPassword())) {
-            throw new AuthException(ErrorStatus.PASSWORD_NOT_MATCH);
+            throw new AuthException(ErrorStatus.INVALID_PASSWORD);
         }
 
         // accessToken, refreshToken 둘 다 발급
