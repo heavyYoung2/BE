@@ -55,7 +55,11 @@ public enum ErrorStatus implements BaseErrorCode {
     ITEM_QUANTITY_NON_POSITIVE(HttpStatus.BAD_REQUEST, "ITEM_003", "수량이 0 이하입니다."),
 
     // ItemCategory 에러
-    ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_001", "해당 카테고리가 존재하지 않습니다.");
+    ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_001", "해당 카테고리가 존재하지 않습니다."),
+
+    // ItemRentalHistory 에러
+    ITEM_RENTAL_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_RENTAL_HISTORY_001", "해당 대여 기록이 존재하지 않습니다."),
+    ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

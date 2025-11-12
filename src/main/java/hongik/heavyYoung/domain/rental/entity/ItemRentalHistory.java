@@ -36,4 +36,8 @@ public class ItemRentalHistory extends BaseEntity {
 
     @Column(name = "returned_at")
     private LocalDateTime returnedAt;
+
+    public void updateReturnedAt(LocalDateTime returnedAt) {
+        this.returnedAt = returnedAt;
+    }
 }
