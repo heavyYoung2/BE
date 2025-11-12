@@ -44,4 +44,11 @@ public class AuthConverter {
         return AuthResponseDTO.SendCodeResponseDTO.builder()
                 .code(code).build();
     }
+
+    public static AuthResponseDTO.VerifyCodeResponseDTO toVerifyCodeResponseDTO(String email) {
+        return AuthResponseDTO.VerifyCodeResponseDTO.builder()
+                .email(email)
+                .message("이메일 인증이 완료되었습니다.")
+                .build();
+    }
 }

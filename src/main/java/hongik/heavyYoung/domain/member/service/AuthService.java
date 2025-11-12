@@ -3,7 +3,9 @@ package hongik.heavyYoung.domain.member.service;
 import hongik.heavyYoung.domain.member.converter.AuthConverter;
 import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
 import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.entity.EmailVerify;
 import hongik.heavyYoung.domain.member.entity.Member;
+import hongik.heavyYoung.domain.member.repository.EmailVerifyRepository;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.GeneralException;
@@ -14,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,17 +26,21 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final MailService mailService;
+    private final EmailVerifyRepository emailVerifyRepository;
 
     // == 회원 가입 == //
     @Transactional
     public AuthResponseDTO.SignUpResponseDTO signUp(AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO) {
+
+        String email = authRequestDTO.getEmail();
+
         // 학교 이메일인지 검증
-        if(authRequestDTO.getEmail() == null || isSchoolEmail(authRequestDTO.getEmail())) {
+        if(!isSchoolEmail(email)) {
             throw new AuthException(ErrorStatus.INVALID_EMAIL);
         }
 
         // 이미 회원인지 검증
-        if(memberRepository.existsByEmail(authRequestDTO.getEmail())) {
+        if(memberRepository.existsByEmail(email)) {
             throw new AuthException(ErrorStatus.MEMBER_ALREADY_EXIST);
         }
         // 비밀번호가 일치하는지 검증
@@ -40,11 +48,22 @@ public class AuthService {
             throw new AuthException(ErrorStatus.PASSWORD_NOT_MATCH);
         }
 
+        // 이메일 인증 선행 여부 검증
+        EmailVerify emailVerify = emailVerifyRepository.findByEmailAddress(email)
+                .orElseThrow(() -> new AuthException(ErrorStatus.EMAIL_NOT_FOUND));
+        if (!emailVerify.isVerified()) {
+            throw new GeneralException(ErrorStatus.EMAIL_NOT_VERIFIED);
+        }
+
+        // 비밀번호 인코딩
         String encodedPassword = passwordEncoder.encode(authRequestDTO.getPassword());
 
         // 멤버 추가
         Member member = AuthConverter.toMemberEntity(authRequestDTO, encodedPassword);
         memberRepository.save(member);
+
+        // 가입 성공시 EmailVerify에 해당 이메일 정리
+        emailVerifyRepository.deleteByEmailAddress(email);
 
         return  AuthConverter.toSignUpResponseDTO(member);
     }
@@ -79,15 +98,58 @@ public class AuthService {
         // jwt 토큰 기반이기에 백엔드에서 처리할게 없음
     }
 
-
+    @Transactional
     public AuthResponseDTO.SendCodeResponseDTO issueSchoolEmailCode(AuthRequestDTO.SendCodeRequestDTO dto) {
+        // 학교 이메일인지 검증
         String email = dto.getEmail();
-        if (email == null || !isSchoolEmail(email)) {
+        if (!isSchoolEmail(email)) {
             throw new GeneralException(ErrorStatus.INVALID_EMAIL);
         }
-        String code = "1234"; // 임시 코드, redis 설정 이후 고치기
+
+        // 회원인지 검증
+        if(memberRepository.existsByEmail(email)) {
+            throw new AuthException(ErrorStatus.MEMBER_ALREADY_EXIST);
+        }
+
+        // 여기서 인증 코드 생성
+        String code = String.format("%06d", new SecureRandom().nextInt(1_000_000));
+
+        // 이메일 엔티티에 저장
+        EmailVerify emailEntity = emailVerifyRepository.findByEmailAddress(email)
+                .map(existing -> {      // 이미 해당 이메일이 존재하면
+                    existing.updateCode(code);
+                    existing.updateVerified(false);
+                    return existing;
+                })
+                .orElseGet(() -> EmailVerify.builder()
+                        .emailAddress(email)
+                        .code(code)
+                        .verified(false)
+                        .build());
+        emailVerifyRepository.save(emailEntity);
+
+        // 이메일 발송
         mailService.sendVerificationCode(email, code);
+
         return AuthConverter.toSendCodeResponseDTO(code);
+    }
+
+
+    @Transactional
+    public AuthResponseDTO.VerifyCodeResponseDTO verifySchoolEmailCode(AuthRequestDTO.VerifyCodeRequestDTO dto) {
+        // 여기서 전송 누른 이메일 주소 찾기
+        EmailVerify emailEntity = emailVerifyRepository.findByEmailAddress(dto.getEmail())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.EMAIL_NOT_FOUND));
+
+        // 여기서 해당 이메일과 코드가 일치하는지 검사
+        if(!emailEntity.getCode().equals(dto.getCode())) {
+            throw new GeneralException(ErrorStatus.EMAIL_CODE_MISMATCH);
+        }
+
+        // 완료 되었다고 엔티티 수정
+        emailEntity.updateVerified(true);
+
+        return AuthConverter.toVerifyCodeResponseDTO(emailEntity.getEmailAddress());
     }
 
     private boolean isSchoolEmail(String email) {

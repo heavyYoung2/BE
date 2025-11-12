@@ -3,10 +3,7 @@ package hongik.heavyYoung.domain.member.dto.authDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-
-import java.time.LocalDate;
 
 public class AuthRequestDTO {
 
@@ -70,7 +67,7 @@ public class AuthRequestDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class approveCodeRequestDTO {
+    public static class VerifyCodeRequestDTO {
         @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "학교 이메일은 필수 입력 값입니다.")
         @Email

@@ -58,4 +58,16 @@ public class AuthResponseDTO {
         @Schema(description = "전송된 인증코드 (개발용)")
         private String code;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VerifyCodeResponseDTO {
+        @Schema(description = "이메일 주소", example = "heavyyoung@g.hongik.ac.kr")
+        private String email;
+
+        @Schema(description = "결과 메시지", example = "이메일 인증이 완료되었습니다.")
+        private String message;
+    }
 }

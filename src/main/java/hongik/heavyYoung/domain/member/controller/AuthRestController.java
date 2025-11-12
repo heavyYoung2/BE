@@ -35,8 +35,10 @@ public class AuthRestController {
     @Operation(summary = "학교 이메일 인증번호 인증 API",
                 description = "학교 이메일을 통해 받은 인증번호를 인증합니다.")
     @PostMapping("/verify-code")
-    public ApiResponse<?> verifyCode(@RequestParam("code") String code){
-        return null;
+    public ApiResponse<AuthResponseDTO.VerifyCodeResponseDTO> verifyCode(
+            @RequestBody @Valid AuthRequestDTO.VerifyCodeRequestDTO dto
+    ){
+        return ApiResponse.onSuccess(authService.verifySchoolEmailCode(dto));
     }
     // TODO : redis 설정 이후 javaMailSender로 구현 이후 구현
 

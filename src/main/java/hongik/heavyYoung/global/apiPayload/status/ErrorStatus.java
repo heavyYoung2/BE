@@ -59,7 +59,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // ItemRentalHistory 에러
     ITEM_RENTAL_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_RENTAL_HISTORY_001", "해당 대여 기록이 존재하지 않습니다."),
-    ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다.");
+    ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다."),
+
+    // EmailVerify 에러
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL_001", "해당 이메일이 존재하지 않습니다."),
+    EMAIL_CODE_MISMATCH(HttpStatus.BAD_REQUEST, "EMAIL_002", "이메일과 코드가 일치하지 않습니다."),
+    EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "EMAIL_003", "이메일 인증이 되지 않았습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
