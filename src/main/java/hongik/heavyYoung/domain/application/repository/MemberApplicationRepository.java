@@ -7,6 +7,7 @@ import hongik.heavyYoung.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MemberApplicationRepository extends JpaRepository<MemberApplication, Long> {
     boolean existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(
@@ -15,6 +16,8 @@ public interface MemberApplicationRepository extends JpaRepository<MemberApplica
     );
 
     boolean existsByMemberAndApplication(Member member, Application application);
+
+    boolean existsByMemberAndApplication_ApplicationSemesterAndApplication_ApplicationTypeIn(Member member, String semester, Set<ApplicationType> applicationTypes);
 
     List<MemberApplication> findAllByApplicationIdOrderByCreatedAtAsc(Long applicationId);
 }

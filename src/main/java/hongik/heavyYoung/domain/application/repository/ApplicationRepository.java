@@ -32,7 +32,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findFirstByApplicationTypeInOrderByApplicationSemesterDesc(Set<ApplicationType> types);
 
     @Query("""
-        SELECT a.applicationSemester
+        SELECT DISTINCT a.applicationSemester
         FROM Application a
         WHERE a.applicationType IN :types
         ORDER BY a.applicationSemester DESC

@@ -1,6 +1,5 @@
 package hongik.heavyYoung.domain.locker.dto;
 
-import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -26,8 +26,7 @@ public class LockerRequest {
         @NotNull(message = "신청 마감일은 필수입니다.")
         private LocalDateTime applicationEndAt;
         @Schema(description = "사물함 신청 학기 (예: 2025-2)")
-        @Pattern(regexp = "^[0-9]{4}-[1-2]$", message = "학기 형식은 'YYYY-N' (예: 2025-2) 형태여야 합니다."
-        )
+        @Pattern(regexp = "^[0-9]{4}-[1-2]$", message = "학기 형식은 'YYYY-N' (예: 2025-2) 형태여야 합니다.")
         private String semester;
         @Schema(description = "사물함 신청 종류(본 신청, 추가 신청)")
         private ApplicationType applicationType;

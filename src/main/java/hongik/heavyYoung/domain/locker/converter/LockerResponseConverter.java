@@ -6,7 +6,6 @@ import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
-import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.member.entity.Member;
 
 import java.time.LocalDateTime;

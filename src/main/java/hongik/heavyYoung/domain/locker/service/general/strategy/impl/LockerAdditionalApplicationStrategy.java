@@ -33,10 +33,8 @@ public class LockerAdditionalApplicationStrategy implements LockerApplicationStr
 
     @Override
     public void apply(Member member, Application lockerApplication) {
-        // 이미 신청한 이력이 있는지 확인
-        // TODO 현재 본 신청 하고 추가신청도 가능함, 이거 막아야된다.
-        boolean alreadyApplied =
-                memberApplicationRepository.existsByMemberAndApplication(member, lockerApplication);
+        // 해당 학기에 이미 신청한 이력이 있는지 확인
+        boolean alreadyApplied = memberApplicationRepository.existsByMemberAndApplication_ApplicationSemesterAndApplication_ApplicationTypeIn(member, lockerApplication.getApplicationSemester(), ApplicationType.LOCKER);
 
         if (alreadyApplied) {
             throw new LockerException(ErrorStatus.ALREADY_APPLIED);
@@ -47,6 +45,7 @@ public class LockerAdditionalApplicationStrategy implements LockerApplicationStr
                 .builder()
                 .member(member)
                 .application(lockerApplication)
+                .applicationSemester(lockerApplication.getApplicationSemester())
                 .build();
 
         memberApplicationRepository.save(memberApplication);

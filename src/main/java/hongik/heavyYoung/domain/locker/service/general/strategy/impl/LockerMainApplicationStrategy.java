@@ -26,8 +26,8 @@ public class LockerMainApplicationStrategy implements LockerApplicationStrategy 
 
     @Override
     public void apply(Member member, Application lockerApplication) {
-        // 이미 신청한 이력이 있는지 확인
-        boolean alreadyApplied = memberApplicationRepository.existsByMemberAndApplication(member, lockerApplication);
+        // 해당 학기에 이미 신청한 이력이 있는지 확인
+        boolean alreadyApplied = memberApplicationRepository.existsByMemberAndApplication_ApplicationSemesterAndApplication_ApplicationTypeIn(member, lockerApplication.getApplicationSemester(), ApplicationType.LOCKER);
 
         if (alreadyApplied) {
             throw new LockerException(ErrorStatus.ALREADY_APPLIED);
@@ -37,6 +37,7 @@ public class LockerMainApplicationStrategy implements LockerApplicationStrategy 
         MemberApplication memberApplication = MemberApplication.builder()
                 .application(lockerApplication)
                 .member(member)
+                .applicationSemester(lockerApplication.getApplicationSemester())
                 .build();
         memberApplicationRepository.save(memberApplication);
 
