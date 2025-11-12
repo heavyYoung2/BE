@@ -28,17 +28,17 @@ public class AuthService {
     @Transactional
     public AuthResponseDTO.AuthSignUpResponseDTO signUp(AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO) {
         // 학교 이메일인지 검증
-//        if(authRequestDTO.getEmail() == null || isSchoolEmail(authRequestDTO.getEmail())) {
-//            throw new GeneralException(ErrorStatus.INVALID_EMAIL);
-//        }
+        if(authRequestDTO.getEmail() == null || isSchoolEmail(authRequestDTO.getEmail())) {
+            throw new AuthException(ErrorStatus.INVALID_EMAIL);
+        }
 
         // 이미 회원인지 검증
         if(memberRepository.existsByEmail(authRequestDTO.getEmail())) {
-            throw new GeneralException(ErrorStatus.MEMBER_ALREADY_EXIST);
+            throw new AuthException(ErrorStatus.MEMBER_ALREADY_EXIST);
         }
         // 비밀번호가 일치하는지 검증
         if(!(authRequestDTO.getPassword()).equals(authRequestDTO.getPasswordConfirm())) {
-            throw new GeneralException(ErrorStatus.PASSWORD_NOT_MATCH);
+            throw new AuthException(ErrorStatus.PASSWORD_NOT_MATCH);
         }
 
         String encodedPassword = passwordEncoder.encode(authRequestDTO.getPassword());
@@ -56,6 +56,9 @@ public class AuthService {
         Member m = memberRepository.findByEmail(req.getEmail())
                 .orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
 
+        if(!isSchoolEmail(req.getEmail())) {
+            throw  new AuthException(ErrorStatus.INVALID_EMAIL);
+        }
         if (!passwordEncoder.matches(req.getPassword(), m.getPassword())) {
             throw new AuthException(ErrorStatus.PASSWORD_NOT_MATCH);
         }
@@ -70,20 +73,15 @@ public class AuthService {
         return AuthConverter.toAuthLoginResponseDTO(m, accessToken, refreshToken, accessExp, refreshExp);
     }
 
-    private boolean isSchoolEmail(String email) {
-        if(email == null) {
-            return false;
-        }
-        String e = email.trim().toLowerCase(Locale.ROOT);
-        if (!e.endsWith("@g.hongik.ac.kr")) return false;
-        int at = e.lastIndexOf('@');
-        return at > 0;
-    }
 
     // == 로그아웃 == //
     @Transactional
     public void logout(Long memberId) {
         // redis 설정 이후 추가
         // jwt 토큰 기반이기에 백엔드에서 처리할게 없음
+    }
+
+    private boolean isSchoolEmail(String email) {
+        return email.endsWith("@g.hongik.ac.kr") || email.endsWith("@mail.hongik.ac.kr");
     }
 }
