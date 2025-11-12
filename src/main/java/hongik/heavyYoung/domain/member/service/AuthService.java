@@ -79,4 +79,11 @@ public class AuthService {
         int at = e.lastIndexOf('@');
         return at > 0;
     }
+
+    // == 로그아웃 == //
+    @Transactional
+    public void logout(Long memberId) {
+        // redis 설정 이후 추가
+        // jwt 토큰 기반이기에 백엔드에서 처리할게 없음
+    }
 }

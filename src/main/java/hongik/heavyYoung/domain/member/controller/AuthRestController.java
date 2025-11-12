@@ -4,7 +4,9 @@ import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
 import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
 import hongik.heavyYoung.domain.member.service.AuthService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
+import hongik.heavyYoung.global.security.auth.AuthMemberId;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -58,8 +60,9 @@ public class AuthRestController {
     @Operation(summary = "로그아웃 API",
                 description = "로그아웃을 합니다.")
     @PostMapping ("/logout")
-    public ApiResponse<?> logout(){
-        return null;
+    public ApiResponse<String> logout(@Parameter(hidden = true) @AuthMemberId Long memberId){
+        authService.logout(memberId);
+        return ApiResponse.onSuccess("로그아웃이 완료되었습니다.");
     }
 
     @Operation(summary = "임시 비밀번호 발급 API",
