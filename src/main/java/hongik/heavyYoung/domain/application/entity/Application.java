@@ -42,7 +42,7 @@ public class Application extends BaseEntity {
 
     @Column(name = "can_apply", nullable = false)
     @Builder.Default
-    private boolean canApply = false;
+    private boolean canApply = true;
 
     @Column(name = "can_assign", nullable = false)
     @Builder.Default
@@ -50,5 +50,9 @@ public class Application extends BaseEntity {
 
     public void updateCanAssignToFalse() {
         this.canAssign = false;
+    }
+
+    public void updateCanApplyToFalse() {
+        this.canApply = false;
     }
 }

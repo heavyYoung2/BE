@@ -5,6 +5,7 @@ import hongik.heavyYoung.domain.application.entity.MemberApplication;
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.application.repository.ApplicationRepository;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
+import hongik.heavyYoung.domain.locker.converter.LockerConverter;
 import hongik.heavyYoung.domain.locker.dto.LockerRequest;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,17 +34,14 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
 
     @Override
     public void addLockerApplication(LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO) {
+        // 현재 진행중인 사물함 신청이 있는 경우 생성 불가
+        if (applicationRepository.findActiveLockerApplications(LocalDateTime.now(), ApplicationType.LOCKER).isPresent()) {
+            throw new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_ENDED);
+        }
 
         int lockerApplicationCanCount = lockerRepository.countByLockerStatus(LockerStatus.AVAILABLE);
 
-        Application lockerApplication = Application.builder()
-                .applicationCanCount(lockerApplicationCanCount)
-                .applicationStartAt(lockerApplicationAddRequestDTO.getApplicationStartAt())
-                .applicationEndAt(lockerApplicationAddRequestDTO.getApplicationEndAt())
-                .applicationSemester(lockerApplicationAddRequestDTO.getSemester())
-                .applicationType(lockerApplicationAddRequestDTO.getApplicationType())
-                .canAssign(lockerApplicationAddRequestDTO.getApplicationType() != ApplicationType.LOCKER_ADDITIONAL)
-                .build();
+        Application lockerApplication = LockerConverter.toLockerApplication(lockerApplicationAddRequestDTO, lockerApplicationCanCount);
 
         applicationRepository.save(lockerApplication);
     }
@@ -51,6 +50,13 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
     public void returnCurrentSemesterLockers() {
         lockerAssignmentRepository.updateAllByCurrentSemesterFalse();
         lockerRepository.updateAllInUseToAvailable();
+    }
+
+    @Override
+    public void finishLockerApplication(Long lockerApplicationId) {
+        Application lockerApplication = applicationRepository.findById(lockerApplicationId)
+                .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_FOUND));
+        lockerApplication.updateCanApplyToFalse();
     }
 
     @Override
@@ -92,12 +98,7 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
             locker.updateLockerStatus(LockerStatus.IN_USE);
 
             // 배정 엔티티 생성
-            LockerAssignment assignment = LockerAssignment.builder()
-                    .member(ma.getMember())
-                    .locker(locker)
-                    .assignSemester(currentSemester)
-                    .isCurrentSemester(true)
-                    .build();
+            LockerAssignment assignment = LockerConverter.toLockerAssignmentForLockerMain(ma, locker, currentSemester);
 
             // 저장
             lockerAssignmentRepository.save(assignment);

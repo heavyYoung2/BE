@@ -24,6 +24,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // LOCKER 에러
     LOCKER_APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "LOCKER_001", "현재 신청이 불가능합니다."),
+    LOCKER_APPLICATION_NOT_ENDED(HttpStatus.NOT_FOUND, "LOCKER_002", "현재 진행중인 사물함 신청이 있습니다"),
     NO_AVAILABLE_LOCKER(HttpStatus.NOT_FOUND, "LOCKER_002", "신청 가능한 사물함이 없습니다."),
     NO_LOCKER_STRATEGY(HttpStatus.NOT_FOUND, "LOCKER_003", "사물함 신청 전략이 존재하지 않습니다."),
     ALREADY_APPLIED(HttpStatus.NOT_FOUND, "LOCKER_004", "사물함을 이미 신청하였습니다."),

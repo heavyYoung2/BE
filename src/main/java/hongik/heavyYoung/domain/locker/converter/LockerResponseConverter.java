@@ -45,7 +45,7 @@ public class LockerResponseConverter {
     public static LockerResponse.LockerApplicationInfoDTO toLockerApplicationInfoDTO(Application lockerApplication) {
         boolean isInTimeRange = !LocalDateTime.now().isBefore(lockerApplication.getApplicationStartAt()) && !LocalDateTime.now().isAfter(lockerApplication.getApplicationEndAt());
         boolean hasCapacity = lockerApplication.getApplicationMemberCount() < lockerApplication.getApplicationCanCount();
-        boolean canApply = isInTimeRange && hasCapacity;
+        boolean canApply = isInTimeRange && hasCapacity && lockerApplication.isCanApply();
 
         return LockerResponse.LockerApplicationInfoDTO.builder()
                 .applicationId(lockerApplication.getId())

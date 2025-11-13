@@ -46,6 +46,15 @@ public class AdminLockerRestController {
         return ApiResponse.onSuccess(lockerApplicationDetail);
     }
 
+    @Operation(summary = "사물함 신청 마감")
+    @PatchMapping("/applications/{lockerApplicationId}")
+    public ApiResponse<Void> endLockerApplication(
+            @PathVariable("lockerApplicationId") Long lockerApplicationId
+    ) {
+        adminLockerCommandService.finishLockerApplication(lockerApplicationId);
+        return ApiResponse.onSuccess(null);
+    }
+
     @Operation(summary = "사물함 신청 추가")
     @PostMapping("/applications")
     public ApiResponse<Void> addLockerApplication(

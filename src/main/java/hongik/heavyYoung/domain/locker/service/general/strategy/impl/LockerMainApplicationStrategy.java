@@ -5,6 +5,7 @@ import hongik.heavyYoung.domain.application.entity.MemberApplication;
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.application.repository.ApplicationRepository;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
+import hongik.heavyYoung.domain.locker.converter.LockerConverter;
 import hongik.heavyYoung.domain.locker.service.general.strategy.LockerApplicationStrategy;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
@@ -34,11 +35,7 @@ public class LockerMainApplicationStrategy implements LockerApplicationStrategy 
         }
 
         // 신청 내역 저장
-        MemberApplication memberApplication = MemberApplication.builder()
-                .application(lockerApplication)
-                .member(member)
-                .applicationSemester(lockerApplication.getApplicationSemester())
-                .build();
+        MemberApplication memberApplication = LockerConverter.toMemberApplication(lockerApplication, member);
         memberApplicationRepository.save(memberApplication);
 
         // 해당 사물함 신청의 인원수 증가

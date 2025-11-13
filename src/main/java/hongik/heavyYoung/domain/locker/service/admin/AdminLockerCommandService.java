@@ -6,4 +6,5 @@ public interface AdminLockerCommandService {
     void addLockerApplication(LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO);
     void returnCurrentSemesterLockers();
     void assignLockersByApplication(Long lockerApplicationId);
+    void finishLockerApplication(Long lockerApplicationId);
 }

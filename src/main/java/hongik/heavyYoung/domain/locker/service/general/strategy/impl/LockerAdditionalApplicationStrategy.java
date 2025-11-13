@@ -5,6 +5,7 @@ import hongik.heavyYoung.domain.application.entity.MemberApplication;
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.application.repository.ApplicationRepository;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
+import hongik.heavyYoung.domain.locker.converter.LockerConverter;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
@@ -41,13 +42,7 @@ public class LockerAdditionalApplicationStrategy implements LockerApplicationStr
         }
 
         // 신청 내역 저장
-        MemberApplication memberApplication = MemberApplication
-                .builder()
-                .member(member)
-                .application(lockerApplication)
-                .applicationSemester(lockerApplication.getApplicationSemester())
-                .build();
-
+        MemberApplication memberApplication = LockerConverter.toMemberApplication(lockerApplication, member);
         memberApplicationRepository.save(memberApplication);
 
         // 배정할 AVAILABLE 사물함 가져오기
@@ -55,11 +50,7 @@ public class LockerAdditionalApplicationStrategy implements LockerApplicationStr
                 .orElseThrow(() -> new LockerException(ErrorStatus.NO_AVAILABLE_LOCKER));
 
         // 사물함 배정
-        LockerAssignment lockerAssignment = LockerAssignment.builder()
-                .member(member)
-                .locker(locker)
-                .assignSemester(lockerApplication.getApplicationSemester())
-                .build();
+        LockerAssignment lockerAssignment = LockerConverter.toLockerAssignmentForLockerAdditional(member, locker, lockerApplication.getApplicationSemester());
         lockerAssignmentRepository.save(lockerAssignment);
 
         // 배정한 사물함 상태 변경
