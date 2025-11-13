@@ -24,4 +24,7 @@ public class MemberApplication extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "application_id", nullable = false)
     private Application application;
+
+    @Column(name = "application_semester", nullable = false, length = 20)
+    private String applicationSemester;
 }
