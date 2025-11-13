@@ -2,6 +2,7 @@ package hongik.heavyYoung.domain.locker.controller.general;
 
 import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
+import hongik.heavyYoung.domain.locker.service.general.MyLockerCommandService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +22,10 @@ import java.util.List;
 public class LockerRestController {
 
     private final LockerQueryService lockerQueryService;
+    private final MyLockerCommandService myLockerCommandService;
 
     // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
-    private static final Long DUMMY_MEMBER_ID = 1L;
+    private static final Long DUMMY_MEMBER_ID = 23L;
 
     @Operation(summary = "사물함 전체 조회")
     @GetMapping
@@ -47,5 +46,12 @@ public class LockerRestController {
         // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
         LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker(DUMMY_MEMBER_ID);
         return ApiResponse.onSuccess(myLocker);
+    }
+
+    @Operation(summary = "사물함 신청")
+    @PostMapping("/apply")
+    public ApiResponse<Void> applyLocker() {
+        myLockerCommandService.applyLocker(DUMMY_MEMBER_ID);
+        return ApiResponse.onSuccess(null);
     }
 }
