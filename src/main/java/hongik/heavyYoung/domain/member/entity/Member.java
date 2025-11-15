@@ -61,4 +61,8 @@ public class Member extends BaseEntity {
     public void updateBlacklistUntil(LocalDate blacklistUntil) {
         this.blacklistUntil = blacklistUntil;
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

@@ -59,6 +59,16 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+    // Security
+    implementation "org.springframework.security:spring-security-crypto:6.4.4" // 취약점 미해당
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
+
+
 }
 
 tasks.named('test') {

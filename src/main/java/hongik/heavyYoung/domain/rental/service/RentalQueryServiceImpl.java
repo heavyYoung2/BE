@@ -89,10 +89,10 @@ public class RentalQueryServiceImpl implements RentalQueryService {
      * @return RentalResponseDTO.MemberRentalInfo
      */
     @Override
-    public RentalResponseDTO.MemberRentalInfo getRentalStatus() {
+    public RentalResponseDTO.MemberRentalInfo getRentalStatus(Long memberId) {
 
         // 멤버 정보 받아오기
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 반납하지 않은 대여 내역 리스트
