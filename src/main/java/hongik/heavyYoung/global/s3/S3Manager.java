@@ -1,7 +1,7 @@
 package hongik.heavyYoung.global.s3;
 
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
-import hongik.heavyYoung.global.exception.GeneralException;
+import hongik.heavyYoung.global.exception.customException.S3ImageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +31,7 @@ public class S3Manager {
      */
     public S3UploadResult upload(MultipartFile file) {
         // 파일 이름 충돌 방지 위해 UUID 사용
-        String key = UUID.randomUUID() + file.getOriginalFilename();
-
+        String key = UUID.randomUUID() + "_" + file.getOriginalFilename();
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -46,7 +45,7 @@ public class S3Manager {
                     RequestBody.fromInputStream(file.getInputStream(), file.getSize())
             );
         } catch (IOException e) {
-            throw new GeneralException(ErrorStatus.S3_UPLOAD_FAIL);
+            throw new S3ImageException(ErrorStatus.S3_UPLOAD_FAIL);
         }
 
 

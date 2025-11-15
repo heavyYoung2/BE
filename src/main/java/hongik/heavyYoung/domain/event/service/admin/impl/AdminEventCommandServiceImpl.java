@@ -78,7 +78,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
         event.update(UpdateEventCommand.from(eventPutRequestDTO));
 
-        if (multipartFiles != null && !multipartFiles.isEmpty()) {
+        if (multipartFiles != null) {
             deleteEventImages(event);
             saveEventImages(event, multipartFiles);
         }
