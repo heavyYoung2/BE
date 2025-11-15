@@ -36,7 +36,7 @@ public class SecurityConfig {
                         ).permitAll()
                         // 나머지는 인증 필요
                         .anyRequest().permitAll()
-                        // 우선 현재는 모든 홤녀 접근 가능
+                        // 우선 현재는 모든 화면 접근 가능
                 )
                 // JWT 필터 등록
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
