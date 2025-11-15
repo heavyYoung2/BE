@@ -37,7 +37,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      * @return 생성된 공지사항의 PK를 담은 응답 DTO
      */
     @Override
-    public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO , List<MultipartFile> multipartFiles) {
+    public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO, List<MultipartFile> multipartFiles) {
         CreateEventCommand createEventCommand = CreateEventCommand.from(eventAddRequestDTO);
 
         Event event = Event.create(createEventCommand);
