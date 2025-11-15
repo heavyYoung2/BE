@@ -115,7 +115,7 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
         itemRentalHistory.getItem().updateIsRented(false);
 
         // itemCategory 수량 + 1
-        itemRentalHistory.getItem().getItemCategory().decreaseAvailableCount();
+        itemRentalHistory.getItem().getItemCategory().increaseAvailableCount();
 
         // if (expectedReturnAt.before(returnedAt)) 이면 블랙리스트 체크
         if (itemRentalHistory.getExpectedReturnAt().isBefore(LocalDateTime.now())) {
