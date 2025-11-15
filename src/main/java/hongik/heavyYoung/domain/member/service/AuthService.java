@@ -121,7 +121,6 @@ public class AuthService {
         EmailVerify emailEntity = emailVerifyRepository.findByEmailAddress(email)
                 .map(existing -> {      // 이미 해당 이메일이 존재하면
                     existing.updateCode(code);
-                    existing.updateVerified(false);
                     return existing;
                 })
                 .orElseGet(() -> EmailVerify.builder()
