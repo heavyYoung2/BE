@@ -7,6 +7,8 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -30,20 +32,16 @@ public class AuthMemberArgumentResolver implements HandlerMethodArgumentResolver
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) {
 
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new AuthException(ErrorStatus.AUTH_UNAUTHORIZED); // 401로 매핑되도록 설정
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new AuthException(ErrorStatus.AUTH_UNAUTHORIZED);
         }
-        String token = authHeader.substring(7); // "Bearer " 이후
 
-        // access 토큰 파싱 → subject = memberId
-        Claims claims = jwtProvider.parseAuthClaims(token);
-        String sub = claims.getSubject();
-        if (sub == null) throw new AuthException(ErrorStatus.AUTH_UNAUTHORIZED);
+        // principal이 JwtAuthFilter에서 넣어둔 subject(memberId)
+        String principal = (String) authentication.getPrincipal();
 
         try {
-            return Long.valueOf(sub);
+            return Long.valueOf(principal);
         } catch (NumberFormatException ex) {
             throw new AuthException(ErrorStatus.INVALID_JWT_FORMAT);
         }

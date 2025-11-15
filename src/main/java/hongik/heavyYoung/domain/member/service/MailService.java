@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class MailService {
     private final JavaMailSender mailSender;
 
-    @Value("{app.mail.from}")
+    @Value("{$app.mail.from}")
     private String from;
 
     public void sendVerificationCode(String to, String code) {
