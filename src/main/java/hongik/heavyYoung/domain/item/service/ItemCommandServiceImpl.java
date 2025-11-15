@@ -7,7 +7,6 @@ import hongik.heavyYoung.domain.item.entity.ItemCategory;
 import hongik.heavyYoung.domain.item.repository.ItemCategoryRepository;
 import hongik.heavyYoung.domain.item.repository.ItemRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
-import hongik.heavyYoung.global.exception.GeneralException;
 import hongik.heavyYoung.global.exception.customException.ItemCategoryException;
 import hongik.heavyYoung.global.exception.customException.ItemException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,8 @@ public class ItemCommandServiceImpl implements ItemCommandService {
         itemRepository.save(item);
 
         // 카테고리 총 수량, 가용 수량 +1
-        itemCategory.increaseQuantity();
+        itemCategory.increaseTotalCount();
+        itemCategory.increaseAvailableCount();
     }
 
     @Override
@@ -49,7 +49,8 @@ public class ItemCommandServiceImpl implements ItemCommandService {
 
         // 해당 카테고리 수량 감소
         ItemCategory itemCategory = item.getItemCategory();
-        itemCategory.decreaseQuantity();
+        itemCategory.decreaseTotalCount();
+        itemCategory.decreaseAvailableCount();
 
         // 아이템 삭제
         itemRepository.delete(item);
