@@ -73,7 +73,7 @@ public class AuthService {
 
     // == 로그인 == //
     @Transactional(readOnly = true)
-    public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.AuthLoginInRequestDTO req) {
+    public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.AuthLoginRequestDTO req) {
         Member m = memberRepository.findByEmail(req.getEmail())
                 .orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
 

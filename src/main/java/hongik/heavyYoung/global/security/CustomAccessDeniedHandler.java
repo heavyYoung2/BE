@@ -35,7 +35,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 .orElseGet(Collections::emptyList);
 
         String role = authorities.stream()
-                .map(GrantedAuthority::getAuthority) // e.g. ROLE_USER, ROLE_ADMIN, ROLE_OWNER
+                .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse("ANONYMOUS");
 
@@ -49,7 +49,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         response.setStatus(status);
         response.setContentType("application/json;charset=UTF-8");
-        // 프로젝트 공통 응답 포맷에 맞춰 작성
         String body = """
                 {"isSuccess":false,"code":"AUTH_008","message":"%s","result":null}
                 """.formatted(message);

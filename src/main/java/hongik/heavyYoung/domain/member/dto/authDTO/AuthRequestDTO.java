@@ -43,7 +43,7 @@ public class AuthRequestDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AuthLoginInRequestDTO {
+    public static class AuthLoginRequestDTO {
         @Schema(description = "이메일",example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
         private String email;
