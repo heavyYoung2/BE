@@ -20,13 +20,15 @@ public class EventImage extends BaseEntity {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    @Column(name = "event_image_key)", nullable = false)
+    private String eventImageKey;
+
     @Lob
     @Column(name = "event_image_url", nullable = false)
     private String eventImageUrl;
 
-    @Builder.Default
     @Column(name = "sort_order", nullable = false)
-    private int sortOrder = 0;
+    private int sortOrder;
 
     protected void setEvent(Event event) {
         this.event = event;
