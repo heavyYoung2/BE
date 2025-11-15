@@ -64,6 +64,6 @@ jobs:
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
             pgrep java | xargs -r kill -15
             sleep 10                        
-            nohup java -jar /home/$EC2_USERNAME/heavyYoungServer.jar > app.log 2>&1 &
+            nohup java -Duser.timezone=Asia/Seoul -jar /home/$EC2_USERNAME/heavyYoungServer.jar > app.log 2>&1 &
           "
           rm -f private_key.pem
