@@ -14,6 +14,7 @@ public class AuthRequestDTO {
     public static class AuthSignUpRequestDTO {
         @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
+        @Email(message = "올바른 학교 이메일 형식을 입력해주세요.")
         private String email;
 
         @Schema(description = "비밀번호")
@@ -46,6 +47,7 @@ public class AuthRequestDTO {
     public static class AuthLoginRequestDTO {
         @Schema(description = "이메일",example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
+        @Email(message = "올바른 학교 이메일 형식을 입력해주세요.")
         private String email;
         @Schema(description = "비밀번호")
         @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
@@ -59,7 +61,7 @@ public class AuthRequestDTO {
     public static class SendCodeRequestDTO {
         @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "학교 이메일은 필수 입력 값입니다.")
-        @Email
+        @Email(message = "올바른 학교 이메일 형식을 입력해주세요.")
         private String email;
     }
 
@@ -70,7 +72,7 @@ public class AuthRequestDTO {
     public static class VerifyCodeRequestDTO {
         @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "학교 이메일은 필수 입력 값입니다.")
-        @Email
+        @Email(message = "올바른 학교 이메일 형식을 입력해주세요.")
         private String email;
         @Schema(description = "전송된 인증코드", example = "1234")
         @NotBlank(message = "인증 코드는 필수 입력 값입니다.")
