@@ -30,16 +30,24 @@ public class ItemCategory extends BaseEntity {
     @Builder.Default
     private int availableCount = 0;
 
-    public void increaseQuantity() {
+    public void increaseTotalCount() {
         this.totalCount++;
-        this.availableCount++;
     }
 
-    public void decreaseQuantity() {
-        if (this.totalCount <= 0 || this.availableCount <= 0) {
+    public void decreaseTotalCount() {
+        if (this.totalCount <= 0) {
             throw new ItemException(ErrorStatus.ITEM_QUANTITY_NON_POSITIVE);
         }
         this.totalCount--;
+    }
+
+    public void increaseAvailableCount() {
+        this.availableCount++;
+    }
+    public void decreaseAvailableCount() {
+        if (this.availableCount <= 0) {
+            throw new ItemException(ErrorStatus.ITEM_QUANTITY_NON_POSITIVE);
+        }
         this.availableCount--;
     }
 }

@@ -10,7 +10,6 @@ import hongik.heavyYoung.domain.rental.dto.RentalRequestDTO;
 import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;
 import hongik.heavyYoung.domain.rental.repository.ItemRentalHistoryRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
-import hongik.heavyYoung.global.exception.GeneralException;
 import hongik.heavyYoung.global.exception.customException.ItemCategoryException;
 import hongik.heavyYoung.global.exception.customException.ItemRentalHistoryException;
 import hongik.heavyYoung.global.exception.customException.MemberException;
@@ -76,7 +75,7 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
         // 해당 itemCategory의 수량 변경
         ItemCategory itemCategory = itemCategoryRepository.findById(qrPayload.getItemCategoryId())
                 .orElseThrow(() -> new ItemCategoryException(ErrorStatus.ITEM_CATEGORY_NOT_FOUND));
-        itemCategory.decreaseQuantity();
+        itemCategory.decreaseAvailableCount();
 
         // 멤버 받아오기
         Member member = memberRepository.findById(qrPayload.getMemberId())
@@ -116,7 +115,7 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
         itemRentalHistory.getItem().updateIsRented(false);
 
         // itemCategory 수량 + 1
-        itemRentalHistory.getItem().getItemCategory().increaseQuantity();
+        itemRentalHistory.getItem().getItemCategory().decreaseAvailableCount();
 
         // if (expectedReturnAt.before(returnedAt)) 이면 블랙리스트 체크
         if (itemRentalHistory.getExpectedReturnAt().isBefore(LocalDateTime.now())) {
