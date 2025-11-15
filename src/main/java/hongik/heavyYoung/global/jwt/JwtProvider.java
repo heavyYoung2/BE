@@ -49,7 +49,9 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.jwtParser = Jwts.parser().verifyWith(this.key).build();
 
-        this.authKey = Keys.hmacShaKeyFor(keyBytes);
+
+        byte[] authKeyBytes = Decoders.BASE64.decode(authSecretBase64);
+        this.authKey = Keys.hmacShaKeyFor(authKeyBytes);
         this.authParser = Jwts.parser().verifyWith(this.authKey).build();
     }
 
