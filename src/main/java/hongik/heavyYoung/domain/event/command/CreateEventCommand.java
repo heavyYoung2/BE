@@ -11,7 +11,6 @@ public record CreateEventCommand (
         String content,
         LocalDate startDate,
         LocalDate endDate
-        // TODO 사진 업로드 방식 결정 후, imageUrl 혹은 Multipart 추가
 ) {
     public static CreateEventCommand from(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
         CreateEventCommand createEventCommand = new CreateEventCommand(
@@ -19,7 +18,6 @@ public record CreateEventCommand (
                 eventAddRequestDTO.getContent(),
                 eventAddRequestDTO.getEventStartDate(),
                 eventAddRequestDTO.getEventEndDate()
-                // TODO 사진 업로드 방식 결정 후, imageUrl 혹은 Multipart 추가
         );
         createEventCommand.validate();
         return createEventCommand;

@@ -20,7 +20,6 @@ import java.util.List;
 public class EventQueryServiceImpl implements EventQueryService {
 
     private final EventRepository eventRepository;
-
     /**
      * 공지사항(Event) 전체 또는 특정 기간의 목록을 조회합니다.
      * 시작일과 종료일이 모두 전달되면 해당 기간 내의 이벤트만 조회합니다.

@@ -4,6 +4,7 @@ import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class EventResponseConverter {
@@ -27,6 +28,11 @@ public class EventResponseConverter {
 
     // 공지사항 상세 정보
     public static EventResponse.EventInfoDetailDTO toEventInfoDetailDTO(Event event) {
+        List<String> imageUrls = event.getEventImages().stream()
+                .sorted(Comparator.comparing(EventImage::getSortOrder))
+                .map(EventImage::getEventImageUrl)
+                .toList();
+
         return EventResponse.EventInfoDetailDTO.builder()
                 .eventId(event.getId())
                 .title(event.getEventTitle())
@@ -34,9 +40,7 @@ public class EventResponseConverter {
                 .eventStartDate(event.getEventStartDate())
                 .eventEndDate(event.getEventEndDate())
                 .eventCreatedAt(event.getCreatedAt())
-                .imageUrls(event.getEventImages().stream()
-                        .map(EventImage::getEventImageUrl)
-                        .toList())
+                .imageUrls(imageUrls)
                 .build();
     }
 

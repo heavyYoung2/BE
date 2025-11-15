@@ -3,17 +3,14 @@ package hongik.heavyYoung.domain.event.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 public class EventRequest {
     // 공지사항 생성 요청 DTO
     @Getter
-    @Builder
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EventAddRequestDTO {
@@ -28,7 +25,6 @@ public class EventRequest {
         private LocalDate eventStartDate;
         @Schema(description = "행사 종료일")
         private LocalDate eventEndDate;
-        // TODO 사진 업로드 방식 결정 후, imageUrl 혹은 Multipart 추가
     }
 
     // 공지사항 수정 요청 DTO
