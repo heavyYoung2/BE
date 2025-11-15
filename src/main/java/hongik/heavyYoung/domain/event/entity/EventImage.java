@@ -20,7 +20,7 @@ public class EventImage extends BaseEntity {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @Column(name = "event_image_key)", nullable = false)
+    @Column(name = "event_image_key", nullable = false)
     private String eventImageKey;
 
     @Lob
