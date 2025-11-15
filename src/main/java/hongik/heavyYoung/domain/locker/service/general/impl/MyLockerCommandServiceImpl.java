@@ -33,7 +33,7 @@ public class MyLockerCommandServiceImpl implements MyLockerCommandService {
 
         // 신청 가능한 사물함 신청 찾기
         Application activeLockerApplication = applicationRepository.findActiveLockerApplications(LocalDateTime.now(), ApplicationType.LOCKER)
-                .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_FOUND));
+                .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_OPENED));
 
         // 사물함 신청 전략 탐색(본 신청, 추가신청)
         LockerApplicationStrategy lockerApplicationStrategy = lockerApplicationStrategies.stream()
