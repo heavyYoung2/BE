@@ -8,8 +8,13 @@ import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+@Slf4j
 @Tag(name = "Item API - 학생회", description = "학생회 - 물품 관련 API")
 @RestController
 @RequestMapping("/admin/items")
@@ -29,6 +34,8 @@ public class AdminItemRestController {
     @PatchMapping("")
     public ApiResponse<?> increaseItemQuantity(@RequestBody ItemRequestDTO.Increase request) {
         itemCommandService.increaseItemQuantity(request);
+        log.info("now = {}", LocalDateTime.now());
+        log.info("zone = {}", ZoneId.systemDefault());
         return ApiResponse.onSuccess(null);
     }
 
