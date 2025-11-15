@@ -29,9 +29,7 @@ public class AuthConverter {
             Member member, String accessToken, String refreshToken, long accessExp, long refreshExp) {
         return AuthResponseDTO.LoginResponseDTO.builder()
                 .memberId(member.getId())
-                .email(member.getEmail())
                 .role(member.getRole())
-                .status(member.getMemberStatus())
                 .studentId(member.getStudentId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)

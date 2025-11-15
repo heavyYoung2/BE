@@ -24,14 +24,9 @@ public class AuthResponseDTO {
         @Schema(description = "회원 PK")
         private Long memberId;
 
-        @Schema(description = "이메일")
-        private String email;
-
         @Schema(description = "역할")
         private MemberRole role;
 
-        @Schema(description = "상태")
-        private MemberStatus status;
 
         @Schema(description = "학번")
         private String studentId;
