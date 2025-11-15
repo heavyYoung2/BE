@@ -69,11 +69,14 @@ public class S3Manager {
      * S3에 저장된 객체의 key로 해당 파일 삭제
      */
     public void delete(String key) {
-        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .build();
-
-        s3Client.deleteObject(deleteObjectRequest);
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            throw new S3ImageException(ErrorStatus.S3_UPLOAD_FAIL);
+        }
     }
 }
