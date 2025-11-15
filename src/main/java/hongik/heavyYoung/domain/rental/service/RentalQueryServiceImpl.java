@@ -33,7 +33,6 @@ public class RentalQueryServiceImpl implements RentalQueryService {
     private final StudentFeeStatusService studentFeeStatusService;
     private final ItemRentalHistoryRepository itemRentalHistoryRepository;
 
-
     @Override
     public QrTokenResponse generateRentalQrToken(Long itemCategoryId) {
 

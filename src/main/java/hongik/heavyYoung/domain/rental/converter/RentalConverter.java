@@ -33,6 +33,8 @@ public class RentalConverter {
         return RentalResponseDTO.RentalHistory.builder()
                 .rentalHistoryId(itemRentalHistory.getId())
                 .itemName(itemRentalHistory.getItem().getItemCategory().getItemCategoryName())
+                .studentId(itemRentalHistory.getMember().getStudentId())
+                .studentName(itemRentalHistory.getMember().getStudentName())
                 .rentalStartedAt(LocalDate.from(itemRentalHistory.getRentalStartAt()))
                 .rentalEndedAt(LocalDate.from(itemRentalHistory.getExpectedReturnAt()))
                 .returnedAt(itemRentalHistory.getReturnedAt() != null ? LocalDate.from(itemRentalHistory.getReturnedAt()) : null)

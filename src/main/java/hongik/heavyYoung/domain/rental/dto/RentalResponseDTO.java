@@ -35,6 +35,8 @@ public class RentalResponseDTO {
     public static class RentalHistory {
         private Long rentalHistoryId;
         private String itemName;
+        private String studentId;
+        private String studentName;
         private LocalDate rentalStartedAt;
         private LocalDate rentalEndedAt;
         private LocalDate returnedAt;
