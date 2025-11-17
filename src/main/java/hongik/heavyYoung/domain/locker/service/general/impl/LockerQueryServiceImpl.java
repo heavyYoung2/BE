@@ -28,8 +28,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
     private final LockerAssignmentRepository lockerAssignmentRepository;
     private final MemberApplicationRepository memberApplicationRepository;
 
-    // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디 제거
-
     /**
      * 섹션 별 전체 사물함 정보를 조회합니다.
      * A,B,C,D,E,F 섹션에 맞게 사물함의 정보를 조회할 수 있습니다.
@@ -65,7 +63,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
      */
     @Override
     public LockerResponse.MyLockerInfoDTO findMyLocker(Long memberId) {
-        // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
         Optional<LockerAssignment> lockerAssignment = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(memberId);
 
         if (lockerAssignment.isPresent()) {
@@ -73,7 +70,6 @@ public class LockerQueryServiceImpl implements LockerQueryService {
             return LockerResponseConverter.toMyLockerInfoDTO(locker, LockerRentalStatus.RENTING);
         }
 
-        // TODO 로그인 구현 시 하드 코딩된 로그인 멤버 아이디로 대체
         boolean lockerRequested = memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(memberId, ApplicationType.LOCKER_MAIN);
 
         if (lockerRequested) {
