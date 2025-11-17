@@ -64,7 +64,7 @@ public class AuthRestController {
         return ApiResponse.onSuccess(authService.login(dto));
     }
 
-    @PreAuthorize("hasRole(\"ADMIN\")")
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "로그아웃 API",
                 description = "로그아웃을 합니다.")
     @PostMapping ("/logout")
