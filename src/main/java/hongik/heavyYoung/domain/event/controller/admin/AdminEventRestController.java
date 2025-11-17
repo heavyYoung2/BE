@@ -4,15 +4,17 @@ import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.service.admin.AdminEventCommandService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
-import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
-import hongik.heavyYoung.global.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/events")
@@ -24,11 +26,12 @@ public class AdminEventRestController {
     private final AdminEventCommandService adminEventCommandService;
 
     @Operation(summary = "공지사항 생성")
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<EventResponse.EventAddResponseDTO> addEvent (
-            @RequestBody @Valid EventRequest.EventAddRequestDTO eventAddRequestDTO
-    ) {
-        EventResponse.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO);
+            @RequestPart("eventAddRequestDTO") @Valid EventRequest.EventAddRequestDTO eventAddRequestDTO,
+            @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles
+            ) {
+        EventResponse.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO, multipartFiles);
         return ApiResponse.onSuccess(eventAddResponseDTO);
     }
 
@@ -42,12 +45,13 @@ public class AdminEventRestController {
     }
 
     @Operation(summary = "공지사항 수정")
-    @PutMapping("/{eventId}")
+    @PutMapping(value = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<EventResponse.EventPutResponseDTO> updateEvent (
             @PathVariable("eventId") @Positive(message = "eventId는 1 이상이어야 합니다.") Long eventId,
-            @RequestBody @Valid EventRequest.EventPutRequestDTO eventPutRequestDTO
+            @RequestPart("eventPutRequestDTO") @Valid EventRequest.EventPutRequestDTO eventPutRequestDTO,
+            @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles
     ) {
-        EventResponse.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO);
+        EventResponse.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO, multipartFiles);
         return ApiResponse.onSuccess(eventPutResponseDTO);
     }
 }

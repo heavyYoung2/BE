@@ -6,13 +6,20 @@ import hongik.heavyYoung.domain.event.converter.EventResponseConverter;
 import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.domain.event.dto.EventResponse;
 import hongik.heavyYoung.domain.event.entity.Event;
+import hongik.heavyYoung.domain.event.entity.EventImage;
+import hongik.heavyYoung.domain.event.repository.EventImageRepository;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import hongik.heavyYoung.domain.event.service.admin.AdminEventCommandService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.EventException;
+import hongik.heavyYoung.global.s3.S3Manager;
+import hongik.heavyYoung.global.s3.S3UploadResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -20,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminEventCommandServiceImpl implements AdminEventCommandService {
 
     private final EventRepository eventRepository;
+    private final S3Manager s3Manager;
+    private final EventImageRepository eventImageRepository;
 
     /**
      * 새로운 공지사항(Event)을 생성합니다.
@@ -28,12 +37,14 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      * @return 생성된 공지사항의 PK를 담은 응답 DTO
      */
     @Override
-    public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO) {
+    public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO, List<MultipartFile> multipartFiles) {
         CreateEventCommand createEventCommand = CreateEventCommand.from(eventAddRequestDTO);
+
         Event event = Event.create(createEventCommand);
-        Event savedEvent = eventRepository.save(event);
-        // TODO 사진 업로드 방식 결정 후, 공지사항(Event)에 사진 추가 로직 필요
-        return EventResponseConverter.toEventAddResponseDTO(savedEvent);
+
+        saveEventImages(event, multipartFiles);
+
+        return EventResponseConverter.toEventAddResponseDTO(event);
     }
 
     /**
@@ -46,7 +57,9 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
     public void deleteEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
-        // TODO S3 추가 이후, S3 버킷에서 이미지 삭제 기능 추가
+
+        deleteEventImages(event);
+
         eventRepository.delete(event);
     }
 
@@ -59,10 +72,53 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      * @return 수정된 공지사항의 PK를 담은 DTO
      */
     @Override
-    public EventResponse.EventPutResponseDTO updateEvent(Long eventId, EventRequest.EventPutRequestDTO eventPutRequestDTO) {
+    public EventResponse.EventPutResponseDTO updateEvent(Long eventId, EventRequest.EventPutRequestDTO eventPutRequestDTO, List<MultipartFile> multipartFiles) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
         event.update(UpdateEventCommand.from(eventPutRequestDTO));
+
+        if (multipartFiles != null) {
+            deleteEventImages(event);
+            saveEventImages(event, multipartFiles);
+        }
+
         return EventResponseConverter.toEventPutResponseDTO(event);
+    }
+
+    private void saveEventImages(Event event, List<MultipartFile> multipartFiles) {
+        if (multipartFiles == null || multipartFiles.isEmpty()) {
+            return;
+        }
+
+        int sortOrder = 1;
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (multipartFile == null || multipartFile.isEmpty()) {
+                continue;
+            }
+
+            S3UploadResult result = s3Manager.upload(multipartFile);
+            String key = result.key();
+            String url = result.url();
+
+            EventImage eventImage = EventImage.builder()
+                    .event(event)
+                    .eventImageKey(key)
+                    .eventImageUrl(url)
+                    .sortOrder(sortOrder++)
+                    .build();
+
+            eventImageRepository.save(eventImage);
+        }
+    }
+
+    private void deleteEventImages(Event event) {
+        List<EventImage> eventImages = eventImageRepository.findAllByEvent(event);
+
+        for (EventImage eventImage : eventImages) {
+            s3Manager.delete(eventImage.getEventImageKey());
+        }
+
+        eventImageRepository.deleteAllByEvent(event);
     }
 }
