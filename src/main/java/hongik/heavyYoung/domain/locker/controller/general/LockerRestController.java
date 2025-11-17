@@ -4,11 +4,13 @@ import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
 import hongik.heavyYoung.domain.locker.service.general.MyLockerCommandService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
+import hongik.heavyYoung.global.security.auth.AuthMemberId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,34 +26,37 @@ public class LockerRestController {
     private final LockerQueryService lockerQueryService;
     private final MyLockerCommandService myLockerCommandService;
 
-    // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
-    private static final Long DUMMY_MEMBER_ID = 23L;
-
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "사물함 전체 조회")
     @GetMapping
     public ApiResponse<List<LockerResponse.LockerInfoDTO>> getAllLockers(
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @Parameter(description = "사물함 구역", example = "A", required = true)
             @RequestParam(value = "lockerSection")
             @Pattern(regexp = "^[A-I]$", message = "사물함 구역은 A부터 I까지 가능합니다.")
             String lockerSection
     ) {
-        // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
-        List<LockerResponse.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection, DUMMY_MEMBER_ID);
+        List<LockerResponse.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection, authMemberId);
         return ApiResponse.onSuccess(allLockers);
     }
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "나의 사물함 조회")
     @GetMapping("/me")
-    public ApiResponse<LockerResponse.MyLockerInfoDTO> getMyLocker() {
-        // TODO 로그인 구현 시 멤버아이디 전달하도록 수정
-        LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker(DUMMY_MEMBER_ID);
+    public ApiResponse<LockerResponse.MyLockerInfoDTO> getMyLocker(
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
+    ) {
+        LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker(authMemberId);
         return ApiResponse.onSuccess(myLocker);
     }
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "사물함 신청")
     @PostMapping("/apply")
-    public ApiResponse<Void> applyLocker() {
-        myLockerCommandService.applyLocker(DUMMY_MEMBER_ID);
+    public ApiResponse<Void> applyLocker(
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
+    ) {
+        myLockerCommandService.applyLocker(authMemberId);
         return ApiResponse.onSuccess(null);
     }
 }

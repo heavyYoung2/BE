@@ -35,10 +35,10 @@ public class StudentFeeCommandServiceImpl implements StudentFeeCommandService {
      * @throws MemberException 회원이 존재하지 않는 경우
      */
     @Override
-    public QrTokenResponse generateStudentFeeQrToken() {
+    public QrTokenResponse generateStudentFeeQrToken(Long authMemberId) {
 
         // 멤버 정보 받아오기
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 회비 납부 여부 갱신

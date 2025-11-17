@@ -34,10 +34,10 @@ public class RentalQueryServiceImpl implements RentalQueryService {
     private final ItemRentalHistoryRepository itemRentalHistoryRepository;
 
     @Override
-    public QrTokenResponse generateRentalQrToken(Long itemCategoryId) {
+    public QrTokenResponse generateRentalQrToken(Long authMemberId, Long itemCategoryId) {
 
         // 멤버 정보 받아오기
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 회비 납부 여부 갱신
@@ -64,10 +64,10 @@ public class RentalQueryServiceImpl implements RentalQueryService {
     }
 
     @Override
-    public QrTokenResponse generateReturnRentalQrToken(Long rentalHistoryId) {
+    public QrTokenResponse generateReturnRentalQrToken(Long authMemberId, Long rentalHistoryId) {
 
         // 멤버 정보 받아오기
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 반납 아이디
@@ -89,10 +89,10 @@ public class RentalQueryServiceImpl implements RentalQueryService {
      * @return RentalResponseDTO.MemberRentalInfo
      */
     @Override
-    public RentalResponseDTO.MemberRentalInfo getRentalStatus(Long memberId) {
+    public RentalResponseDTO.MemberRentalInfo getRentalStatus(Long authMemberId) {
 
         // 멤버 정보 받아오기
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 반납하지 않은 대여 내역 리스트
@@ -113,10 +113,10 @@ public class RentalQueryServiceImpl implements RentalQueryService {
     }
 
     @Override
-    public RentalResponseDTO.AllRentalHistories getRentalHistory() {
+    public RentalResponseDTO.AllRentalHistories getRentalHistory(Long authMemberId) {
 
         // 멤버 정보 받아오기
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 대여 정보 가져오기

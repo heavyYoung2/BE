@@ -4,5 +4,5 @@ import hongik.heavyYoung.domain.chat.dto.ChatRequestDTO;
 import hongik.heavyYoung.domain.chat.dto.ChatResponseDTO;
 
 public interface ChatCommandService {
-    ChatResponseDTO.Response getChatResponse(ChatRequestDTO.Request request);
+    ChatResponseDTO.Response getChatResponse(Long authMemberId, ChatRequestDTO.Request request);
 }

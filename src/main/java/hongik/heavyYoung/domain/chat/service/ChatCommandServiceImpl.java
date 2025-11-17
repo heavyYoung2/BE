@@ -26,11 +26,10 @@ public class ChatCommandServiceImpl implements ChatCommandService {
     private final ChatMemory chatMemory;
 
     @Override
-    public ChatResponseDTO.Response getChatResponse(ChatRequestDTO.Request request) {
-        Long memberId = 1L;
+    public ChatResponseDTO.Response getChatResponse(Long authMemberId, ChatRequestDTO.Request request) {
 
         // 채팅 히스토리 가져오기
-        List<Message> chatHistory = new ArrayList<>(chatMemory.get(String.valueOf(memberId)));
+        List<Message> chatHistory = new ArrayList<>(chatMemory.get(String.valueOf(authMemberId)));
 
         // 사용자 메시지 추가
         chatHistory.add(new UserMessage(request.getContent()));
@@ -42,8 +41,8 @@ public class ChatCommandServiceImpl implements ChatCommandService {
         String response = aiClient.getResponse(prompt);
 
         // 대화 히스토리에 사용자 메시지와 어시스턴트 메시지 추가
-        chatMemory.add(String.valueOf(memberId), new UserMessage(request.getContent()));
-        chatMemory.add(String.valueOf(memberId), new AssistantMessage(response));
+        chatMemory.add(String.valueOf(authMemberId), new UserMessage(request.getContent()));
+        chatMemory.add(String.valueOf(authMemberId), new AssistantMessage(response));
 
         return ChatConverter.toResponseDTO(response);
     }

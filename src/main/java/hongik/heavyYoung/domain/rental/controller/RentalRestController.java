@@ -23,32 +23,41 @@ public class RentalRestController {
 
     private final RentalQueryService rentalQueryService;
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "물품 대여 QR 생성")
     @GetMapping("/{item-category-id}/qr-tokens")
     public ApiResponse<QrTokenResponse> generateRentalQrToken(
-            @PathVariable("item-category-id") Long itemCategoryId
+            @PathVariable("item-category-id") Long itemCategoryId,
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
     ) {
-        return ApiResponse.onSuccess(rentalQueryService.generateRentalQrToken(itemCategoryId));
+        return ApiResponse.onSuccess(rentalQueryService.generateRentalQrToken(authMemberId, itemCategoryId));
     }
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "물품 반납 QR 생성")
     @GetMapping("/{rental-history-id}/return/qr-tokens")
     public ApiResponse<QrTokenResponse> generateReturnRentalQrToken(
-            @PathVariable("rental-history-id") Long rentalHistoryId
+            @PathVariable("rental-history-id") Long rentalHistoryId,
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
     ) {
-        return ApiResponse.onSuccess(rentalQueryService.generateReturnRentalQrToken(rentalHistoryId));
+        return ApiResponse.onSuccess(rentalQueryService.generateReturnRentalQrToken(authMemberId, rentalHistoryId));
     }
 
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "내 대여 현황 조회")
     @GetMapping("/me")
-    public ApiResponse<RentalResponseDTO.MemberRentalInfo> getRentalStatus(@Parameter(hidden = true) @AuthMemberId Long memberId) {
-        return ApiResponse.onSuccess(rentalQueryService.getRentalStatus(memberId));
+    public ApiResponse<RentalResponseDTO.MemberRentalInfo> getRentalStatus(
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
+    ) {
+        return ApiResponse.onSuccess(rentalQueryService.getRentalStatus(authMemberId));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "전체 대여 내역 조회")
     @GetMapping("/me/history")
-    public ApiResponse<RentalResponseDTO.AllRentalHistories> getRentalHistory() {
-        return ApiResponse.onSuccess(rentalQueryService.getRentalHistory());
+    public ApiResponse<RentalResponseDTO.AllRentalHistories> getRentalHistory(
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
+    ) {
+        return ApiResponse.onSuccess(rentalQueryService.getRentalHistory(authMemberId));
     }
 }
