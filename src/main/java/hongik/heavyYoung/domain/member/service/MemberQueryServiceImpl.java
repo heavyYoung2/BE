@@ -50,11 +50,11 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        LockerResponse.MyLockerInfoDTO lockers = lockerQueryService.findMyLocker(authMemberId);
+        LockerResponse.MyLockerInfoDTO locker = lockerQueryService.findMyLocker(authMemberId);
         List<RentalResponseDTO.RentalHistory> items = rentalQueryService.getRentalStatus(authMemberId).getItems();
         boolean isStudentFeePaid = studentFeeStatusService.isStudentFeePaid(member);
         MemberResponseDTO.BlacklistInfo blacklist = getBlacklist(authMemberId);
 
-        return MemberConverter.toMyPageInfo(lockers, items, isStudentFeePaid, blacklist);
+        return MemberConverter.toMyPageInfo(locker, items, isStudentFeePaid, blacklist);
     }
 }

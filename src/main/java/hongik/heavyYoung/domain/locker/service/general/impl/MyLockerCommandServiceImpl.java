@@ -35,7 +35,7 @@ public class MyLockerCommandServiceImpl implements MyLockerCommandService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new LockerException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        // 학생회비 납부 여부 확인
+        // 학생회비 미납 시 사물함 신청 불가
         boolean studentFeePaid = studentFeeStatusService.isStudentFeePaid(member);
         if (!studentFeePaid) {
             throw new MemberException(ErrorStatus.MEMBER_NOT_PAID);
