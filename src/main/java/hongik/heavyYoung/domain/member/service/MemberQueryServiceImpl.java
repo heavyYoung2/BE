@@ -24,9 +24,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
      * @return MemberResponseDTO.BlacklistInfo
      */
     @Override
-    public MemberResponseDTO.BlacklistInfo getBlacklist() {
+    public MemberResponseDTO.BlacklistInfo getBlacklist(Long authMemberId) {
 
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         LocalDate blacklistUntil = member.getBlacklistUntil();

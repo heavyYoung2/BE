@@ -7,7 +7,6 @@ import hongik.heavyYoung.domain.item.entity.ItemCategory;
 public class ItemCategoryConverter {
 
     public static ItemCategory toItemCategory(ItemCategoryRequestDTO.Create request) {
-
         return ItemCategory.builder()
                 .itemCategoryName(request.getCategoryName())
                 .build();

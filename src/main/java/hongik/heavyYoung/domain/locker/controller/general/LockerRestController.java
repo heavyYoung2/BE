@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class LockerRestController {
     private final LockerQueryService lockerQueryService;
     private final MyLockerCommandService myLockerCommandService;
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "사물함 전체 조회")
     @GetMapping
     public ApiResponse<List<LockerResponse.LockerInfoDTO>> getAllLockers(
@@ -38,6 +40,7 @@ public class LockerRestController {
         return ApiResponse.onSuccess(allLockers);
     }
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "나의 사물함 조회")
     @GetMapping("/me")
     public ApiResponse<LockerResponse.MyLockerInfoDTO> getMyLocker(
@@ -47,6 +50,7 @@ public class LockerRestController {
         return ApiResponse.onSuccess(myLocker);
     }
 
+    @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "사물함 신청")
     @PostMapping("/apply")
     public ApiResponse<Void> applyLocker(
