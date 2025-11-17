@@ -22,7 +22,7 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        if(member.getRole() != MemberRole.USER ) {
+        if (member.getRole() != MemberRole.USER ) {
             throw new MemberException(ErrorStatus.MEMBER_ALREADY_COUNCIL_MEMBER);
         }
 
@@ -34,11 +34,11 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        if(member.getRole() == MemberRole.USER) {
+        if (member.getRole() == MemberRole.USER) {
             throw new MemberException(ErrorStatus.MEMBER_NOT_STUDENT_COUNCIL);
         }
 
-        if(member.getRole() == MemberRole.OWNER) {
+        if (member.getRole() == MemberRole.OWNER) {
             throw new MemberException(ErrorStatus.CANNOT_DELETE_OWNER);
         }
 
