@@ -7,8 +7,10 @@ import hongik.heavyYoung.domain.locker.service.general.MyLockerCommandService;
 import hongik.heavyYoung.domain.locker.service.general.strategy.LockerApplicationStrategy;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
+import hongik.heavyYoung.domain.studentFee.service.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.LockerException;
+import hongik.heavyYoung.global.exception.customException.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +27,19 @@ public class MyLockerCommandServiceImpl implements MyLockerCommandService {
     private final ApplicationRepository applicationRepository;
     private final List<LockerApplicationStrategy> lockerApplicationStrategies;
 
+    private final StudentFeeStatusService studentFeeStatusService;
+
     @Override
     public void applyLocker(Long memberId) {
         // 신청하려는 학생 찾기
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new LockerException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 학생회비 납부 여부 확인
+        boolean studentFeePaid = studentFeeStatusService.isStudentFeePaid(member);
+        if (!studentFeePaid) {
+            throw new MemberException(ErrorStatus.MEMBER_NOT_PAID);
+        }
 
         // 신청 가능한 사물함 신청 찾기
         Application activeLockerApplication = applicationRepository.findActiveLockerApplications(LocalDateTime.now(), ApplicationType.LOCKER)
