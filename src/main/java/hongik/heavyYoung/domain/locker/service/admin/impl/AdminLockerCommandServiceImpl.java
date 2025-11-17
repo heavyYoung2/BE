@@ -121,8 +121,9 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
                 Member member = memberRepository.findByStudentId(studentId)
                         .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-                String currentSemester = lockerAssignmentRepository.findCurrentSemester()
-                        .orElseThrow(() -> new LockerException(ErrorStatus.CURRENT_SEMESTER_NOT_FOUND));
+                LockerAssignment currentLockerAssignment = lockerAssignmentRepository.findTopByOrderByAssignSemesterDesc()
+                        .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_ASSIGNMENT_NOT_FOUND));
+                String currentSemester = currentLockerAssignment.getAssignSemester();
 
                 LockerAssignment lockerAssignment = LockerConverter.toLockerAssignmentForLockerAdditional(member, locker, currentSemester);
                 lockerAssignmentRepository.save(lockerAssignment);
