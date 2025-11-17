@@ -35,7 +35,7 @@ public class AdminMemberRestController {
     @Operation(summary = "학생회 인원 추가")
     @PatchMapping("/{memberId}/add")
     public ApiResponse<Void> addStudentCouncil(
-            @Parameter(hidden = true) @AuthMemberId Long authMEmberId,
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @PathVariable("memberId") Long memberId
     ) {
         adminMemberCommandService.createStudentCouncil(memberId);
@@ -46,7 +46,7 @@ public class AdminMemberRestController {
     @Operation(summary = "학생회에 추가할 학생 조회")
     @GetMapping("/lookup")
     public ApiResponse<MemberResponseDTO.StudentCouncilCandidateInfo> getStudentCouncilCandidate(
-            @Parameter(hidden = true) @AuthMemberId Long authMEmberId,
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @Parameter(description = "학번", example = "C011117")
             @RequestParam(value = "studentId", required = false) String studentId
     ) {
@@ -58,7 +58,7 @@ public class AdminMemberRestController {
     @Operation(summary = "학생회 삭제")
     @PatchMapping("/{memberId}/delete")
     public ApiResponse<Void> deleteStudentCouncil(
-            @Parameter(hidden = true) @AuthMemberId Long authMEmberId,
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @PathVariable("memberId") Long memberId
     ) {
         adminMemberCommandService.deleteStudentCouncil(memberId);
