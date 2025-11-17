@@ -41,11 +41,10 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
         CreateEventCommand createEventCommand = CreateEventCommand.from(eventAddRequestDTO);
 
         Event event = Event.create(createEventCommand);
-        Event savedEvent = eventRepository.save(event);
 
         saveEventImages(event, multipartFiles);
 
-        return EventResponseConverter.toEventAddResponseDTO(savedEvent);
+        return EventResponseConverter.toEventAddResponseDTO(event);
     }
 
     /**

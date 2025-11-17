@@ -48,12 +48,6 @@ public class Event extends BaseEntity {
         image.setEvent(this);
     }
 
-    public void removeEventImage(EventImage image) {
-        if (image == null) return;
-        this.eventImages.remove(image);
-        image.removeEvent();
-    }
-
     /** 생성 관련 메서드 */
     public static Event create(CreateEventCommand createEventCommand) {
         return Event.builder().
