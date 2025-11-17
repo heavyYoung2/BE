@@ -1,6 +1,7 @@
 package hongik.heavyYoung.domain.member.service.admin.impl;
 
 import hongik.heavyYoung.domain.member.entity.Member;
+import hongik.heavyYoung.domain.member.enums.MemberRole;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
 import hongik.heavyYoung.domain.member.service.admin.AdminMemberCommandService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
@@ -20,6 +21,11 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
     public void createStudentCouncil(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        if(member.getRole() != MemberRole.USER ) {
+            throw new MemberException(ErrorStatus.MEMBER_ALREADY_COUNCIL_MEMBER);
+        }
+
         member.updateRoleToAdmin();
     }
 
@@ -27,6 +33,11 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
     public void deleteStudentCouncil(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        if(member.getRole() == MemberRole.USER) {
+            throw new MemberException(ErrorStatus.MEMBER_NOT_STUDENT_COUNCIL);
+        }
+
         member.updateRoleToUser();
     }
 }

@@ -40,6 +40,9 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_NOT_PAID(HttpStatus.BAD_REQUEST, "MEMBER_003", "학생회비를 납부하지 않았습니다."),
     MEMBER_HAS_OVERDUE_ITEM(HttpStatus.BAD_REQUEST, "MEMBER_004", "연체된 물품이 존재합니다."),
     MEMBER_ALREADY_RENTED_SAME_CATEGORY(HttpStatus.BAD_REQUEST, "MEMBER_005", "해당 종류의 물품을 이미 대여했습니다."),
+    MEMBER_ALREADY_COUNCIL_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER_006", "이미 학생회 인원입니다."),
+    MEMBER_NOT_STUDENT_COUNCIL(HttpStatus.BAD_REQUEST, "MEMBER_006", "학생회 인원이 아닙니다."),
+
 
     // Auth 에러
     MEMBER_ALREADY_EXIST(HttpStatus.FORBIDDEN, "AUTH_001", "해당 이메일의 회원이 이미 존재합니다"),
