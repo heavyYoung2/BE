@@ -64,7 +64,6 @@ public class EventRestController {
     public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails (
             @PathVariable("eventId")
             @Positive(message = "eventId는 1 이상이어야 합니다.") Long eventId,
-
             @Parameter(hidden = true) @AuthMemberId Long authMemberId
     ) {
         EventResponse.EventInfoDetailDTO eventDetails = eventQueryService.findEventDetails(eventId);
