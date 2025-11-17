@@ -12,6 +12,7 @@ public class RentalRequestDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class QrToken {
+        private Long itemCategoryId;
         private String qrToken;
     }
 }

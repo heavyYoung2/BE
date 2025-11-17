@@ -32,6 +32,7 @@ public class RentalConverter {
 
         return RentalResponseDTO.RentalHistory.builder()
                 .rentalHistoryId(itemRentalHistory.getId())
+                .itemCategoryId(itemRentalHistory.getItem().getItemCategory().getId())
                 .itemName(itemRentalHistory.getItem().getItemCategory().getItemCategoryName())
                 .studentId(itemRentalHistory.getMember().getStudentId())
                 .studentName(itemRentalHistory.getMember().getStudentName())

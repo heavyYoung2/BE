@@ -42,8 +42,14 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
     @Override
     public void rentalByQr(RentalRequestDTO.QrToken rentalQrToken) {
 
+        Long itemCategoryId = rentalQrToken.getItemCategoryId();
         String qrToken = rentalQrToken.getQrToken();
         RentalPayload qrPayload = (RentalPayload) qrManager.decodeQrToken(QrType.RENTAL, qrToken);
+
+        // itemCategoryId 불일치 예외 처리
+        if (!itemCategoryId.equals(qrPayload.getItemCategoryId())) {
+            throw new RentalException(ErrorStatus.RENTAL_NOT_EQUAL);
+        }
 
         // 블랙리스트인지 확인
         if (qrPayload.isBlacklisted()) {
@@ -93,12 +99,26 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
 
     @Override
     public void returnByQr(RentalRequestDTO.QrToken request) {
+
+        Long itemCategoryId = request.getItemCategoryId();
         ReturnPayload qrPayload = (ReturnPayload) qrManager.decodeQrToken(QrType.RETURN_ITEM, request.getQrToken());
+
+        // itemCategoryId 불일치 예외 처리
+        ItemRentalHistory itemRentalHistory = itemRentalHistoryRepository.findById(qrPayload.getRentalHistoryId())
+                .orElseThrow(() -> new ItemRentalHistoryException(ErrorStatus.ITEM_RENTAL_HISTORY_NOT_FOUND));
+
+        // 반납하려는 물품과 QR 토큰의 물품이 일치하는지 확인
+        if(!itemRentalHistory.getItem().getItemCategory().getId().equals(itemCategoryId)){
+            throw new RentalException(ErrorStatus.RETURN_NOT_EQUAL);
+        }
+
+        // 반납 처리 공통 메서드 호출
         processReturn(qrPayload.getRentalHistoryId());
     }
 
     @Override
     public void manualReturn(Long rentalHistoryId) {
+        // 반납 처리 공통 메서드 호출
         processReturn(rentalHistoryId);
     }
 

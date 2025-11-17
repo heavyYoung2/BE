@@ -80,6 +80,10 @@ public enum ErrorStatus implements BaseErrorCode {
     ITEM_RENTAL_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_RENTAL_HISTORY_001", "해당 대여 기록이 존재하지 않습니다."),
     ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다."),
 
+    // Rental 에러
+    RENTAL_NOT_EQUAL(HttpStatus.BAD_REQUEST, "RENTAL_001", "대여 물품이 일치하지 않습니다."),
+    RETURN_NOT_EQUAL(HttpStatus.BAD_REQUEST, "RENTAL_002", "반납 물품이 일치하지 않습니다."),
+
     // Email 에러
     EMAIL_NOT_SENT(HttpStatus.NOT_FOUND, "EMAIL_001", "이메일이 전송되지 않았습니다."),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL_002", "해당 이메일로 인증 코드가 전송되지 않았습니다."),

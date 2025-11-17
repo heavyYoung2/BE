@@ -34,6 +34,7 @@ public class RentalResponseDTO {
     @NoArgsConstructor
     public static class RentalHistory {
         private Long rentalHistoryId;
+        private Long itemCategoryId;
         private String itemName;
         private String studentId;
         private String studentName;
