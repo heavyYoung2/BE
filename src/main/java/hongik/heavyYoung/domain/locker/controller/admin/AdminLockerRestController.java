@@ -129,7 +129,7 @@ public class AdminLockerRestController {
             @Parameter(description = "학번", example = "C011117")
             @RequestParam(value = "studentId", required = false) String studentId
     ) {
-        adminLockerCommandService.changLockerUsing(lockerId, studentId);
+        adminLockerCommandService.changeLockerUsing(lockerId, studentId);
         return ApiResponse.onSuccess(null);
     }
 }

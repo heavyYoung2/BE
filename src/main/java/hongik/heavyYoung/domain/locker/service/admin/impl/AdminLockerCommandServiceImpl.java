@@ -110,7 +110,7 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
     }
 
     @Override
-    public void changLockerUsing(Long lockerId, String studentId) {
+    public void changeLockerUsing(Long lockerId, String studentId) {
         Locker locker = lockerRepository.findById(lockerId)
                 .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_NOT_FOUND));
 
@@ -121,9 +121,8 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
                 Member member = memberRepository.findByStudentId(studentId)
                         .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-                LockerAssignment currentLockerAssignment = lockerAssignmentRepository.findTopByOrderByAssignSemesterDesc()
-                        .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_ASSIGNMENT_NOT_FOUND));
-                String currentSemester = currentLockerAssignment.getAssignSemester();
+                String currentSemester = lockerAssignmentRepository.findCurrentSemester()
+                        .orElseThrow(() -> new LockerException(ErrorStatus.CURRENT_SEMESTER_NOT_FOUND));
 
                 LockerAssignment lockerAssignment = LockerConverter.toLockerAssignmentForLockerAdditional(member, locker, currentSemester);
                 lockerAssignmentRepository.save(lockerAssignment);

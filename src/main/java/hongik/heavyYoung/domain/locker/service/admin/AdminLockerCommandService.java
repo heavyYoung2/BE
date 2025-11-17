@@ -9,5 +9,5 @@ public interface AdminLockerCommandService {
     void finishLockerApplication(Long lockerApplicationId);
     void changeLockerNotAvailable(Long lockerId);
     void changeLockerAvailable(Long lockerId);
-    void changLockerUsing(Long lockerId, String studentId);
+    void changeLockerUsing(Long lockerId, String studentId);
 }
