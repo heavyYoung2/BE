@@ -31,4 +31,8 @@ public class LockerAssignment extends BaseEntity {
     @Column(name = "is_current_semester", nullable = false)
     @Builder.Default
     private boolean isCurrentSemester = true;
+
+    public void updateIsCurrentSemesterToFalse() {
+        this.isCurrentSemester = false;
+    }
 }

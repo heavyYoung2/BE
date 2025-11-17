@@ -7,4 +7,7 @@ public interface AdminLockerCommandService {
     void returnCurrentSemesterLockers();
     void assignLockersByApplication(Long lockerApplicationId);
     void finishLockerApplication(Long lockerApplicationId);
+    void changeLockerNotAvailable(Long lockerId);
+    void changeLockerAvailable(Long lockerId);
+    void changLockerUsing(Long lockerId, String studentId);
 }

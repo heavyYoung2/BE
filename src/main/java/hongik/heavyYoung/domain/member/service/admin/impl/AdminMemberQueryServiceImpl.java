@@ -23,7 +23,8 @@ public class AdminMemberQueryServiceImpl implements AdminMemberQueryService {
 
     @Override
     public MemberResponseDTO.StudentCouncilInfo findStudentCouncil() {
-        List<Member> studentCouncilMembers = memberRepository.findAllByRole(MemberRole.ADMIN);
+        List<MemberRole> roles = List.of(MemberRole.ADMIN, MemberRole.OWNER);
+        List<Member> studentCouncilMembers = memberRepository.findAllByRoleIn(roles);
         return MemberConverter.toStudentCouncilInfo(studentCouncilMembers);
     }
 

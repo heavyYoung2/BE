@@ -51,7 +51,7 @@ class LockerRepositoryTest {
         Locker locker3 = Locker.builder()
                 .lockerSection("A")
                 .lockerNumber(3)
-                .lockerStatus(LockerStatus.BROKEN)
+                .lockerStatus(LockerStatus.CANT_USE)
                 .build();
 
         Locker locker4 = Locker.builder()
