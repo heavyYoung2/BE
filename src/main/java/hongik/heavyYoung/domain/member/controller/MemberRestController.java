@@ -29,4 +29,13 @@ public class MemberRestController {
     ) {
         return ApiResponse.onSuccess(memberQueryService.getBlacklist(authMemberId));
     }
+
+    @PreAuthorize("hasRole(\"USER\")")
+    @Operation(summary = "마이페이지 조회")
+    @GetMapping("/me")
+    public ApiResponse<MemberResponseDTO.MyPageInfo> getMyPage(
+            @Parameter(hidden = true) @AuthMemberId Long authMemberId
+    ) {
+        return ApiResponse.onSuccess(memberQueryService.findMyPage(authMemberId));
+    }
 }
