@@ -93,15 +93,26 @@ public class RentalAdminCommandServiceImpl implements RentalAdminCommandService 
 
     @Override
     public void returnByQr(RentalRequestDTO.QrToken request) {
+        ReturnPayload qrPayload = (ReturnPayload) qrManager.decodeQrToken(QrType.RETURN_ITEM, request.getQrToken());
+        processReturn(qrPayload.getRentalHistoryId());
+    }
 
-        String qrToken = request.getQrToken();
-        ReturnPayload qrPayload = (ReturnPayload) qrManager.decodeQrToken(QrType.RETURN_ITEM, qrToken);
+    @Override
+    public void manualReturn(Long rentalHistoryId) {
+        processReturn(rentalHistoryId);
+    }
 
-        Member member = memberRepository.findById(qrPayload.getMemberId())
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
-        ItemRentalHistory itemRentalHistory = itemRentalHistoryRepository.findById(qrPayload.getRentalHistoryId())
+    /**
+     * rentalHistoryId 기준으로 물품 반납을 처리하는 공통 메서드.
+     * - 대여 이력 조회 및 검증
+     * - 반납 처리
+     * - 수량 복구 및 연체 시 블랙리스트 반영
+     */
+    private void processReturn(Long rentalHistoryId) {
+        ItemRentalHistory itemRentalHistory = itemRentalHistoryRepository.findById(rentalHistoryId)
                 .orElseThrow(() -> new ItemRentalHistoryException(ErrorStatus.ITEM_RENTAL_HISTORY_NOT_FOUND));
+
+        Member member = itemRentalHistory.getMember();
 
         // 이미 반납한 물품 예외 처리
         if (itemRentalHistory.getReturnedAt() != null) {

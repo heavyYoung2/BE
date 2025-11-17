@@ -38,4 +38,11 @@ public class RentalAdminRestController {
         rentalAdminCommandService.returnByQr(request);
         return ApiResponse.onSuccess(null);
     }
+
+    @Operation(summary = "물품 수동 반납")
+    @PostMapping("/{rental-history-id}/return")
+    public ApiResponse<?> manualReturn (@PathVariable("rental-history-id") Long rentalHistoryId) {
+        rentalAdminCommandService.manualReturn(rentalHistoryId);
+        return ApiResponse.onSuccess(null);
+    }
 }
