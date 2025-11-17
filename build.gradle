@@ -18,6 +18,9 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    all {
+        exclude group: "io.swagger.core.v3", module: "swagger-annotations"
+    }
 }
 
 repositories {
@@ -69,9 +72,8 @@ dependencies {
     // Email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-
-
-
+    // Spring AI
+    implementation 'org.springframework.ai:spring-ai-starter-model-openai:1.0.0'
 }
 
 tasks.named('test') {

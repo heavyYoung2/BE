@@ -88,7 +88,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // S3 에러
     S3_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3_001", "이미지 업로드 중 오류가 발생했습니다."),
-    S3_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3_002", "이미지 삭제 중 오류가 발생했습니다.");
+    S3_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3_002", "이미지 삭제 중 오류가 발생했습니다."),
+
+    // 채팅 관련
+    INVALID_API_KEY(HttpStatus.UNAUTHORIZED, "CHAT4001", "API 키가 잘못됐습니다."),
+    QUOTA_EXCEEDED(HttpStatus.FORBIDDEN, "CHAT4002", "API 쿼터가 모두 소진되었습니다."),
+    OPEN_AI_SERVER_ERROR(HttpStatus.BAD_GATEWAY, "CHAT4003", "OpenAI 서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
 
     private final HttpStatus httpStatus;
     private final String code;
