@@ -38,6 +38,10 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
             throw new MemberException(ErrorStatus.MEMBER_NOT_STUDENT_COUNCIL);
         }
 
+        if(member.getRole() == MemberRole.OWNER) {
+            throw new MemberException(ErrorStatus.CANNOT_DELETE_OWNER);
+        }
+
         member.updateRoleToUser();
     }
 }

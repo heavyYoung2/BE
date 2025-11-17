@@ -41,7 +41,8 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_HAS_OVERDUE_ITEM(HttpStatus.BAD_REQUEST, "MEMBER_004", "연체된 물품이 존재합니다."),
     MEMBER_ALREADY_RENTED_SAME_CATEGORY(HttpStatus.BAD_REQUEST, "MEMBER_005", "해당 종류의 물품을 이미 대여했습니다."),
     MEMBER_ALREADY_COUNCIL_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER_006", "이미 학생회 인원입니다."),
-    MEMBER_NOT_STUDENT_COUNCIL(HttpStatus.BAD_REQUEST, "MEMBER_006", "학생회 인원이 아닙니다."),
+    MEMBER_NOT_STUDENT_COUNCIL(HttpStatus.BAD_REQUEST, "MEMBER_007", "학생회 인원이 아닙니다."),
+    CANNOT_DELETE_OWNER(HttpStatus.BAD_REQUEST, "MEMBER_008", "최고 관리자는 삭제할 수 없습니다."),
 
 
     // Auth 에러
