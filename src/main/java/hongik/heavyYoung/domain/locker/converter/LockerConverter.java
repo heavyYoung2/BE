@@ -38,6 +38,7 @@ public class LockerConverter {
                 .member(member)
                 .locker(locker)
                 .assignSemester(semester)
+                .isCurrentSemester(true)
                 .build();
     }
 

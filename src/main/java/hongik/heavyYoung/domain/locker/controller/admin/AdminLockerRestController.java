@@ -8,6 +8,7 @@ import hongik.heavyYoung.domain.locker.service.admin.AdminLockerQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.LockerException;
+import hongik.heavyYoung.global.security.auth.AuthMemberId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -100,6 +101,35 @@ public class AdminLockerRestController {
     @PatchMapping("/return")
     public ApiResponse<Void> returnLockers() {
         adminLockerCommandService.returnCurrentSemesterLockers();
+        return ApiResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "사물함 상태 사용불가로 변경")
+    @PatchMapping("/{lockerId}/unavailable")
+    public ApiResponse<Void> makeLockerNotAvailable(
+            @PathVariable("lockerId") Long lockerId
+    ) {
+        adminLockerCommandService.changeLockerNotAvailable(lockerId);
+        return ApiResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "사물함 상태 사용가능으로 변경")
+    @PatchMapping("/{lockerId}/available")
+    public ApiResponse<Void> makeLockerAvailable(
+            @PathVariable("lockerId") Long lockerId
+    ) {
+        adminLockerCommandService.changeLockerAvailable(lockerId);
+        return ApiResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "사물함 상태 사용중으로 변경(수동배정)")
+    @PatchMapping("/{lockerId}/using")
+    public ApiResponse<Void> makeLockerUsing(
+            @PathVariable("lockerId") Long lockerId,
+            @Parameter(description = "학번", example = "C011117")
+            @RequestParam(value = "studentId", required = false) String studentId
+    ) {
+        adminLockerCommandService.changeLockerUsing(lockerId, studentId);
         return ApiResponse.onSuccess(null);
     }
 }

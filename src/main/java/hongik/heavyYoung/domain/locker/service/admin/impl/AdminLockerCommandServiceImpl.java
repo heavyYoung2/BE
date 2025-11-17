@@ -13,8 +13,11 @@ import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.locker.repository.LockerAssignmentRepository;
 import hongik.heavyYoung.domain.locker.repository.LockerRepository;
 import hongik.heavyYoung.domain.locker.service.admin.AdminLockerCommandService;
+import hongik.heavyYoung.domain.member.entity.Member;
+import hongik.heavyYoung.domain.member.repository.MemberRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.LockerException;
+import hongik.heavyYoung.global.exception.customException.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +34,7 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
     private final LockerRepository lockerRepository;
     private final LockerAssignmentRepository lockerAssignmentRepository;
     private final MemberApplicationRepository memberApplicationRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public void addLockerApplication(LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO) {
@@ -58,6 +62,78 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
                 .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_FOUND));
         lockerApplication.updateCanApplyToFalse();
     }
+
+    @Override
+    public void changeLockerNotAvailable(Long lockerId) {
+        Locker locker = lockerRepository.findById(lockerId)
+                .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_NOT_FOUND));
+
+        LockerStatus currentLockerStatus = locker.getLockerStatus();
+
+        switch (currentLockerStatus) {
+            case AVAILABLE -> {
+            }
+            case IN_USE -> {
+                LockerAssignment lockerAssignment = lockerAssignmentRepository
+                        .findByLocker_IdAndIsCurrentSemesterTrue(lockerId)
+                        .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_ASSIGNMENT_NOT_FOUND));
+
+                lockerAssignment.updateIsCurrentSemesterToFalse();
+            }
+            case CANT_USE -> throw new LockerException(ErrorStatus.LOCKER_ALREADY_CANT_USE);
+        }
+
+        locker.updateLockerStatus(LockerStatus.CANT_USE);
+    }
+
+    @Override
+    public void changeLockerAvailable(Long lockerId) {
+        Locker locker = lockerRepository.findById(lockerId)
+                .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_NOT_FOUND));
+
+        LockerStatus currentLockerStatus = locker.getLockerStatus();
+
+        switch (currentLockerStatus) {
+            case AVAILABLE -> throw new LockerException(ErrorStatus.LOCKER_ALREADY_AVAILABLE);
+            case IN_USE -> {
+                LockerAssignment lockerAssignment = lockerAssignmentRepository
+                        .findByLocker_IdAndIsCurrentSemesterTrue(lockerId)
+                        .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_ASSIGNMENT_NOT_FOUND));
+
+                lockerAssignment.updateIsCurrentSemesterToFalse();
+            }
+            case CANT_USE -> {
+            }
+        }
+
+        locker.updateLockerStatus(LockerStatus.AVAILABLE);
+    }
+
+    @Override
+    public void changeLockerUsing(Long lockerId, String studentId) {
+        Locker locker = lockerRepository.findById(lockerId)
+                .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_NOT_FOUND));
+
+        LockerStatus currentLockerStatus = locker.getLockerStatus();
+
+        switch (currentLockerStatus) {
+            case AVAILABLE -> {
+                Member member = memberRepository.findByStudentId(studentId)
+                        .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+                String currentSemester = lockerAssignmentRepository.findCurrentSemester()
+                        .orElseThrow(() -> new LockerException(ErrorStatus.CURRENT_SEMESTER_NOT_FOUND));
+
+                LockerAssignment lockerAssignment = LockerConverter.toLockerAssignmentForLockerAdditional(member, locker, currentSemester);
+                lockerAssignmentRepository.save(lockerAssignment);
+
+                locker.updateLockerStatus(LockerStatus.IN_USE);
+            }
+            case IN_USE, CANT_USE -> throw new LockerException(ErrorStatus.LOCKER_SHOULD_BE_AVAILABLE);
+        }
+
+    }
+
 
     @Override
     public void assignLockersByApplication(Long lockerApplicationId) {

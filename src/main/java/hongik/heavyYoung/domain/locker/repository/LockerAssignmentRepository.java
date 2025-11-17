@@ -26,4 +26,14 @@ public interface LockerAssignmentRepository extends JpaRepository<LockerAssignme
     order by l.lockerSection asc, l.lockerNumber asc, m.studentId asc
 """)
     List<LockerAssignment> findAllBySemesterWithMemberAndLocker(@Param("semester") String semester);
+
+    Optional<LockerAssignment> findByLocker_IdAndIsCurrentSemesterTrue(Long lockerId);
+
+    @Query("""
+    select la.assignSemester
+    from LockerAssignment  la
+    order by la.assignSemester desc
+    limit 1
+""")
+    Optional<String> findCurrentSemester();
 }
