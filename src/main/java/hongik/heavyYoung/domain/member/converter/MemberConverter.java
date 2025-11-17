@@ -1,7 +1,9 @@
 package hongik.heavyYoung.domain.member.converter;
 
+import hongik.heavyYoung.domain.locker.dto.LockerResponse;
 import hongik.heavyYoung.domain.member.dto.MemberResponseDTO;
 import hongik.heavyYoung.domain.member.entity.Member;
+import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +41,20 @@ public class MemberConverter {
                 .memberId(member.getId())
                 .studentId(member.getStudentId())
                 .studentName(member.getStudentName())
+                .build();
+    }
+
+    public static MemberResponseDTO.MyPageInfo toMyPageInfo(
+            LockerResponse.MyLockerInfoDTO locker,
+            List<RentalResponseDTO.RentalHistory> items,
+            boolean isStudentFeePaid,
+            MemberResponseDTO.BlacklistInfo blacklist
+    ) {
+        return MemberResponseDTO.MyPageInfo.builder()
+                .locker(locker)
+                .items(items)
+                .isStudentFeePaid(isStudentFeePaid)
+                .blacklist(blacklist)
                 .build();
     }
 }

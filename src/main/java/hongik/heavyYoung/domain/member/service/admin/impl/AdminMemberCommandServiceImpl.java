@@ -1,5 +1,7 @@
 package hongik.heavyYoung.domain.member.service.admin.impl;
 
+import hongik.heavyYoung.domain.member.converter.MemberConverter;
+import hongik.heavyYoung.domain.member.dto.MemberResponseDTO;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.enums.MemberRole;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
@@ -18,7 +20,7 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
     private final MemberRepository memberRepository;
 
     @Override
-    public void createStudentCouncil(Long memberId) {
+    public MemberResponseDTO.StudentCouncilCandidateInfo createStudentCouncil(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
@@ -27,6 +29,7 @@ public class AdminMemberCommandServiceImpl implements AdminMemberCommandService 
         }
 
         member.updateRoleToAdmin();
+        return MemberConverter.toStudentCouncilCandidateInfo(member);
     }
 
     @Override

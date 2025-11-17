@@ -34,12 +34,11 @@ public class AdminMemberRestController {
     @PreAuthorize("hasRole(\"ADMIN\")")
     @Operation(summary = "학생회 인원 추가")
     @PatchMapping("/{memberId}/add")
-    public ApiResponse<Void> addStudentCouncil(
+    public ApiResponse<MemberResponseDTO.StudentCouncilCandidateInfo> addStudentCouncil(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @PathVariable("memberId") Long memberId
     ) {
-        adminMemberCommandService.createStudentCouncil(memberId);
-        return ApiResponse.onSuccess(null);
+        return ApiResponse.onSuccess(adminMemberCommandService.createStudentCouncil(memberId));
     }
 
     @PreAuthorize("hasRole(\"ADMIN\")")
