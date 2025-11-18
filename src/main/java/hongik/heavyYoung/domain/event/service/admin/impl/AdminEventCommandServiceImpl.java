@@ -42,6 +42,8 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
 
         Event event = Event.create(createEventCommand);
 
+        eventRepository.save(event);
+
         saveEventImages(event, multipartFiles);
 
         return EventResponseConverter.toEventAddResponseDTO(event);
