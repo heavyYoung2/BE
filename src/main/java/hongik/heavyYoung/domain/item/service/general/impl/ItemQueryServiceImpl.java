@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.item.service.general.imp;
+package hongik.heavyYoung.domain.item.service.general.impl;
 
 import hongik.heavyYoung.domain.item.converter.ItemConverter;
 import hongik.heavyYoung.domain.item.dto.ItemResponseDTO;

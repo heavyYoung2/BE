@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.rental.service.general;
+package hongik.heavyYoung.domain.rental.service.general.impl;
 
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
@@ -7,6 +7,7 @@ import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
 import hongik.heavyYoung.domain.rental.entity.ItemRentalHistory;
 import hongik.heavyYoung.domain.rental.enums.RentalStatus;
 import hongik.heavyYoung.domain.rental.repository.ItemRentalHistoryRepository;
+import hongik.heavyYoung.domain.rental.service.general.RentalQueryService;
 import hongik.heavyYoung.domain.studentFee.service.general.impl.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.MemberException;

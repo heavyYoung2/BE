@@ -1,4 +1,4 @@
-package hongik.heavyYoung.domain.chat.service.imp;
+package hongik.heavyYoung.domain.chat.service.impl;
 
 import hongik.heavyYoung.domain.chat.converter.ChatConverter;
 import hongik.heavyYoung.domain.chat.dto.ChatRequestDTO;
