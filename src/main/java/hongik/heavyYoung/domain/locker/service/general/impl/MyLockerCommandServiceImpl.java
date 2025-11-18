@@ -7,7 +7,7 @@ import hongik.heavyYoung.domain.locker.service.general.MyLockerCommandService;
 import hongik.heavyYoung.domain.locker.service.general.strategy.LockerApplicationStrategy;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
-import hongik.heavyYoung.domain.studentFee.service.StudentFeeStatusService;
+import hongik.heavyYoung.domain.studentFee.service.general.impl.StudentFeeStatusService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.LockerException;
 import hongik.heavyYoung.global.exception.customException.MemberException;
