@@ -27,7 +27,7 @@ public class Event extends BaseEntity {
     private String eventTitle;
 
     @Lob
-    @Column(name = "event_content", nullable = false)
+    @Column(name = "event_content", nullable = false, columnDefinition = "TEXT")
     private String eventContent;
 
     @Column(name = "event_start_date")
