@@ -49,7 +49,7 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_ALREADY_COUNCIL_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER_006", "이미 학생회 인원입니다."),
     MEMBER_NOT_STUDENT_COUNCIL(HttpStatus.BAD_REQUEST, "MEMBER_007", "학생회 인원이 아닙니다."),
     CANNOT_DELETE_OWNER(HttpStatus.BAD_REQUEST, "MEMBER_008", "최고 관리자는 삭제할 수 없습니다."),
-
+    STUDENT_FEE_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_009", "학생회비가 존재하지 않습니다."),
 
     // Auth 에러
     MEMBER_ALREADY_EXIST(HttpStatus.FORBIDDEN, "AUTH_001", "해당 이메일의 회원이 이미 존재합니다"),
@@ -79,6 +79,10 @@ public enum ErrorStatus implements BaseErrorCode {
     // ItemRentalHistory 에러
     ITEM_RENTAL_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_RENTAL_HISTORY_001", "해당 대여 기록이 존재하지 않습니다."),
     ALREADY_RETURN(HttpStatus.BAD_REQUEST, "ITEM_RENTAL_HISTORY_002", "이미 반납된 내역입니다."),
+
+    // Rental 에러
+    RENTAL_NOT_EQUAL(HttpStatus.BAD_REQUEST, "RENTAL_001", "대여 물품이 일치하지 않습니다."),
+    RETURN_NOT_EQUAL(HttpStatus.BAD_REQUEST, "RENTAL_002", "반납 물품이 일치하지 않습니다."),
 
     // Email 에러
     EMAIL_NOT_SENT(HttpStatus.NOT_FOUND, "EMAIL_001", "이메일이 전송되지 않았습니다."),
