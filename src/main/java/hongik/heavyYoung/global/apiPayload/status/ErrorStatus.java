@@ -60,6 +60,8 @@ public enum ErrorStatus implements BaseErrorCode {
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "AUTH_006", "JWT 토큰이 만료되었습니다."),
     INVALID_JWT_FORMAT(HttpStatus.UNAUTHORIZED, "AUTH_007", "JWT 형식이 올바르지 않습니다."),
     AUTH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_008", "접근 권한이 없습니다."),
+    PASSWORD_ALREADY_USED(HttpStatus.BAD_REQUEST, "AUTH_009", "기존에 사용한 비밀번호 입니다. 새로운 비밀번호를 입력해주세요."),
+
 
     // QrToken 에러
     QR_AUTH_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, "QR_001", "QR 토큰 서명이 유효하지 않습니다."),

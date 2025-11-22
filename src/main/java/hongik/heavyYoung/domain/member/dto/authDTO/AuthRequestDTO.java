@@ -86,7 +86,7 @@ public class AuthRequestDTO {
     public static class ChangePasswordRequestDTO {
         @Schema(description = "기존 비밀번호")
         @NotBlank(message = "기존 비밀번호는 필수 입력 값입니다.")
-        private String password;
+        private String originPassword;
 
         @Schema(description = "새 비밀번호")
         @NotBlank(message = "새 비밀번호는 필수 입력 값입니다.")

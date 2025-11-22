@@ -179,14 +179,17 @@ public class AuthService {
     public AuthResponseDTO.ChangePasswordResponseDTO changePassword(Long authMemberId, AuthRequestDTO.ChangePasswordRequestDTO dto) {
         Member member = memberRepository.findById(authMemberId).orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        String originPassword = passwordEncoder.encode(member.getPassword());
 
-        if(!originPassword.equals(dto.getPassword())) {
+        if(!passwordEncoder.matches(dto.getOriginPassword(), member.getPassword())) {
             throw new AuthException(ErrorStatus.INVALID_PASSWORD);
         }
 
         if(!(dto.getNewPassword().equals(dto.getNewPasswordConfirm()))) {
             throw new AuthException(ErrorStatus.PASSWORD_CONFIRM_NOT_MATCH);
+        }
+
+        if(dto.getOriginPassword().equals(dto.getNewPassword())) {
+            throw new AuthException(ErrorStatus.PASSWORD_ALREADY_USED);
         }
 
         member.updatePassword(passwordEncoder.encode(dto.getNewPassword()));
@@ -210,8 +213,4 @@ public class AuthService {
         return email.endsWith("@g.hongik.ac.kr") || email.endsWith("@mail.hongik.ac.kr");
     }
 
-    public AuthResponseDTO.SendCodeResponseDTO issuePasswordVerifyCode(AuthRequestDTO.SendCodeRequestDTO dto) {
-
-
-    }
 }
