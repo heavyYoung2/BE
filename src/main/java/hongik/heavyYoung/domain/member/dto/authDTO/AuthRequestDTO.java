@@ -50,11 +50,11 @@ public class AuthRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AuthLoginRequestDTO {
-        @Schema(description = "이메일",example = "heavyyoung@g.hongik.ac.kr")
+        @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
         @Email(message = "올바른 학교 이메일 형식을 입력해주세요.")
         private String email;
-        @Schema(description = "비밀번호")
+        @Schema(description = "비밀번호", example = "a12345678@")
         @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
         private String password;
     }
