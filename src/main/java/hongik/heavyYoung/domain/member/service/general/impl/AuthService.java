@@ -11,6 +11,7 @@ import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.GeneralException;
 import hongik.heavyYoung.global.exception.customException.AuthException;
 import hongik.heavyYoung.global.jwt.JwtProvider;
+import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -174,6 +175,25 @@ public class AuthService {
         return AuthConverter.toTempPasswordResponseDTO(email);
     }
 
+    @Transactional
+    public AuthResponseDTO.ChangePasswordResponseDTO changePassword(Long authMemberId, AuthRequestDTO.ChangePasswordRequestDTO dto) {
+        Member member = memberRepository.findById(authMemberId).orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        String originPassword = passwordEncoder.encode(member.getPassword());
+
+        if(!originPassword.equals(dto.getPassword())) {
+            throw new AuthException(ErrorStatus.INVALID_PASSWORD);
+        }
+
+        if(!(dto.getNewPassword().equals(dto.getNewPasswordConfirm()))) {
+            throw new AuthException(ErrorStatus.PASSWORD_CONFIRM_NOT_MATCH);
+        }
+
+        member.updatePassword(passwordEncoder.encode(dto.getNewPassword()));
+
+        return AuthConverter.toChangePasswordResponseDTO(member);
+    }
+
     private String generateTempPassword(int length) {
         final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
         SecureRandom random = new SecureRandom();
@@ -188,5 +208,10 @@ public class AuthService {
 
     private boolean isSchoolEmail(String email) {
         return email.endsWith("@g.hongik.ac.kr") || email.endsWith("@mail.hongik.ac.kr");
+    }
+
+    public AuthResponseDTO.SendCodeResponseDTO issuePasswordVerifyCode(AuthRequestDTO.SendCodeRequestDTO dto) {
+
+
     }
 }

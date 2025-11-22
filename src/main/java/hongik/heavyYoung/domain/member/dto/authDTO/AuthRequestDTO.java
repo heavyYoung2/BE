@@ -79,4 +79,22 @@ public class AuthRequestDTO {
         private String code;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChangePasswordRequestDTO {
+        @Schema(description = "기존 비밀번호")
+        @NotBlank(message = "기존 비밀번호는 필수 입력 값입니다.")
+        private String password;
+
+        @Schema(description = "새 비밀번호")
+        @NotBlank(message = "새 비밀번호는 필수 입력 값입니다.")
+        private String newPassword;
+
+        @Schema(description = "새 비밀번호 확인")
+        @NotBlank(message = "새 비밀번호 확인은 필수 입력 값입니다.")
+        private String newPasswordConfirm;
+    }
+
 }
