@@ -36,6 +36,8 @@ public enum ErrorStatus implements BaseErrorCode {
     LOCKER_ALREADY_AVAILABLE(HttpStatus.BAD_REQUEST, "LOCKER_010", "사물함이 이미 사용가능 상태입니다."),
     LOCKER_SHOULD_BE_AVAILABLE(HttpStatus.BAD_REQUEST, "LOCKER_011", "사물함이 사용가능 상태일 때 수동 배정할 수 있습니다."),
     CURRENT_SEMESTER_NOT_FOUND(HttpStatus.NOT_FOUND, "LOCKER_012", "현재 학기가 존재하지 않습니다."),
+    LOCKER_APPLICATION_INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "LOCKER_013", "사물함 신청 시작 일자는 마감 일자보다 나중이어야 합니다."),
+    LOCKER_APPLICATION_SHOULD_BE_ENDED(HttpStatus.BAD_REQUEST, "LOCKER_014", "사물함 신청을 마감한 이후, 배정할 수 있습니다"),
 
     // USER 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_001", "해당 유저가 존재하지 않습니다."),

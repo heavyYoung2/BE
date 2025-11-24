@@ -76,6 +76,11 @@ public class AdminLockerRestController {
             throw new LockerException(ErrorStatus.VALIDATION_ERROR);
         }
 
+        // 사물함 신청 시작일, 마감일 검증 작업
+        if (lockerApplicationAddRequestDTO.getApplicationStartAt().isAfter(lockerApplicationAddRequestDTO.getApplicationEndAt())) {
+            throw new LockerException(ErrorStatus.LOCKER_APPLICATION_INVALID_DATE_FORMAT);
+        }
+
         adminLockerCommandService.addLockerApplication(lockerApplicationAddRequestDTO);
         return ApiResponse.onSuccess(null);
     }

@@ -21,6 +21,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
   WHERE a.applicationType IN :types
     AND a.applicationStartAt <= :now
     AND a.applicationEndAt >= :now
+    AND a.canApply = true
      AND a.applicationMemberCount < a.applicationCanCount
 """)
     Optional<Application> findActiveLockerApplications(@Param("now") LocalDateTime now, @Param("types") Set<ApplicationType> types);

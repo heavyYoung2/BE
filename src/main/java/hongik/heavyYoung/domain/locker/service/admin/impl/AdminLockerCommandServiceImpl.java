@@ -141,6 +141,10 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
         Application lockerApplication = applicationRepository.findById(lockerApplicationId)
                 .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_FOUND));
 
+        if(lockerApplication.isCanApply()) {
+            throw new LockerException(ErrorStatus.LOCKER_APPLICATION_SHOULD_BE_ENDED);
+        }
+
         if(!lockerApplication.isCanAssign()) {
             throw new LockerException(ErrorStatus.CAN_NOT_ASSIGN);
         }
