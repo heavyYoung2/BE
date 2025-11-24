@@ -85,4 +85,16 @@ public class AuthRestController {
         return ApiResponse.onSuccess(response);
     }
 
+
+    @PreAuthorize("hasRole(\"USER\")")
+    @Operation(summary = "비밀번호 변경",
+    description = "기존 비밀번호, 새 비밀번호, 새 비밀번호 확인을 통해 비밀번호를 변경합니다.")
+    @PostMapping("/change-password")
+    public ApiResponse<AuthResponseDTO.ChangePasswordResponseDTO> changePassword(@Parameter(hidden = true) @AuthMemberId Long authMemberId,
+                                                                      @RequestBody @Valid AuthRequestDTO.ChangePasswordRequestDTO dto) {
+        AuthResponseDTO.ChangePasswordResponseDTO response = authService.changePassword(authMemberId, dto);
+        return ApiResponse.onSuccess(response);
+    }
+
+
 }

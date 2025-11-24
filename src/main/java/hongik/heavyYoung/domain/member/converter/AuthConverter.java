@@ -56,4 +56,9 @@ public class AuthConverter {
                 .message("임시 비밀번호가 발급되었습니다. 이메일을 확인하세요.")
                 .build();
     }
+
+    public static AuthResponseDTO.ChangePasswordResponseDTO toChangePasswordResponseDTO(Member member) {
+        return AuthResponseDTO.ChangePasswordResponseDTO.builder()
+                .memberId(member.getId()).build();
+    }
 }

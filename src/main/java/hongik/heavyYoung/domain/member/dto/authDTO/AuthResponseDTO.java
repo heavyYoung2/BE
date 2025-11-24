@@ -77,4 +77,13 @@ public class AuthResponseDTO {
         @Schema(description = "결과 메시지", example = "임시 비밀번호가 발급되었습니다.")
         private String message;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChangePasswordResponseDTO {
+        @Schema(description = "회원 PK")
+        private Long memberId;
+    }
 }

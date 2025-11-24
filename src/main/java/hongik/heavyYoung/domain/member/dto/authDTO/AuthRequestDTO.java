@@ -3,6 +3,7 @@ package hongik.heavyYoung.domain.member.dto.authDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 public class AuthRequestDTO {
@@ -19,6 +20,10 @@ public class AuthRequestDTO {
 
         @Schema(description = "비밀번호")
         @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
+        @Pattern(
+                regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,}$",
+                message = "비밀번호는 8자 이상이며, 영문/숫자/특수문자를 최소 1개씩 포함해야 합니다."
+        )
         private String password;
 
         @Schema(description = "비밀번호 확인")
@@ -45,11 +50,11 @@ public class AuthRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AuthLoginRequestDTO {
-        @Schema(description = "이메일",example = "heavyyoung@g.hongik.ac.kr")
+        @Schema(description = "이메일", example = "heavyyoung@g.hongik.ac.kr")
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
         @Email(message = "올바른 학교 이메일 형식을 입력해주세요.")
         private String email;
-        @Schema(description = "비밀번호")
+        @Schema(description = "비밀번호", example = "a12345678@")
         @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
         private String password;
     }
@@ -77,6 +82,28 @@ public class AuthRequestDTO {
         @Schema(description = "전송된 인증코드", example = "1234")
         @NotBlank(message = "인증 코드는 필수 입력 값입니다.")
         private String code;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChangePasswordRequestDTO {
+        @Schema(description = "기존 비밀번호")
+        @NotBlank(message = "기존 비밀번호는 필수 입력 값입니다.")
+        private String originPassword;
+
+        @Schema(description = "새 비밀번호")
+        @NotBlank(message = "새 비밀번호는 필수 입력 값입니다.")
+        @Pattern(
+                regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,}$",
+                message = "비밀번호는 8자 이상이며, 영문/숫자/특수문자를 최소 1개씩 포함해야 합니다."
+        )
+        private String newPassword;
+
+        @Schema(description = "새 비밀번호 확인")
+        @NotBlank(message = "새 비밀번호 확인은 필수 입력 값입니다.")
+        private String newPasswordConfirm;
     }
 
 }
