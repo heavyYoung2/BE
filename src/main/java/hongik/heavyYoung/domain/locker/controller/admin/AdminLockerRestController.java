@@ -1,8 +1,8 @@
 package hongik.heavyYoung.domain.locker.controller.admin;
 
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
-import hongik.heavyYoung.domain.locker.dto.LockerRequest;
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerRequestDTO;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.service.admin.AdminLockerCommandService;
 import hongik.heavyYoung.domain.locker.service.admin.AdminLockerQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
@@ -35,21 +35,21 @@ public class AdminLockerRestController {
     @PreAuthorize("hasRole(\"ADMIN\")")
     @Operation(summary = "사물함 신청 전체 조회")
     @GetMapping("/applications")
-    public ApiResponse<List<LockerResponse.LockerApplicationInfoDTO>> getAllLockerApplication(
+    public ApiResponse<List<LockerResponseDTO.LockerApplicationInfoDTO>> getAllLockerApplication(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId
     ) {
-        List<LockerResponse.LockerApplicationInfoDTO> allLockerApplication = adminLockerQueryService.findAllLockerApplication();
+        List<LockerResponseDTO.LockerApplicationInfoDTO> allLockerApplication = adminLockerQueryService.findAllLockerApplication();
         return ApiResponse.onSuccess(allLockerApplication);
     }
 
     @PreAuthorize("hasRole(\"ADMIN\")")
     @Operation(summary = "사물함 신청 내역 상세 조회")
     @GetMapping("/applications/{lockerApplicationId}")
-    public ApiResponse<LockerResponse.LockerApplicationDetailInfoDTO> getLockerApplicationDetail(
+    public ApiResponse<LockerResponseDTO.LockerApplicationDetailInfoDTO> getLockerApplicationDetail(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @PathVariable("lockerApplicationId") Long lockerApplicationId
     ) {
-        LockerResponse.LockerApplicationDetailInfoDTO lockerApplicationDetail = adminLockerQueryService.findLockerApplicationDetail(lockerApplicationId);
+        LockerResponseDTO.LockerApplicationDetailInfoDTO lockerApplicationDetail = adminLockerQueryService.findLockerApplicationDetail(lockerApplicationId);
         return ApiResponse.onSuccess(lockerApplicationDetail);
     }
 
@@ -69,7 +69,7 @@ public class AdminLockerRestController {
     @PostMapping("/applications")
     public ApiResponse<Void> addLockerApplication(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
-            @RequestBody @Valid LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO
+            @RequestBody @Valid LockerRequestDTO.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO
     ) {
         // ApplicationType - Locker 신청 관련 Enum 검증 작업
         if (!ApplicationType.LOCKER.contains(lockerApplicationAddRequestDTO.getApplicationType())) {
@@ -99,13 +99,13 @@ public class AdminLockerRestController {
     @PreAuthorize("hasRole(\"ADMIN\")")
     @Operation(summary = "해당 학기 사물함 배정 내역 조회, default 값은 가장 최신 학기")
     @GetMapping("/applications/assign")
-    public ApiResponse<List<LockerResponse.LockerAssignmentInfoDTO>> getLockerAssignments(
+    public ApiResponse<List<LockerResponseDTO.LockerAssignmentInfoDTO>> getLockerAssignments(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @Parameter(description = "학기", example = "2025-1")
             @Pattern(regexp = "^[0-9]{4}-[1-2]$", message = "학기 형식은 'YYYY-1' 또는 'YYYY-2' 여야 합니다.")
             @RequestParam(value = "semester", required = false) String semester
     ) {
-        List<LockerResponse.LockerAssignmentInfoDTO> lockerAssignmentInfoDTOs = adminLockerQueryService.findLockerAssignments(semester);
+        List<LockerResponseDTO.LockerAssignmentInfoDTO> lockerAssignmentInfoDTOs = adminLockerQueryService.findLockerAssignments(semester);
         return ApiResponse.onSuccess(lockerAssignmentInfoDTOs);
     }
 

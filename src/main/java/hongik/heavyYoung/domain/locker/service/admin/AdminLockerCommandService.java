@@ -1,9 +1,9 @@
 package hongik.heavyYoung.domain.locker.service.admin;
 
-import hongik.heavyYoung.domain.locker.dto.LockerRequest;
+import hongik.heavyYoung.domain.locker.dto.LockerRequestDTO;
 
 public interface AdminLockerCommandService {
-    void addLockerApplication(LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO);
+    void addLockerApplication(LockerRequestDTO.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO);
     void returnCurrentSemesterLockers();
     void assignLockersByApplication(Long lockerApplicationId);
     void finishLockerApplication(Long lockerApplicationId);

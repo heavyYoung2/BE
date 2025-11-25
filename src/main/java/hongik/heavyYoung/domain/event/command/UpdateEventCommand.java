@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.event.command;
 
-import hongik.heavyYoung.domain.event.dto.EventRequest;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.EventException;
 
@@ -12,7 +12,7 @@ public record UpdateEventCommand (
         LocalDate startDate,
         LocalDate endDate
 ) {
-    public static UpdateEventCommand from(EventRequest.EventPutRequestDTO eventPutRequestDTO) {
+    public static UpdateEventCommand from(EventRequestDTO.EventPutRequestDTO eventPutRequestDTO) {
         UpdateEventCommand updateEventCommand = new UpdateEventCommand(
                 eventPutRequestDTO.getTitle(),
                 eventPutRequestDTO.getContent(),

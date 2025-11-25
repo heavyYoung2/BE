@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class LockerRequest {
+public class LockerRequestDTO {
 
     // 사물함 신청 생성 요청 DTO
     @Getter

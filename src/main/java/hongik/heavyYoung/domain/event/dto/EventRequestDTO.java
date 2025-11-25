@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-public class EventRequest {
+public class EventRequestDTO {
     // 공지사항 생성 요청 DTO
     @Getter
     @Setter

@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.event.controller.general;
 
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.service.general.EventQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
@@ -31,7 +31,7 @@ public class EventRestController {
     @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "공지사항 조회")
     @GetMapping("")
-    public ApiResponse<List<EventResponse.EventInfoDTO>> getEvents (
+    public ApiResponse<List<EventResponseDTO.EventInfoDTO>> getEvents (
             @Parameter(description = "시작일 (yyyy-MM-dd)", example = "2025-09-01")
             @RequestParam(value = "from", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -54,19 +54,19 @@ public class EventRestController {
             throw new GeneralException(ErrorStatus.INVALID_DATE_RANGE);
         }
 
-        List<EventResponse.EventInfoDTO> allEvents = eventQueryService.findEvents(from, to);
+        List<EventResponseDTO.EventInfoDTO> allEvents = eventQueryService.findEvents(from, to);
         return ApiResponse.onSuccess(allEvents);
     }
 
     @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "공지사항 상세 조회")
     @GetMapping("/{eventId}")
-    public ApiResponse<EventResponse.EventInfoDetailDTO> getEventDetails (
+    public ApiResponse<EventResponseDTO.EventInfoDetailDTO> getEventDetails (
             @PathVariable("eventId")
             @Positive(message = "eventId는 1 이상이어야 합니다.") Long eventId,
             @Parameter(hidden = true) @AuthMemberId Long authMemberId
     ) {
-        EventResponse.EventInfoDetailDTO eventDetails = eventQueryService.findEventDetails(eventId);
+        EventResponseDTO.EventInfoDetailDTO eventDetails = eventQueryService.findEventDetails(eventId);
         return ApiResponse.onSuccess(eventDetails);
     }
 }

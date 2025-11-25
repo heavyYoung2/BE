@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.event.service.general.impl;
 
 import hongik.heavyYoung.domain.event.converter.EventResponseConverter;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import hongik.heavyYoung.domain.event.service.general.EventQueryService;
@@ -30,7 +30,7 @@ public class EventQueryServiceImpl implements EventQueryService {
      * @return 조회된 공지사항(Event) 정보 리스트
      */
     @Override
-    public List<EventResponse.EventInfoDTO> findEvents(LocalDate from, LocalDate to) {
+    public List<EventResponseDTO.EventInfoDTO> findEvents(LocalDate from, LocalDate to) {
         List<Event> allEvents;
 
         // 시작일, 종료일이 전달된 경우 (기간별 조회)
@@ -53,7 +53,7 @@ public class EventQueryServiceImpl implements EventQueryService {
      * @throws EventException 해당 ID의 공지사항이 존재하지 않을 경우 발생
      */
     @Override
-    public EventResponse.EventInfoDetailDTO findEventDetails(Long id) {
+    public EventResponseDTO.EventInfoDetailDTO findEventDetails(Long id) {
         Event event = eventRepository.findByIdWithImages(id)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
 

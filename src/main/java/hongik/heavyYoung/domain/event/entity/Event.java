@@ -2,7 +2,6 @@ package hongik.heavyYoung.domain.event.entity;
 
 import hongik.heavyYoung.domain.event.command.CreateEventCommand;
 import hongik.heavyYoung.domain.event.command.UpdateEventCommand;
-import hongik.heavyYoung.domain.event.dto.EventRequest;
 import hongik.heavyYoung.global.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

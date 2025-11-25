@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.locker.controller.general;
 
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
 import hongik.heavyYoung.domain.locker.service.general.MyLockerCommandService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
@@ -29,24 +29,24 @@ public class LockerRestController {
     @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "사물함 전체 조회")
     @GetMapping
-    public ApiResponse<List<LockerResponse.LockerInfoDTO>> getAllLockers(
+    public ApiResponse<List<LockerResponseDTO.LockerInfoDTO>> getAllLockers(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @Parameter(description = "사물함 구역", example = "A", required = true)
             @RequestParam(value = "lockerSection")
             @Pattern(regexp = "^[A-I]$", message = "사물함 구역은 A부터 I까지 가능합니다.")
             String lockerSection
     ) {
-        List<LockerResponse.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection, authMemberId);
+        List<LockerResponseDTO.LockerInfoDTO> allLockers = lockerQueryService.findAllLockers(lockerSection, authMemberId);
         return ApiResponse.onSuccess(allLockers);
     }
 
     @PreAuthorize("hasRole(\"USER\")")
     @Operation(summary = "나의 사물함 조회")
     @GetMapping("/me")
-    public ApiResponse<LockerResponse.MyLockerInfoDTO> getMyLocker(
+    public ApiResponse<LockerResponseDTO.MyLockerInfoDTO> getMyLocker(
             @Parameter(hidden = true) @AuthMemberId Long authMemberId
     ) {
-        LockerResponse.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker(authMemberId);
+        LockerResponseDTO.MyLockerInfoDTO myLocker = lockerQueryService.findMyLocker(authMemberId);
         return ApiResponse.onSuccess(myLocker);
     }
 

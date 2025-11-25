@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.member.converter;
 
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.member.dto.MemberResponseDTO;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
@@ -45,7 +45,7 @@ public class MemberConverter {
     }
 
     public static MemberResponseDTO.MyPageInfo toMyPageInfo(
-            LockerResponse.MyLockerInfoDTO locker,
+            LockerResponseDTO.MyLockerInfoDTO locker,
             List<RentalResponseDTO.RentalHistory> items,
             boolean isStudentFeePaid,
             MemberResponseDTO.BlacklistInfo blacklist

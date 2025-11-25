@@ -1,8 +1,7 @@
 package hongik.heavyYoung.domain.member.dto;
 
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.rental.dto.RentalResponseDTO;
-import hongik.heavyYoung.domain.studentFee.dto.StudentFeeResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,7 +55,7 @@ public class MemberResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MyPageInfo {
-        private LockerResponse.MyLockerInfoDTO locker;
+        private LockerResponseDTO.MyLockerInfoDTO locker;
         private List<RentalResponseDTO.RentalHistory> items;
         private boolean isStudentFeePaid;
         private BlacklistInfo blacklist;

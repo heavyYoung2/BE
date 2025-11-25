@@ -6,7 +6,7 @@ import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.application.repository.ApplicationRepository;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
 import hongik.heavyYoung.domain.locker.converter.LockerConverter;
-import hongik.heavyYoung.domain.locker.dto.LockerRequest;
+import hongik.heavyYoung.domain.locker.dto.LockerRequestDTO;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
@@ -37,7 +37,7 @@ public class AdminLockerCommandServiceImpl implements AdminLockerCommandService 
     private final MemberRepository memberRepository;
 
     @Override
-    public void addLockerApplication(LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO) {
+    public void addLockerApplication(LockerRequestDTO.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO) {
         // 현재 진행중인 사물함 신청이 있는 경우 생성 불가
         if (applicationRepository.findActiveLockerApplications(LocalDateTime.now(), ApplicationType.LOCKER).isPresent()) {
             throw new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_ENDED);

@@ -1,8 +1,8 @@
 package hongik.heavyYoung.domain.member.controller.general;
 
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
-import hongik.heavyYoung.domain.member.service.general.impl.AuthService;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.service.general.AuthService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.security.auth.AuthMemberId;
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,17 +82,6 @@ public class AuthRestController {
             @RequestParam("email") String email
     ) {
         AuthResponseDTO.TempPasswordResponseDTO response = authService.issueTemporaryPassword(email);
-        return ApiResponse.onSuccess(response);
-    }
-
-
-    @PreAuthorize("hasRole(\"USER\")")
-    @Operation(summary = "비밀번호 변경",
-    description = "기존 비밀번호, 새 비밀번호, 새 비밀번호 확인을 통해 비밀번호를 변경합니다.")
-    @PostMapping("/change-password")
-    public ApiResponse<AuthResponseDTO.ChangePasswordResponseDTO> changePassword(@Parameter(hidden = true) @AuthMemberId Long authMemberId,
-                                                                      @RequestBody @Valid AuthRequestDTO.ChangePasswordRequestDTO dto) {
-        AuthResponseDTO.ChangePasswordResponseDTO response = authService.changePassword(authMemberId, dto);
         return ApiResponse.onSuccess(response);
     }
 

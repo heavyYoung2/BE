@@ -4,7 +4,7 @@ import hongik.heavyYoung.domain.application.entity.Application;
 import hongik.heavyYoung.domain.application.entity.MemberApplication;
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
@@ -108,7 +108,7 @@ class LockerQueryServiceImplTest {
         given(lockerRepository.findAllWithCurrentSemesterAssign("A")).willReturn(lockers);
 
         // when
-        List<LockerResponse.LockerInfoDTO> result = lockerQueryService.findAllLockers("A", loginMemberId);
+        List<LockerResponseDTO.LockerInfoDTO> result = lockerQueryService.findAllLockers("A", loginMemberId);
 
         // then
         assertEquals(result.getFirst().getLockerNumber(), "A1");
@@ -162,7 +162,7 @@ class LockerQueryServiceImplTest {
         given(lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(loginMemberId)).willReturn(Optional.ofNullable(lockerAssignment1));
 
         // when
-        LockerResponse.MyLockerInfoDTO result = lockerQueryService.findMyLocker(loginMemberId);
+        LockerResponseDTO.MyLockerInfoDTO result = lockerQueryService.findMyLocker(loginMemberId);
 
         // then
         assertEquals(result.getLockerId(), locker1.getId());
@@ -209,7 +209,7 @@ class LockerQueryServiceImplTest {
         given(memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(loginMemberId, ApplicationType.LOCKER_MAIN)).willReturn(true);
 
         // when
-        LockerResponse.MyLockerInfoDTO result = lockerQueryService.findMyLocker(loginMemberId);
+        LockerResponseDTO.MyLockerInfoDTO result = lockerQueryService.findMyLocker(loginMemberId);
 
         // then
         assertNull(result.getLockerId());
@@ -238,7 +238,7 @@ class LockerQueryServiceImplTest {
         given(memberApplicationRepository.existsByMember_IdAndApplication_CanAssignTrueAndApplication_ApplicationType(loginMemberId, ApplicationType.LOCKER_MAIN)).willReturn(false);
 
         // when
-        LockerResponse.MyLockerInfoDTO result = lockerQueryService.findMyLocker(loginMemberId);
+        LockerResponseDTO.MyLockerInfoDTO result = lockerQueryService.findMyLocker(loginMemberId);
 
         // then
         assertNull(result.getLockerId());

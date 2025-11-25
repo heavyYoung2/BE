@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.event.service.admin.impl;
 
-import hongik.heavyYoung.domain.event.dto.EventRequest;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
@@ -36,7 +36,7 @@ class AdminEventCommandServiceImplTest {
     @DisplayName("공지사항 생성 성공")
     void createEvent_success() {
         // given
-        EventRequest.EventAddRequestDTO eventAddRequestDTO = EventRequest.EventAddRequestDTO.builder()
+        EventRequestDTO.EventAddRequestDTO eventAddRequestDTO = EventRequestDTO.EventAddRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부 일정")
                 .eventStartDate(LocalDate.of(2025, 9, 1))
@@ -54,7 +54,7 @@ class AdminEventCommandServiceImplTest {
         given(eventRepository.save(any(Event.class))).willReturn(fakeSavedEvent);
 
         // when
-        EventResponse.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO);
+        EventResponseDTO.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO);
 
         // then
         assertThat(eventAddResponseDTO.getEventId()).isEqualTo(1L);
@@ -112,7 +112,7 @@ class AdminEventCommandServiceImplTest {
                 .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
-        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+        EventRequestDTO.EventPutRequestDTO eventPutRequestDTO = EventRequestDTO.EventPutRequestDTO.builder()
                 .title("수정된행사")
                 .content("수정된행사 세부 일정")
                 .eventStartDate(LocalDate.of(2025, 10, 1))
@@ -122,7 +122,7 @@ class AdminEventCommandServiceImplTest {
         given(eventRepository.findById(eventId)).willReturn(Optional.of(event));
 
         // when
-        EventResponse.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO);
+        EventResponseDTO.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO);
 
         // then
         assertThat(eventPutResponseDTO.getEventId()).isEqualTo(1L);
@@ -140,7 +140,7 @@ class AdminEventCommandServiceImplTest {
         // given
         Long notExistingId = 999L;
 
-        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+        EventRequestDTO.EventPutRequestDTO eventPutRequestDTO = EventRequestDTO.EventPutRequestDTO.builder()
                 .title("수정된행사")
                 .content("수정된행사 세부 일정")
                 .eventStartDate(LocalDate.of(2025, 10, 1))

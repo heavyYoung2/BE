@@ -1,17 +1,17 @@
 package hongik.heavyYoung.domain.member.service.general.impl;
 
 import hongik.heavyYoung.domain.member.converter.AuthConverter;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
 import hongik.heavyYoung.domain.member.entity.EmailVerify;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.EmailVerifyRepository;
 import hongik.heavyYoung.domain.member.repository.MemberRepository;
+import hongik.heavyYoung.domain.member.service.general.AuthService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.GeneralException;
 import hongik.heavyYoung.global.exception.customException.AuthException;
 import hongik.heavyYoung.global.jwt.JwtProvider;
-import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.security.SecureRandom;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -30,6 +30,7 @@ public class AuthService {
     private final EmailVerifyRepository emailVerifyRepository;
 
     // == 회원 가입 == //
+    @Override
     @Transactional
     public AuthResponseDTO.SignUpResponseDTO signUp(AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO) {
 
@@ -73,7 +74,7 @@ public class AuthService {
     }
 
     // == 로그인 == //
-    @Transactional(readOnly = true)
+    @Override
     public AuthResponseDTO.LoginResponseDTO login(AuthRequestDTO.AuthLoginRequestDTO req) {
         Member m = memberRepository.findByEmail(req.getEmail())
                 .orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
@@ -97,12 +98,14 @@ public class AuthService {
 
     // == 로그아웃 == //
     @Transactional
+    @Override
     public void logout(Long memberId) {
         // redis 설정 이후 추가
         // jwt 토큰 기반이기에 백엔드에서 처리할게 없음
     }
 
     @Transactional
+    @Override
     public AuthResponseDTO.SendCodeResponseDTO issueSchoolEmailCode(AuthRequestDTO.SendCodeRequestDTO dto) {
         // 학교 이메일인지 검증
         String email = dto.getEmail();
@@ -139,6 +142,7 @@ public class AuthService {
 
 
     @Transactional
+    @Override
     public AuthResponseDTO.VerifyCodeResponseDTO verifySchoolEmailCode(AuthRequestDTO.VerifyCodeRequestDTO dto) {
         // 여기서 전송 누른 이메일 주소 찾기
         EmailVerify emailEntity = emailVerifyRepository.findByEmailAddress(dto.getEmail())
@@ -156,6 +160,7 @@ public class AuthService {
     }
 
     @Transactional
+    @Override
     public AuthResponseDTO.TempPasswordResponseDTO issueTemporaryPassword(String email) {
         // 회원 존재 하는지 확인
         Member member = memberRepository.findByEmail(email)
@@ -175,27 +180,6 @@ public class AuthService {
         return AuthConverter.toTempPasswordResponseDTO(email);
     }
 
-    @Transactional
-    public AuthResponseDTO.ChangePasswordResponseDTO changePassword(Long authMemberId, AuthRequestDTO.ChangePasswordRequestDTO dto) {
-        Member member = memberRepository.findById(authMemberId).orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
-
-
-        if(!passwordEncoder.matches(dto.getOriginPassword(), member.getPassword())) {
-            throw new AuthException(ErrorStatus.INVALID_PASSWORD);
-        }
-
-        if(!(dto.getNewPassword().equals(dto.getNewPasswordConfirm()))) {
-            throw new AuthException(ErrorStatus.PASSWORD_CONFIRM_NOT_MATCH);
-        }
-
-        if(dto.getOriginPassword().equals(dto.getNewPassword())) {
-            throw new AuthException(ErrorStatus.PASSWORD_ALREADY_USED);
-        }
-
-        member.updatePassword(passwordEncoder.encode(dto.getNewPassword()));
-
-        return AuthConverter.toChangePasswordResponseDTO(member);
-    }
 
     private String generateTempPassword(int length) {
         final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";

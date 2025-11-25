@@ -1,7 +1,6 @@
-package hongik.heavyYoung.domain.member.dto.authDTO;
+package hongik.heavyYoung.domain.member.dto;
 
 import hongik.heavyYoung.domain.member.enums.MemberRole;
-import hongik.heavyYoung.domain.member.enums.MemberStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

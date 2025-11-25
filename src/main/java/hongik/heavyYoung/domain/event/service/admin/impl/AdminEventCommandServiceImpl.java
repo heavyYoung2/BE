@@ -3,8 +3,8 @@ package hongik.heavyYoung.domain.event.service.admin.impl;
 import hongik.heavyYoung.domain.event.command.CreateEventCommand;
 import hongik.heavyYoung.domain.event.command.UpdateEventCommand;
 import hongik.heavyYoung.domain.event.converter.EventResponseConverter;
-import hongik.heavyYoung.domain.event.dto.EventRequest;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventImageRepository;
@@ -37,7 +37,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      * @return 생성된 공지사항의 PK를 담은 응답 DTO
      */
     @Override
-    public EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO, List<MultipartFile> multipartFiles) {
+    public EventResponseDTO.EventAddResponseDTO createEvent(EventRequestDTO.EventAddRequestDTO eventAddRequestDTO, List<MultipartFile> multipartFiles) {
         CreateEventCommand createEventCommand = CreateEventCommand.from(eventAddRequestDTO);
 
         Event event = Event.create(createEventCommand);
@@ -74,7 +74,7 @@ public class AdminEventCommandServiceImpl implements AdminEventCommandService {
      * @return 수정된 공지사항의 PK를 담은 DTO
      */
     @Override
-    public EventResponse.EventPutResponseDTO updateEvent(Long eventId, EventRequest.EventPutRequestDTO eventPutRequestDTO, List<MultipartFile> multipartFiles) {
+    public EventResponseDTO.EventPutResponseDTO updateEvent(Long eventId, EventRequestDTO.EventPutRequestDTO eventPutRequestDTO, List<MultipartFile> multipartFiles) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventException(ErrorStatus.EVENT_NOT_FOUND));
         event.update(UpdateEventCommand.from(eventPutRequestDTO));
