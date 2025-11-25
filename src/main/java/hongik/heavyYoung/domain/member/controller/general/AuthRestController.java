@@ -2,7 +2,7 @@ package hongik.heavyYoung.domain.member.controller.general;
 
 import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
 import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
-import hongik.heavyYoung.domain.member.service.general.impl.AuthService;
+import hongik.heavyYoung.domain.member.service.general.impl.AuthServiceImpl;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.security.auth.AuthMemberId;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthRestController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
 
     @Operation(summary = "학교 이메일 인증번호 요청 API",
             description = "학교 이메일을 통해 인증 번호를 전송합니다.")
@@ -29,7 +29,7 @@ public class AuthRestController {
     public ApiResponse<AuthResponseDTO.SendCodeResponseDTO> sendCode(
             @RequestBody @Valid AuthRequestDTO.SendCodeRequestDTO dto
     ) {
-        return ApiResponse.onSuccess(authService.issueSchoolEmailCode(dto));
+        return ApiResponse.onSuccess(authServiceImpl.issueSchoolEmailCode(dto));
     }
 
 
@@ -39,7 +39,7 @@ public class AuthRestController {
     public ApiResponse<AuthResponseDTO.VerifyCodeResponseDTO> verifyCode(
             @RequestBody @Valid AuthRequestDTO.VerifyCodeRequestDTO dto
     ) {
-        return ApiResponse.onSuccess(authService.verifySchoolEmailCode(dto));
+        return ApiResponse.onSuccess(authServiceImpl.verifySchoolEmailCode(dto));
     }
     // TODO : redis 설정 이후 javaMailSender로 구현 이후 구현
 
@@ -50,7 +50,7 @@ public class AuthRestController {
     public ApiResponse<AuthResponseDTO.SignUpResponseDTO> signIn(
             @RequestBody @Valid AuthRequestDTO.AuthSignUpRequestDTO dto
     ) {
-        AuthResponseDTO.SignUpResponseDTO authResponseDTO = authService.signUp(dto);
+        AuthResponseDTO.SignUpResponseDTO authResponseDTO = authServiceImpl.signUp(dto);
         return ApiResponse.onSuccess(authResponseDTO);
     }
 
@@ -61,7 +61,7 @@ public class AuthRestController {
     public ApiResponse<AuthResponseDTO.LoginResponseDTO> login(
             @RequestBody @Valid AuthRequestDTO.AuthLoginRequestDTO dto
     ) {
-        return ApiResponse.onSuccess(authService.login(dto));
+        return ApiResponse.onSuccess(authServiceImpl.login(dto));
     }
 
     @PreAuthorize("hasRole(\"USER\")")
@@ -71,7 +71,7 @@ public class AuthRestController {
     public ApiResponse<String> logout(
             @Parameter(hidden = true) @AuthMemberId Long memberId
     ) {
-        authService.logout(memberId);
+        authServiceImpl.logout(memberId);
         return ApiResponse.onSuccess("로그아웃이 완료되었습니다.");
     }
 
@@ -81,18 +81,7 @@ public class AuthRestController {
     public  ApiResponse<AuthResponseDTO.TempPasswordResponseDTO> issueTemporaryPassword(
             @RequestParam("email") String email
     ) {
-        AuthResponseDTO.TempPasswordResponseDTO response = authService.issueTemporaryPassword(email);
-        return ApiResponse.onSuccess(response);
-    }
-
-
-    @PreAuthorize("hasRole(\"USER\")")
-    @Operation(summary = "비밀번호 변경",
-    description = "기존 비밀번호, 새 비밀번호, 새 비밀번호 확인을 통해 비밀번호를 변경합니다.")
-    @PostMapping("/change-password")
-    public ApiResponse<AuthResponseDTO.ChangePasswordResponseDTO> changePassword(@Parameter(hidden = true) @AuthMemberId Long authMemberId,
-                                                                      @RequestBody @Valid AuthRequestDTO.ChangePasswordRequestDTO dto) {
-        AuthResponseDTO.ChangePasswordResponseDTO response = authService.changePassword(authMemberId, dto);
+        AuthResponseDTO.TempPasswordResponseDTO response = authServiceImpl.issueTemporaryPassword(email);
         return ApiResponse.onSuccess(response);
     }
 
