@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.event.controller.general;
 
 import hongik.heavyYoung.domain.event.config.EventRestControllerTestConfig;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.service.general.EventQueryService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ class EventRestControllerTest {
     @DisplayName("공지사항 조회 성공")
     void getEvents_success() throws Exception {
         // given
-        EventResponse.EventInfoDTO eventInfoDTO = EventResponse.EventInfoDTO.builder()
+        EventResponseDTO.EventInfoDTO eventInfoDTO = EventResponseDTO.EventInfoDTO.builder()
                 .eventId(1L)
                 .title("간식행사")
                 .eventCreatedAt(LocalDate.of(2025, 8, 31).atStartOfDay())
@@ -132,7 +132,7 @@ class EventRestControllerTest {
     @DisplayName("공지사항 상세 조회(사진포함) 성공")
     void getEventDetails_success() throws Exception {
         // given
-        EventResponse.EventInfoDetailDTO eventInfoDetailDTO = EventResponse.EventInfoDetailDTO.builder()
+        EventResponseDTO.EventInfoDetailDTO eventInfoDetailDTO = EventResponseDTO.EventInfoDetailDTO.builder()
                 .eventId(1L)
                 .title("간식행사")
                 .content("간식행사 상세 일정")

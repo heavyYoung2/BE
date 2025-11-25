@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.member.controller.general;
 
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
 import hongik.heavyYoung.domain.member.service.general.impl.AuthServiceImpl;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.security.auth.AuthMemberId;

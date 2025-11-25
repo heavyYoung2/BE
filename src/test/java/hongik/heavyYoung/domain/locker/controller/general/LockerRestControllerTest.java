@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.locker.controller.general;
 
 import hongik.heavyYoung.domain.locker.config.LockerRestControllerTestConfig;
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
 import hongik.heavyYoung.domain.locker.enums.LockerStatus;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
@@ -45,7 +45,7 @@ class LockerRestControllerTest {
         // given
         Long loginMemberId = 1L;
 
-        LockerResponse.LockerInfoDTO lockerInfoDTO1 = LockerResponse.LockerInfoDTO.builder()
+        LockerResponseDTO.LockerInfoDTO lockerInfoDTO1 = LockerResponseDTO.LockerInfoDTO.builder()
                 .lockerId(1L)
                 .lockerNumber("A1")
                 .studentId("C011117")
@@ -53,7 +53,7 @@ class LockerRestControllerTest {
                 .lockerStatus(LockerStatus.MY.name())
                 .build();
 
-        LockerResponse.LockerInfoDTO lockerInfoDTO2 = LockerResponse.LockerInfoDTO.builder()
+        LockerResponseDTO.LockerInfoDTO lockerInfoDTO2 = LockerResponseDTO.LockerInfoDTO.builder()
                 .lockerId(2L)
                 .lockerNumber("A2")
                 .lockerStatus(LockerStatus.AVAILABLE.name())
@@ -102,7 +102,7 @@ class LockerRestControllerTest {
         // given
         Long loginMemberId = 1L;
 
-        LockerResponse.MyLockerInfoDTO myLockerInfoDTO = LockerResponse.MyLockerInfoDTO.builder()
+        LockerResponseDTO.MyLockerInfoDTO myLockerInfoDTO = LockerResponseDTO.MyLockerInfoDTO.builder()
                 .lockerId(1L)
                 .lockerNumber("A1")
                 .lockerRentalStatus(LockerRentalStatus.RENTING.name())

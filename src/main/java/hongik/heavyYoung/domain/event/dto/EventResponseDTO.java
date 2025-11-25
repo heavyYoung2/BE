@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-public class EventResponse {
+public class EventResponseDTO {
     // 공지사항 기본 정보 DTO
     @Getter
     @Builder

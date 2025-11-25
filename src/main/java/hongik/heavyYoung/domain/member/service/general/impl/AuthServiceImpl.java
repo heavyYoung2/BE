@@ -1,8 +1,8 @@
 package hongik.heavyYoung.domain.member.service.general.impl;
 
 import hongik.heavyYoung.domain.member.converter.AuthConverter;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
 import hongik.heavyYoung.domain.member.entity.EmailVerify;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.repository.EmailVerifyRepository;

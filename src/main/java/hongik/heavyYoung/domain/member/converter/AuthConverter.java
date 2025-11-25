@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.member.converter;
 
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
 import hongik.heavyYoung.domain.member.entity.Member;
 import hongik.heavyYoung.domain.member.enums.MemberRole;
 import hongik.heavyYoung.domain.member.enums.MemberStatus;

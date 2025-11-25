@@ -1,11 +1,11 @@
 package hongik.heavyYoung.domain.event.service.general;
 
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface EventQueryService {
-    List<EventResponse.EventInfoDTO> findEvents(LocalDate from, LocalDate to);
-    EventResponse.EventInfoDetailDTO findEventDetails(Long id);
+    List<EventResponseDTO.EventInfoDTO> findEvents(LocalDate from, LocalDate to);
+    EventResponseDTO.EventInfoDetailDTO findEventDetails(Long id);
 }

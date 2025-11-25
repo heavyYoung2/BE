@@ -2,8 +2,8 @@ package hongik.heavyYoung.domain.event.controller.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hongik.heavyYoung.domain.event.config.AdminEventRestControllerTestConfig;
-import hongik.heavyYoung.domain.event.dto.EventRequest;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.service.admin.AdminEventCommandService;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,19 +51,19 @@ class AdminEventRestControllerTest {
         // given
         Long eventId = 1L;
 
-        EventRequest.EventAddRequestDTO request = EventRequest.EventAddRequestDTO.builder()
+        EventRequestDTO.EventAddRequestDTO request = EventRequestDTO.EventAddRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부 일정")
                 .eventStartDate(LocalDate.of(2025, 9, 1))
                 .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
-        EventResponse.EventAddResponseDTO eventAddResponseDTO =
-                EventResponse.EventAddResponseDTO.builder()
+        EventResponseDTO.EventAddResponseDTO eventAddResponseDTO =
+                EventResponseDTO.EventAddResponseDTO.builder()
                         .eventId(eventId)
                         .build();
 
-        given(adminEventCommandService.createEvent(any(EventRequest.EventAddRequestDTO.class)))
+        given(adminEventCommandService.createEvent(any(EventRequestDTO.EventAddRequestDTO.class)))
                 .willReturn(eventAddResponseDTO);
 
         // when
@@ -76,7 +76,7 @@ class AdminEventRestControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.eventId").value(eventId));
 
-        verify(adminEventCommandService).createEvent(any(EventRequest.EventAddRequestDTO.class));
+        verify(adminEventCommandService).createEvent(any(EventRequestDTO.EventAddRequestDTO.class));
     }
 
 
@@ -84,7 +84,7 @@ class AdminEventRestControllerTest {
     @DisplayName("공지사항 생성 실패 - DTO Valid 검증 실패(제목 누락)")
     void addEvent_notValidException_noTitle() throws Exception {
         // given
-        EventRequest.EventAddRequestDTO request = EventRequest.EventAddRequestDTO.builder()
+        EventRequestDTO.EventAddRequestDTO request = EventRequestDTO.EventAddRequestDTO.builder()
                 .title("")
                 .content("간식행사 세부 일정")
                 .eventStartDate(LocalDate.of(2025, 9, 1))
@@ -171,19 +171,19 @@ class AdminEventRestControllerTest {
         // given
         Long eventId = 1L;
 
-        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+        EventRequestDTO.EventPutRequestDTO eventPutRequestDTO = EventRequestDTO.EventPutRequestDTO.builder()
                 .title("수정된행사")
                 .content("수정된행사 세부 일정")
                 .eventStartDate(LocalDate.of(2025, 9, 1))
                 .eventEndDate(LocalDate.of(2025, 9, 2))
                 .build();
 
-        EventResponse.EventPutResponseDTO eventPutResponseDTO =
-                EventResponse.EventPutResponseDTO.builder()
+        EventResponseDTO.EventPutResponseDTO eventPutResponseDTO =
+                EventResponseDTO.EventPutResponseDTO.builder()
                         .eventId(eventId)
                         .build();
 
-        given(adminEventCommandService.updateEvent(eq(eventId),any(EventRequest.EventPutRequestDTO.class))).willReturn(eventPutResponseDTO);
+        given(adminEventCommandService.updateEvent(eq(eventId),any(EventRequestDTO.EventPutRequestDTO.class))).willReturn(eventPutResponseDTO);
 
         // when
         ResultActions result = mockMvc.perform(put("/admin/events/{eventId}", eventId)
@@ -195,6 +195,6 @@ class AdminEventRestControllerTest {
                 .andExpect(jsonPath("$.isSuccess").value(true))
                 .andExpect(jsonPath("$.result.eventId").value(eventId));
 
-        verify(adminEventCommandService).updateEvent(eq(eventId),any(EventRequest.EventPutRequestDTO.class));
+        verify(adminEventCommandService).updateEvent(eq(eventId),any(EventRequestDTO.EventPutRequestDTO.class));
     }
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class LockerResponse {
+public class LockerResponseDTO {
     // 사물함 기본 정보 DTO
     @Getter
     @Builder

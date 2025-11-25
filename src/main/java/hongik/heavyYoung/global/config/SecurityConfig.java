@@ -1,6 +1,9 @@
-package hongik.heavyYoung.global.security;
+package hongik.heavyYoung.global.config;
 
 
+import hongik.heavyYoung.global.security.CustomAccessDeniedHandler;
+import hongik.heavyYoung.global.security.JwtAuthFilter;
+import hongik.heavyYoung.global.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,13 +1,13 @@
 package hongik.heavyYoung.domain.event.service.admin;
 
-import hongik.heavyYoung.domain.event.dto.EventRequest;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface AdminEventCommandService {
-    EventResponse.EventAddResponseDTO createEvent(EventRequest.EventAddRequestDTO eventAddRequestDTO, List<MultipartFile> multipartFiles);
+    EventResponseDTO.EventAddResponseDTO createEvent(EventRequestDTO.EventAddRequestDTO eventAddRequestDTO, List<MultipartFile> multipartFiles);
     void deleteEvent(Long eventId);
-    EventResponse.EventPutResponseDTO updateEvent(Long eventId, EventRequest.EventPutRequestDTO eventPutRequestDTO, List<MultipartFile> multipartFiles);
+    EventResponseDTO.EventPutResponseDTO updateEvent(Long eventId, EventRequestDTO.EventPutRequestDTO eventPutRequestDTO, List<MultipartFile> multipartFiles);
 }

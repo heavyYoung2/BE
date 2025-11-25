@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.member.service.general;
 
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
 
 public interface AuthService {
     AuthResponseDTO.SignUpResponseDTO signUp(AuthRequestDTO.AuthSignUpRequestDTO authRequestDTO);

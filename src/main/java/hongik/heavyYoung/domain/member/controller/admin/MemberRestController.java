@@ -1,8 +1,8 @@
 package hongik.heavyYoung.domain.member.controller.admin;
 
 import hongik.heavyYoung.domain.member.dto.MemberResponseDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthRequestDTO;
-import hongik.heavyYoung.domain.member.dto.authDTO.AuthResponseDTO;
+import hongik.heavyYoung.domain.member.dto.AuthRequestDTO;
+import hongik.heavyYoung.domain.member.dto.AuthResponseDTO;
 import hongik.heavyYoung.domain.member.service.general.MemberCommandService;
 import hongik.heavyYoung.domain.member.service.general.MemberQueryService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Member API - 학생", description = "학생 - 블랙리스트 확인 API")
+@Tag(name = "Member API - 학생", description = "학생 정보 관련 API")
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor

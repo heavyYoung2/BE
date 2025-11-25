@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.member.service.general.impl;
 
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.service.general.LockerQueryService;
 import hongik.heavyYoung.domain.member.converter.MemberConverter;
 import hongik.heavyYoung.domain.member.dto.MemberResponseDTO;
@@ -51,7 +51,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         Member member = memberRepository.findById(authMemberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        LockerResponse.MyLockerInfoDTO locker = lockerQueryService.findMyLocker(authMemberId);
+        LockerResponseDTO.MyLockerInfoDTO locker = lockerQueryService.findMyLocker(authMemberId);
         List<RentalResponseDTO.RentalHistory> items = rentalQueryService.getRentalStatus(authMemberId).getItems();
         boolean isStudentFeePaid = studentFeeStatusService.isStudentFeePaid(member);
         MemberResponseDTO.BlacklistInfo blacklist = getBlacklist(authMemberId);

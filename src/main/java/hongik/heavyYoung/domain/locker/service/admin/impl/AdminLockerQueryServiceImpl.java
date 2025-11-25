@@ -6,7 +6,7 @@ import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.application.repository.ApplicationRepository;
 import hongik.heavyYoung.domain.application.repository.MemberApplicationRepository;
 import hongik.heavyYoung.domain.locker.converter.LockerResponseConverter;
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.repository.LockerAssignmentRepository;
 import hongik.heavyYoung.domain.locker.service.admin.AdminLockerQueryService;
@@ -28,13 +28,13 @@ public class AdminLockerQueryServiceImpl implements AdminLockerQueryService {
     private final LockerAssignmentRepository lockerAssignmentRepository;
 
     @Override
-    public List<LockerResponse.LockerApplicationInfoDTO> findAllLockerApplication() {
+    public List<LockerResponseDTO.LockerApplicationInfoDTO> findAllLockerApplication() {
         List<Application> lockerApplications = applicationRepository.findAllByApplicationTypeInOrderByCreatedAtDesc(ApplicationType.LOCKER);
         return LockerResponseConverter.toLockerApplicationInfoDTOList(lockerApplications);
     }
 
     @Override
-    public LockerResponse.LockerApplicationDetailInfoDTO findLockerApplicationDetail(Long lockerApplicationId) {
+    public LockerResponseDTO.LockerApplicationDetailInfoDTO findLockerApplicationDetail(Long lockerApplicationId) {
         Application lockerApplication = applicationRepository.findById(lockerApplicationId)
                 .orElseThrow(() -> new LockerException(ErrorStatus.LOCKER_APPLICATION_NOT_FOUND));
 
@@ -49,7 +49,7 @@ public class AdminLockerQueryServiceImpl implements AdminLockerQueryService {
     }
 
     @Override
-    public List<LockerResponse.LockerAssignmentInfoDTO> findLockerAssignments(String semesterOrNull) {
+    public List<LockerResponseDTO.LockerAssignmentInfoDTO> findLockerAssignments(String semesterOrNull) {
         String semester = resolveSemesterOrLatest(semesterOrNull);
         List<LockerAssignment> lockerAssignments = lockerAssignmentRepository.findAllBySemesterWithMemberAndLocker(semester);
         return LockerResponseConverter.toLockerAssignmentInfoDTOList(lockerAssignments);

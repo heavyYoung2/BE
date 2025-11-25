@@ -2,7 +2,7 @@ package hongik.heavyYoung.domain.locker.converter;
 
 import hongik.heavyYoung.domain.application.entity.Application;
 import hongik.heavyYoung.domain.application.entity.MemberApplication;
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
@@ -14,8 +14,8 @@ import java.util.List;
 public class LockerResponseConverter {
 
     // 사물함 기본 정보
-    public static LockerResponse.LockerInfoDTO toLockerInfoDTO(Locker locker, Member member, String lockerStatus) {
-        return LockerResponse.LockerInfoDTO.builder()
+    public static LockerResponseDTO.LockerInfoDTO toLockerInfoDTO(Locker locker, Member member, String lockerStatus) {
+        return LockerResponseDTO.LockerInfoDTO.builder()
                 .lockerId(locker.getId())
                 .lockerNumber(locker.getLockerSection() + locker.getLockerNumber())
                 .lockerStatus(lockerStatus)
@@ -25,8 +25,8 @@ public class LockerResponseConverter {
     }
 
     // 나의 사물함 정보 (사물함 배정 o)
-    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(Locker locker, LockerRentalStatus lockerRentalStatus) {
-        return LockerResponse.MyLockerInfoDTO.builder()
+    public static LockerResponseDTO.MyLockerInfoDTO toMyLockerInfoDTO(Locker locker, LockerRentalStatus lockerRentalStatus) {
+        return LockerResponseDTO.MyLockerInfoDTO.builder()
                 .lockerId(locker.getId())
                 .lockerNumber(locker.getLockerSection() + locker.getLockerNumber())
                 .lockerRentalStatus(lockerRentalStatus.name())
@@ -34,20 +34,20 @@ public class LockerResponseConverter {
     }
 
     // 나의 사물함 정보 (사물함 배정 x)
-    public static LockerResponse.MyLockerInfoDTO toMyLockerInfoDTO(LockerRentalStatus lockerRentalStatus) {
-        return LockerResponse.MyLockerInfoDTO.builder()
+    public static LockerResponseDTO.MyLockerInfoDTO toMyLockerInfoDTO(LockerRentalStatus lockerRentalStatus) {
+        return LockerResponseDTO.MyLockerInfoDTO.builder()
                 .lockerRentalStatus(lockerRentalStatus.name())
                 .build();
     }
 
 
     // 사물함 신청 정보
-    public static LockerResponse.LockerApplicationInfoDTO toLockerApplicationInfoDTO(Application lockerApplication) {
+    public static LockerResponseDTO.LockerApplicationInfoDTO toLockerApplicationInfoDTO(Application lockerApplication) {
         boolean isInTimeRange = !LocalDateTime.now().isBefore(lockerApplication.getApplicationStartAt()) && !LocalDateTime.now().isAfter(lockerApplication.getApplicationEndAt());
         boolean hasCapacity = lockerApplication.getApplicationMemberCount() < lockerApplication.getApplicationCanCount();
         boolean canApply = isInTimeRange && hasCapacity && lockerApplication.isCanApply();
 
-        return LockerResponse.LockerApplicationInfoDTO.builder()
+        return LockerResponseDTO.LockerApplicationInfoDTO.builder()
                 .applicationId(lockerApplication.getId())
                 .applicationStartAt(lockerApplication.getApplicationStartAt())
                 .applicationEndAt(lockerApplication.getApplicationEndAt())
@@ -59,22 +59,22 @@ public class LockerResponseConverter {
     }
 
     // 사물함 신청 정보 리스트
-    public static List<LockerResponse.LockerApplicationInfoDTO> toLockerApplicationInfoDTOList(List<Application> applications) {
+    public static List<LockerResponseDTO.LockerApplicationInfoDTO> toLockerApplicationInfoDTOList(List<Application> applications) {
         return applications.stream()
                 .map(LockerResponseConverter::toLockerApplicationInfoDTO)
                 .toList();
     }
 
     // 사물함 신청 상세 정보
-    public static LockerResponse.LockerApplicationDetailInfoDTO toLockerApplicationDetailInfoDTO(
+    public static LockerResponseDTO.LockerApplicationDetailInfoDTO toLockerApplicationDetailInfoDTO(
             Application lockerApplication,
             List<MemberApplication> memberApplications
     ) {
-        List<LockerResponse.LockerApplicationDetailInfoDTO.ApplicantInfoDTO> applicantDTOs =
+        List<LockerResponseDTO.LockerApplicationDetailInfoDTO.ApplicantInfoDTO> applicantDTOs =
                 memberApplications.stream()
                         .map(memberApplication -> {
                             Member member = memberApplication.getMember();
-                            return LockerResponse.LockerApplicationDetailInfoDTO.ApplicantInfoDTO.builder()
+                            return LockerResponseDTO.LockerApplicationDetailInfoDTO.ApplicantInfoDTO.builder()
                                     .studentId(member.getStudentId())
                                     .studentName(member.getStudentName())
                                     .appliedAt(memberApplication.getCreatedAt())
@@ -82,7 +82,7 @@ public class LockerResponseConverter {
                         })
                         .toList();
 
-        return LockerResponse.LockerApplicationDetailInfoDTO.builder()
+        return LockerResponseDTO.LockerApplicationDetailInfoDTO.builder()
                 .applicationStartAt(lockerApplication.getApplicationStartAt())
                 .applicationEndAt(lockerApplication.getApplicationEndAt())
                 .semester(lockerApplication.getApplicationSemester())
@@ -94,13 +94,13 @@ public class LockerResponseConverter {
     }
 
     // 사물함 배정 정보
-    public static LockerResponse.LockerAssignmentInfoDTO toLockerAssignmentInfoDTO(LockerAssignment lockerAssignment) {
+    public static LockerResponseDTO.LockerAssignmentInfoDTO toLockerAssignmentInfoDTO(LockerAssignment lockerAssignment) {
         Locker locker = lockerAssignment.getLocker();
         Member member = lockerAssignment.getMember();
 
         String lockerNumber = locker.getLockerSection() + locker.getLockerNumber();
 
-        return LockerResponse.LockerAssignmentInfoDTO.builder()
+        return LockerResponseDTO.LockerAssignmentInfoDTO.builder()
                 .lockerId(locker.getId())
                 .lockerNumber(lockerNumber)
                 .studentId(member.getStudentId())
@@ -109,7 +109,7 @@ public class LockerResponseConverter {
     }
 
     // 사물함 배정 정보 리스트
-    public static List<LockerResponse.LockerAssignmentInfoDTO> toLockerAssignmentInfoDTOList(List<LockerAssignment> lockerAssignments) {
+    public static List<LockerResponseDTO.LockerAssignmentInfoDTO> toLockerAssignmentInfoDTOList(List<LockerAssignment> lockerAssignments) {
         return lockerAssignments.stream()
                 .map(LockerResponseConverter::toLockerAssignmentInfoDTO)
                 .toList();

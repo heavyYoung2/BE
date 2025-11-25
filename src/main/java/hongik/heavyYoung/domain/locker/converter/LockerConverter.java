@@ -3,7 +3,7 @@ package hongik.heavyYoung.domain.locker.converter;
 import hongik.heavyYoung.domain.application.entity.Application;
 import hongik.heavyYoung.domain.application.entity.MemberApplication;
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
-import hongik.heavyYoung.domain.locker.dto.LockerRequest;
+import hongik.heavyYoung.domain.locker.dto.LockerRequestDTO;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.member.entity.Member;
@@ -11,7 +11,7 @@ import hongik.heavyYoung.domain.member.entity.Member;
 public class LockerConverter {
 
     // 새로운 사물함 신청 변환
-    public static Application toLockerApplication(LockerRequest.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO, int lockerApplicationCanCount) {
+    public static Application toLockerApplication(LockerRequestDTO.LockerApplicationAddRequestDTO lockerApplicationAddRequestDTO, int lockerApplicationCanCount) {
         return Application.builder()
                 .applicationCanCount(lockerApplicationCanCount)
                 .applicationStartAt(lockerApplicationAddRequestDTO.getApplicationStartAt())

@@ -2,7 +2,7 @@ package hongik.heavyYoung.domain.locker.service.general.impl;
 
 import hongik.heavyYoung.domain.application.enums.ApplicationType;
 import hongik.heavyYoung.domain.locker.converter.LockerResponseConverter;
-import hongik.heavyYoung.domain.locker.dto.LockerResponse;
+import hongik.heavyYoung.domain.locker.dto.LockerResponseDTO;
 import hongik.heavyYoung.domain.locker.entity.Locker;
 import hongik.heavyYoung.domain.locker.entity.LockerAssignment;
 import hongik.heavyYoung.domain.locker.enums.LockerRentalStatus;
@@ -36,7 +36,7 @@ public class LockerQueryServiceImpl implements LockerQueryService {
      * @return 섹션 별 전체 사물함 정보 리스트
      */
     @Override
-    public List<LockerResponse.LockerInfoDTO> findAllLockers(String lockerSection, Long memberId) {
+    public List<LockerResponseDTO.LockerInfoDTO> findAllLockers(String lockerSection, Long memberId) {
         List<Object[]> lockerMember = lockerRepository.findAllWithCurrentSemesterAssign(lockerSection);
 
         return lockerMember.stream()
@@ -62,7 +62,7 @@ public class LockerQueryServiceImpl implements LockerQueryService {
      * @return 나의 사물함 정보
      */
     @Override
-    public LockerResponse.MyLockerInfoDTO findMyLocker(Long memberId) {
+    public LockerResponseDTO.MyLockerInfoDTO findMyLocker(Long memberId) {
         Optional<LockerAssignment> lockerAssignment = lockerAssignmentRepository.findByMember_IdAndIsCurrentSemesterTrue(memberId);
 
         if (lockerAssignment.isPresent()) {

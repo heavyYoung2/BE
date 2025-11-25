@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.event.service.general.impl;
 
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.entity.Event;
 import hongik.heavyYoung.domain.event.entity.EventImage;
 import hongik.heavyYoung.domain.event.repository.EventRepository;
@@ -60,7 +60,7 @@ class EventQueryServiceImplTest {
         given(eventRepository.findAllByOrderByCreatedAtDesc()).willReturn(events);
 
         // when
-        List<EventResponse.EventInfoDTO> result = eventQueryService.findEvents(null, null);
+        List<EventResponseDTO.EventInfoDTO> result = eventQueryService.findEvents(null, null);
 
         // then
         assertThat(result).hasSize(2);
@@ -102,7 +102,7 @@ class EventQueryServiceImplTest {
         given(eventRepository.findAllByEventStartDateBetweenOrderByCreatedAtDesc(from,to)).willReturn(events);
 
         // when
-        List<EventResponse.EventInfoDTO> result = eventQueryService.findEvents(from, to);
+        List<EventResponseDTO.EventInfoDTO> result = eventQueryService.findEvents(from, to);
 
         // then
         assertThat(result).hasSize(2);
@@ -142,7 +142,7 @@ class EventQueryServiceImplTest {
                 .willReturn(Optional.of(event1));
 
         // when
-        EventResponse.EventInfoDetailDTO result = eventQueryService.findEventDetails(event1.getId());
+        EventResponseDTO.EventInfoDetailDTO result = eventQueryService.findEventDetails(event1.getId());
 
         // then
         assertThat(result.getImageUrls()).hasSize(2);

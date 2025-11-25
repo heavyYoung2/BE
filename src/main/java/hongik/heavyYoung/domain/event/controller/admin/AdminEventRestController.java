@@ -1,7 +1,7 @@
 package hongik.heavyYoung.domain.event.controller.admin;
 
-import hongik.heavyYoung.domain.event.dto.EventRequest;
-import hongik.heavyYoung.domain.event.dto.EventResponse;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
+import hongik.heavyYoung.domain.event.dto.EventResponseDTO;
 import hongik.heavyYoung.domain.event.service.admin.AdminEventCommandService;
 import hongik.heavyYoung.global.apiPayload.ApiResponse;
 import hongik.heavyYoung.global.security.auth.AuthMemberId;
@@ -31,12 +31,12 @@ public class AdminEventRestController {
     @PreAuthorize("hasRole(\"ADMIN\")")
     @Operation(summary = "공지사항 생성")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<EventResponse.EventAddResponseDTO> addEvent (
+    public ApiResponse<EventResponseDTO.EventAddResponseDTO> addEvent (
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
-            @RequestPart("eventAddRequestDTO") @Valid EventRequest.EventAddRequestDTO eventAddRequestDTO,
+            @RequestPart("eventAddRequestDTO") @Valid EventRequestDTO.EventAddRequestDTO eventAddRequestDTO,
             @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles
             ) {
-        EventResponse.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO, multipartFiles);
+        EventResponseDTO.EventAddResponseDTO eventAddResponseDTO = adminEventCommandService.createEvent(eventAddRequestDTO, multipartFiles);
         return ApiResponse.onSuccess(eventAddResponseDTO);
     }
 
@@ -54,13 +54,13 @@ public class AdminEventRestController {
     @PreAuthorize("hasRole(\"ADMIN\")")
     @Operation(summary = "공지사항 수정")
     @PutMapping(value = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<EventResponse.EventPutResponseDTO> updateEvent (
+    public ApiResponse<EventResponseDTO.EventPutResponseDTO> updateEvent (
             @Parameter(hidden = true) @AuthMemberId Long authMemberId,
             @PathVariable("eventId") @Positive(message = "eventId는 1 이상이어야 합니다.") Long eventId,
-            @RequestPart("eventPutRequestDTO") @Valid EventRequest.EventPutRequestDTO eventPutRequestDTO,
+            @RequestPart("eventPutRequestDTO") @Valid EventRequestDTO.EventPutRequestDTO eventPutRequestDTO,
             @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles
     ) {
-        EventResponse.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO, multipartFiles);
+        EventResponseDTO.EventPutResponseDTO eventPutResponseDTO = adminEventCommandService.updateEvent(eventId, eventPutRequestDTO, multipartFiles);
         return ApiResponse.onSuccess(eventPutResponseDTO);
     }
 }

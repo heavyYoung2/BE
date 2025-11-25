@@ -1,6 +1,6 @@
 package hongik.heavyYoung.domain.event.command;
 
-import hongik.heavyYoung.domain.event.dto.EventRequest;
+import hongik.heavyYoung.domain.event.dto.EventRequestDTO;
 import hongik.heavyYoung.global.apiPayload.status.ErrorStatus;
 import hongik.heavyYoung.global.exception.customException.EventException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ class UpdateEventCommandTest {
     @Test
     void updateEventCommand_success() {
         // given
-        EventRequest.EventPutRequestDTO dto = EventRequest.EventPutRequestDTO.builder()
+        EventRequestDTO.EventPutRequestDTO dto = EventRequestDTO.EventPutRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부일정")
                 .eventStartDate(LocalDate.of(2025, 9, 1))
@@ -30,7 +30,7 @@ class UpdateEventCommandTest {
     @Test
     void updateEventCommand_eventInvalidDateCombination() {
         // given
-        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+        EventRequestDTO.EventPutRequestDTO eventPutRequestDTO = EventRequestDTO.EventPutRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부일정")
                 .eventStartDate(LocalDate.of(2025, 9, 1))
@@ -47,7 +47,7 @@ class UpdateEventCommandTest {
     @Test
     void updateEventCommand_eventInvalidDateRange() {
         // given
-        EventRequest.EventPutRequestDTO eventPutRequestDTO = EventRequest.EventPutRequestDTO.builder()
+        EventRequestDTO.EventPutRequestDTO eventPutRequestDTO = EventRequestDTO.EventPutRequestDTO.builder()
                 .title("간식행사")
                 .content("간식행사 세부일정")
                 .eventStartDate(LocalDate.of(2025, 9, 10))
