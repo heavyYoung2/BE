@@ -38,7 +38,7 @@ public class ChatCommandServiceImpl implements ChatCommandService {
         // 프롬프트 생성
         Prompt prompt = PromptFactory.buildPrompt(chatHistory);
 
-        // AI 클라이언트를 통해 응답 받기
+        // AI 클라이언트를 통해 응답
         String response = aiClient.getResponse(prompt);
 
         // 대화 히스토리에 사용자 메시지와 어시스턴트 메시지 추가
